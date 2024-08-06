@@ -16,7 +16,7 @@ declare interface body {
 }
 
 declare interface project {
-	major: boolean;
+	invisible: boolean;
 	title: string;
 	order: number | null;
 	headline: string;

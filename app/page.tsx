@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Container from './container';
 import client from '@/utils/sanityClient';
-
+export const revalidate = 60;
 const fetchSanityData = async () => {
 	const projects: project[] = await client.fetch(`
     *[_type == "project"] | order(order asc){
@@ -9,7 +9,7 @@ const fetchSanityData = async () => {
       order,
       headline,
       url,
-      major,
+      invisible,
       tech,
       body,
       _id,
