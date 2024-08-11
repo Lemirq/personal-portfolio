@@ -3,8 +3,8 @@ import Container from './container';
 import client from '@/utils/sanityClient';
 export const revalidate = 60;
 const fetchSanityData = async () => {
-	const projects: project[] = await client.fetch(`
-    *[_type == "project"] | order(order asc){
+	const unorderedProjects: project[] = await client.fetch(`
+    *[_type == "project"]{
       title,
       order,
       headline,
@@ -21,6 +21,12 @@ const fetchSanityData = async () => {
       }
     }				
     `);
+
+	const projectOrdering = await client.fetch(
+		`*[_type == "visible-projects"]{
+        projectOrdering,
+     }`
+	);
 
 	const iknow = await client.fetch(`
       *[_type == "iknow"]{
@@ -52,6 +58,10 @@ const fetchSanityData = async () => {
             }`
 	);
 
+	// match projects to projectOrdering
+	const projects = projectOrdering[0].projectOrdering.map((projecto: any) => {
+		return unorderedProjects.find((project: any) => project._id === projecto._ref);
+	});
 	return { projects, iknow, about, tech };
 };
 

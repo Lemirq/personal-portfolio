@@ -68,7 +68,7 @@ const Projects = () => {
 														<DialogImage
 															src={project.mainImage.asset.url}
 															alt={project.title}
-															className="h-auto w-full max-w-[90vw] rounded-2xl object-cover lg:h-[90vh]"
+															className="h-auto w-full max-w-[90vw] rounded-2xl object-contain lg:h-[90vh]"
 														/>
 													</DialogContent>
 													<DialogClose

@@ -105,14 +105,7 @@ const Bento = () => {
 					</div> */}
 					{/* {globeVisible && <GlobeDemo />} */}
 					{/* skew to appear as a globe */}
-					<Image
-						src="/images/worldmap.svg"
-						alt="World"
-						layout="responsive"
-						width={384}
-						height={216}
-						className="skew-[-10deg] w-full absolute"
-					/>
+					<Image src="/images/worldmap.svg" alt="World" width={384} height={216} className="skew-[-10deg] w-full absolute" />
 				</div>
 
 				<div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full h-full relative overflow-hidden">
