@@ -51,14 +51,14 @@ const Card = ({ index, children, item }: { index: number; children?: React.React
 			<Icon className="absolute h-6 w-6 -top-3 -right-3 dark:text-white text-black" />
 			<Icon className="absolute h-6 w-6 -bottom-3 -right-3 dark:text-white text-black" />
 
-			<div className="h-full w-full absolute inset-0 group-hover:opacity-100 transition-opacity duration-200 opacity-0">
+			<div className="h-full w-full absolute inset-0 transition-opacity duration-200 opacity-100">
 				<div className="h-full w-full absolute inset-0">{children}</div>
 				<div className="h-full w-full absolute inset-0 z-10 fc px-5">
 					<h2 className="text-2xl">{item.title}</h2>
 					<p className="text-sm">{item.description}</p>
 				</div>
 			</div>
-			<div className="relative z-20 group-hover:opacity-0 transition-opacity duration-200 opacity-100">
+			{/* <div className="relative z-20 group-hover:opacity-0 transition-opacity duration-200 opacity-100">
 				<div className="text-center  w-full mx-auto flex items-center justify-center">
 					<div className="text-2xl fc">
 						<span>Phase {index + 1}</span>
@@ -66,7 +66,7 @@ const Card = ({ index, children, item }: { index: number; children?: React.React
 						<span className="text-white/70 text-sm md:hidden block">(tap this)</span>
 					</div>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };
