@@ -28,7 +28,7 @@ const Projects = () => {
 						},
 					}}
 				>
-					<div className="grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-10">
+					<div className="grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-5">
 						{projects.map((project) => {
 							if (project.invisible) return null;
 							return <Project key={project._id} project={project} tech={tech} />;

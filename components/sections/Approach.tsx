@@ -1,16 +1,20 @@
-import { CanvasRevealEffect } from '@/components/Reveal';
+// import { CanvasRevealEffect } from '@/components/Reveal';
+// ssr false
+// const CanvasRevealEffect = dynamic(() => import('@/components/Reveal').then((mod) => mod.CanvasRevealEffect), { ssr: false });
 const approachData = [
 	{
 		title: 'Planning',
 		description:
 			'During the planning phase of a web development project, I define the project scope, requirements, and goals, creating detailed wireframes and sitemaps to guide the design and functionality. I also establish timelines, allocate resources, and set up a project management framework to ensure smooth execution and collaboration.',
 		class: 'bg-emerald-900',
+		radial: '#00F6F7',
 	},
 	{
 		title: 'Design',
 		description:
 			"In the design phase, I create wireframes and sitemaps, using tools like Figma and Sketch to visualize the project's structure and content. I also use design systems and templates to streamline the design process and ensure consistency across the project.",
 		class: 'bg-black',
+		radial: '#E54694',
 		color: [
 			[236, 72, 153],
 			[232, 121, 249],
@@ -22,6 +26,7 @@ const approachData = [
 			'During the development phase, I write code, implement features, and test the project to ensure it functions as intended. I use tools like React, Next.js, and Tailwind CSS to build the project and ensure a smooth user experience.',
 		class: 'bg-sky-600',
 		color: [[125, 211, 252]],
+		radial: '#70BCE2',
 	},
 ];
 const Approach = () => {
@@ -34,7 +39,15 @@ const Approach = () => {
 				<div className="py-5 fc lg:fr w-full gap-4 mx-auto md:px-8">
 					{approachData.map((data, index) => (
 						<Card key={index} item={data} index={index}>
-							<CanvasRevealEffect animationSpeed={3} colors={data.color} dotSize={2} containerClassName={data.class} />
+							{/* <CanvasRevealEffect animationSpeed={3} colors={data.color} dotSize={2} containerClassName={data.class} /> */}
+							{/* bottom gradient */}
+
+							<div
+								style={{
+									background: data.radial,
+								}}
+								className="absolute w-full aspect-square translate-y-24 bottom-0 filter blur-2xl rounded-full opacity-50"
+							/>
 						</Card>
 					))}
 				</div>
@@ -52,8 +65,8 @@ const Card = ({ index, children, item }: { index: number; children?: React.React
 			<Icon className="absolute h-6 w-6 -bottom-3 -right-3 dark:text-white text-black" />
 
 			<div className="h-full w-full absolute inset-0 transition-opacity duration-200 opacity-100">
-				<div className="h-full w-full absolute inset-0">{children}</div>
-				<div className="h-full w-full absolute inset-0 z-10 fc px-5">
+				<div className="h-full w-full absolute inset-0 overflow-hidden">{children}</div>
+				<div className="h-full w-full absolute inset-0 z-10 fc px-5 items-start">
 					<h2 className="text-2xl">{item.title}</h2>
 					<p className="text-sm">{item.description}</p>
 				</div>

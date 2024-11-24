@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Container from './container';
 import client from '@/utils/sanityClient';
+
 export const revalidate = 60;
 const fetchSanityData = async () => {
 	const unorderedProjects: project[] = await client.fetch(`

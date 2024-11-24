@@ -1,6 +1,7 @@
 import { Spotlight } from '@/components/Spotlight';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import SignatureDraw from '../SignatureDraw';
 const Hero = () => {
 	return (
 		<section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-32 md:pt-0 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
@@ -23,10 +24,11 @@ const Hero = () => {
 				<motion.h1
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.5, duration: 0.5 }}
-					className="text-4xl md:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 tracking-tight"
+					transition={{ delay: 0.3, duration: 0.5 }}
+					className="text-4xl md:text-7xl max-w-xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 tracking-tight w-full fr gap-5"
 				>
-					Hi, I'm<span className="text-indigo-500"> Vihaan Sharma</span>
+					{/* Hi, I'm<span className="text-indigo-500"> Vihaan Sharma</span> */}
+					<span className="whitespace-nowrap">Hi, I'm</span> <SignatureDraw />
 				</motion.h1>
 				<motion.p
 					initial={{ opacity: 0, y: 20 }}

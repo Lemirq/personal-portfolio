@@ -1,8 +1,6 @@
-import { GlobeDemo } from '@/components/GlobeDemo';
 import { useMainStore } from '@/stores/main-state-provider';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import Cobe from '../cobe';
 import Image from 'next/image';
 
 const tech = ['Next.js', 'React.js', 'Typescript', 'Node.js', 'Express.js', 'PostgreSQL'];
