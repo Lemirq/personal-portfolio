@@ -1,0 +1,304 @@
+<!-- --- START OF FILE Esterification Animation for Ethyl Acetate.html --- -->
+
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                if (headerRowIndex === -1 || headerRowIndex > 25) { headerRowIndex = 0; }
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) { console.error(e); return ""; }
+        }
+        return gk_fileData[filename] || "";
+        }
+<html lang="en">
+</script><!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esterification Animation</title>
+    <style>
+        body { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f4f4f8; font-family: 'Arial', sans-serif; }
+        canvas { border: 1px solid #ccc; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); cursor: pointer; }
+        #restartButton { margin-bottom: 20px; padding: 10px 20px; font-size: 16px; color: white; background-color: #007bff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
+        #restartButton:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <button id="restartButton">Restart Animation</button>
+    <canvas id="animationCanvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+        const restartButton = document.getElementById('restartButton');
+
+        let animationId;
+        let animationRunning = true;
+        let waitingForClick = false;
+
+        const STEP_DURATIONS = {
+            SHOW_INGREDIENTS: 2, POP_OUT_REACTANTS: 2, CATALYST_ENTERS: 2,
+            MIXING: 3, HEATING: 2, DISTILLATION: 4, SHOW_PRODUCT: 1
+        };
+
+        let step = 0;
+        let currentTimeInStep = 0;
+
+        let ethanolPos = { x: 200, y: 250 }, aceticAcidPos = { x: 400, y: 250 }, sulfuricAcidPos = { x: 300, y: -50 };
+        let mixAngle = 0, distillParticles = [], collectedEthylAcetateHeight = 0;
+
+        const COLORS = {
+            ethanol: '#64b5f6', aceticAcid: '#e57373', sulfuricAcid: '#ffb74d', ethylAcetate: '#81c784',
+            corn: '#FFEB3B', vinegarBottle: '#D2B48C', vinegarLiquid: 'rgba(139, 69, 19, 0.5)',
+            flask: '#E0E0E0', flameOuter: 'rgba(255, 165, 0, 0.7)', flameInner: 'rgba(255, 255, 0, 0.9)', text: '#333333'
+        };
+
+        let _internalEthanolTargetPos = { x: 200, y: 250 }, _internalAceticAcidTargetPos = { x: 400, y: 250 };
+        let _currentEthanolPos = { x: 150, y: 350 }, _currentAceticAcidPos = { x: 550, y: 350 };
+
+        let ethylAcetateImage = new Image();
+        let imageLoaded = false;
+        ethylAcetateImage.onload = () => { imageLoaded = true; console.log("ethyl.png loaded successfully."); };
+        ethylAcetateImage.onerror = () => { console.error("Failed to load ethyl.png. Make sure it's in the same directory."); };
+        ethylAcetateImage.src = 'ethyl.png';
+
+        // --- Flask and Condenser Geometry ---
+        const flaskCenterX = canvas.width / 2 - 100, flaskBottomY = 480, flaskWidth = 180, flaskHeight = 180, flaskNeckWidth = 50, flaskNeckHeight = 60;
+        const flaskLiquidCenterY = flaskBottomY - flaskHeight / 2 + flaskHeight * 0.2;
+
+        const condenserSetupX = flaskCenterX + flaskNeckWidth / 2; // Outer edge of flask neck where condenser starts
+        const condenserSetupY = flaskBottomY - flaskHeight / 2 - flaskNeckHeight + 10; // Top of flask neck
+
+        // Visual Condenser Dimensions
+        const C_LENGTH = 250;
+        const C_DROP = 100;
+        const C_VISUAL_END_X = condenserSetupX + C_LENGTH;
+        const C_VISUAL_END_Y = condenserSetupY + C_DROP;
+
+        // Drip Point (slightly inside the visual end of the condenser's inner tube)
+        const DRIP_POINT_X = C_VISUAL_END_X - 10;
+        const DRIP_POINT_Y = C_VISUAL_END_Y - 5;
+
+        // Collection Beaker properties
+        const BEAKER_WIDTH = 100;
+        const BEAKER_HEIGHT = 120;
+        const BEAKER_DRIP_GAP = 20; // Gap between condenser tip and beaker top opening for visual drip
+
+        const COLLECTION_BEAKER_X_CENTER = DRIP_POINT_X; // Beaker X center aligned with drip point
+        const COLLECTION_BEAKER_Y_CENTER = DRIP_POINT_Y + BEAKER_DRIP_GAP + BEAKER_HEIGHT / 2; // Beaker Y center calculation
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = -(0.8 + Math.random() * 0.4);
+                this.gravity = 0.02; this.phase = 'vapor';
+
+                // Particle's path within the condenser
+                this.condenserPathStartX = condenserSetupX + 5; // Start point for particle path inside visual condenser
+                this.condenserPathStartY = condenserSetupY + 2; // Slightly adjusted to be within visual tube
+                this.condenserPathEndX = DRIP_POINT_X; // Particle path ends at the defined drip point
+                this.condenserPathEndY = DRIP_POINT_Y; // Particle path ends at the defined drip point
+
+                this.lifespan = 350; this.age = 0; this.vx_condenser = 1.8; // Slightly faster through condenser
+            }
+            update() {
+                this.age++;
+                if (this.phase === 'vapor') {
+                    this.y += this.vy; this.x += this.vx; this.vy += this.gravity / 3;
+                    // Check for entry into condenser path start area
+                    if (this.y < this.condenserPathStartY + 20 && this.x > this.condenserPathStartX - 20 && this.x < this.condenserPathStartX + 20) {
+                        this.phase = 'condensing';
+                        this.x = this.condenserPathStartX + (Math.random() - 0.5) * 3; // Position at start of path
+                        this.y = this.condenserPathStartY + (Math.random() - 0.5) * 3;
+                    }
+                } else if (this.phase === 'condensing') {
+                    const slope = (this.condenserPathEndY - this.condenserPathStartY) / (this.condenserPathEndX - this.condenserPathStartX);
+                    this.x += this.vx_condenser;
+                    this.y = this.condenserPathStartY + slope * (this.x - this.condenserPathStartX);
+                    if (this.x >= this.condenserPathEndX) {
+                        this.phase = 'liquid';
+                        this.x = this.condenserPathEndX; // Snap to drip point X
+                        this.y = this.condenserPathEndY; // Snap to drip point Y
+                        this.vy = 0.5; // Initial downward speed for drip
+                        this.vx = (Math.random() - 0.5) * 0.15; // Very small, random horizontal nudge for drip effect
+                    }
+                } else if (this.phase === 'liquid') {
+                    this.y += this.vy; this.x += this.vx;
+                    this.vy += this.gravity; this.vx *= 0.98; // Air resistance
+                }
+            }
+            draw() { ctx.beginPath();ctx.arc(this.x,this.y,this.phase==='vapor'?3:4,0,Math.PI*2);if(this.phase==='vapor'){ctx.fillStyle='rgba(220,220,220,0.6)'}else if(this.phase==='condensing'){ctx.fillStyle=`rgba(${parseInt(COLORS.ethylAcetate.slice(1,3),16)}, ${parseInt(COLORS.ethylAcetate.slice(3,5),16)}, ${parseInt(COLORS.ethylAcetate.slice(5,7),16)}, 0.8)`}else{ctx.fillStyle=COLORS.ethylAcetate}ctx.fill() }
+        }
+
+        function resetAnimationState() {
+            // console.log("Resetting animation state.");
+            step = 0; currentTimeInStep = 0;
+            sulfuricAcidPos = { x: 300, y: -50 }; mixAngle = 0; distillParticles = []; collectedEthylAcetateHeight = 0;
+            animationRunning = true; waitingForClick = false;
+            _internalEthanolTargetPos = { x: 200, y: 250 }; _internalAceticAcidTargetPos = { x: 400, y: 250 };
+            _currentEthanolPos = { x: 150, y: 350 }; _currentAceticAcidPos = { x: 550, y: 350 };
+        }
+
+        restartButton.addEventListener('click', () => {
+            // console.log("Restart button clicked.");
+            if (animationId) { cancelAnimationFrame(animationId); }
+            resetAnimationState();
+            animate();
+        });
+
+        canvas.addEventListener('click', () => {
+            // console.log(`Canvas clicked. Current state: step=${step}, waitingForClick=${waitingForClick}, animationRunning=${animationRunning}`);
+            if (waitingForClick && animationRunning) {
+                waitingForClick = false; currentTimeInStep = 0;
+                let nextStep = step + 1;
+                console.log(`  Transitioning from step ${step} to ${nextStep}.`);
+
+                if (nextStep === 1) { _currentEthanolPos = { x: 150, y: 350 }; _currentAceticAcidPos = { x: 550, y: 350 }; }
+                else if (nextStep === 2) { sulfuricAcidPos = { x: (ethanolPos.x + aceticAcidPos.x) / 2, y: -50 }; }
+                else if (nextStep === 3) { _currentEthanolPos = {...ethanolPos}; _currentAceticAcidPos = {...aceticAcidPos}; }
+                else if (nextStep === 5) { distillParticles = []; collectedEthylAcetateHeight = 0; }
+
+                step = nextStep;
+
+                if (step > 6) { animationRunning = false; }
+            }
+        });
+
+        function drawText(text,x,y,s=16,c=COLORS.text,a='center'){ctx.fillStyle=c;ctx.font=`bold ${s}px Arial`;ctx.textAlign=a;ctx.fillText(text,x,y);ctx.textAlign='left'}
+        function drawSubText(text,x,y,s=12,c=COLORS.text,a='center'){ctx.fillStyle=c;ctx.font=`${s}px Arial`;ctx.textAlign=a;ctx.fillText(text,x,y);ctx.textAlign='left'}
+        function drawFlask(x,y,w,h,nW,nH,l=0,lC='lightblue'){ctx.strokeStyle='#777';ctx.lineWidth=3;const bBY=y+h/2,bTY=y-h/2,bLX=x-w/2,bRX=x+w/2;ctx.beginPath();ctx.moveTo(bLX,bTY+h*.2);ctx.quadraticCurveTo(bLX,bBY,x,bBY);ctx.quadraticCurveTo(bRX,bBY,bRX,bTY+h*.2);if(l>0){ctx.save();ctx.beginPath();ctx.moveTo(bLX,bTY+h*.2);ctx.quadraticCurveTo(bLX,bBY,x,bBY);ctx.quadraticCurveTo(bRX,bBY,bRX,bTY+h*.2);ctx.lineTo(x+nW/2,bTY);ctx.lineTo(x-nW/2,bTY);ctx.closePath();ctx.clip();ctx.fillStyle=lC;const lHV=(h-h*.1)*l,lSY=bBY-lHV;ctx.fillRect(bLX-ctx.lineWidth,lSY,w+2*ctx.lineWidth,lHV+ctx.lineWidth);ctx.restore()}ctx.beginPath();ctx.moveTo(bLX,bTY+h*.2);ctx.quadraticCurveTo(bLX,bBY,x,bBY);ctx.quadraticCurveTo(bRX,bBY,bRX,bTY+h*.2);ctx.lineTo(x+nW/2,bTY);ctx.lineTo(x-nW/2,bTY);ctx.closePath();ctx.stroke();ctx.beginPath();ctx.moveTo(x-nW/2,bTY);ctx.lineTo(x-nW/2,bTY-nH);ctx.lineTo(x+nW/2,bTY-nH);ctx.lineTo(x+nW/2,bTY);ctx.stroke()}
+        function drawBeaker(x,y,w,h,l=0,lC='lightblue'){ctx.strokeStyle='#777';ctx.lineWidth=3;const tY=y-h/2,bY=y+h/2,lX=x-w/2,rX=x+w/2;if(l>0){ctx.fillStyle=lC;const cLH=(h-ctx.lineWidth)*l;ctx.fillRect(lX+ctx.lineWidth/2,bY-cLH-ctx.lineWidth/2,w-ctx.lineWidth,cLH)}ctx.beginPath();ctx.moveTo(lX,tY);ctx.lineTo(lX,bY);ctx.lineTo(rX,bY);ctx.lineTo(rX,tY);ctx.moveTo(lX-5,tY+5);ctx.lineTo(lX,tY);ctx.moveTo(rX+5,tY+5);ctx.lineTo(rX,tY);ctx.stroke()}
+        const easeInOutQuad=t=>t<.5?2*t*t:-1+(4-2*t)*t;
+        function drawStep0_Ingredients(p){const cX=150,cY=350,cRX=40,cRY=60;ctx.fillStyle=COLORS.corn;ctx.beginPath();ctx.ellipse(cX,cY,cRX,cRY,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(160,120,40,0.3)';for(let i=0;i<60;i++){const rX=(Math.random()-.5)*2*cRX*.8,rY=(Math.random()-.5)*2*cRY*.8;if((rX*rX)/(cRX*cRX*.64)+(rY*rY)/(cRY*cRY*.64)<1){ctx.beginPath();ctx.arc(cX+rX,cY+rY,2+Math.random(),0,Math.PI*2);ctx.fill()}}drawText('Corn',cX,cY+cRY+30);drawSubText('(Source of Ethanol)',cX,cY+cRY+50);const bX=550,bYB=410,bW=70,bH=120,nH=40,nW=bW*.4;ctx.fillStyle=COLORS.vinegarBottle;ctx.beginPath();ctx.rect(bX-bW/2,bYB-bH,bW,bH);ctx.rect(bX-nW/2,bYB-bH-nH,nW,nH);ctx.fill();ctx.fillStyle=COLORS.vinegarLiquid;ctx.fillRect(bX-bW/2+5,bYB-bH*.6,bW-10,bH*.55);ctx.fillStyle='white';ctx.fillRect(bX-bW/2+10,bYB-bH*.7,bW-20,40);drawText('Vinegar',bX,bYB-bH*.7+25,14,'black');drawText('Acetic Acid',bX,bYB+30);drawSubText('(Source)',bX,bYB+50)}
+        function drawStep1_ReactantsPopOut(p){drawStep0_Ingredients(1);const eP=easeInOutQuad(p);_currentEthanolPos.x=150+(_internalEthanolTargetPos.x-150)*eP;_currentEthanolPos.y=350+(_internalEthanolTargetPos.y-350)*eP;_currentAceticAcidPos.x=550+(_internalAceticAcidTargetPos.x-550)*eP;_currentAceticAcidPos.y=350+(_internalAceticAcidTargetPos.y-350)*eP;ctx.globalAlpha=Math.min(1,p*2);ctx.beginPath();ctx.arc(_currentEthanolPos.x,_currentEthanolPos.y,30,0,Math.PI*2);ctx.fillStyle=COLORS.ethanol;ctx.fill();drawText('Ethanol',_currentEthanolPos.x,_currentEthanolPos.y+45);ctx.globalAlpha=Math.min(1,p*2);ctx.beginPath();ctx.arc(_currentAceticAcidPos.x,_currentAceticAcidPos.y,30,0,Math.PI*2);ctx.fillStyle=COLORS.aceticAcid;ctx.fill();drawText('Acetic Acid',_currentAceticAcidPos.x,_currentAceticAcidPos.y+45);ctx.globalAlpha=1;ethanolPos={..._currentEthanolPos};aceticAcidPos={..._currentAceticAcidPos}}
+        function drawStep2_CatalystEnters(p){ctx.beginPath();ctx.arc(ethanolPos.x,ethanolPos.y,30,0,Math.PI*2);ctx.fillStyle=COLORS.ethanol;ctx.fill();drawText('Ethanol',ethanolPos.x,ethanolPos.y+45);ctx.beginPath();ctx.arc(aceticAcidPos.x,aceticAcidPos.y,30,0,Math.PI*2);ctx.fillStyle=COLORS.aceticAcid;ctx.fill();drawText('Acetic Acid',aceticAcidPos.x,aceticAcidPos.y+45);const eP=easeInOutQuad(p),sY=-50,eY=(ethanolPos.y+aceticAcidPos.y)/2;sulfuricAcidPos.y=sY+(eY-sY)*eP;sulfuricAcidPos.x=(ethanolPos.x+aceticAcidPos.x)/2;ctx.beginPath();ctx.arc(sulfuricAcidPos.x,sulfuricAcidPos.y,25,0,Math.PI*2);ctx.fillStyle=COLORS.sulfuricAcid;ctx.fill();drawText('H₂SO₄',sulfuricAcidPos.x,sulfuricAcidPos.y+40);drawSubText('(Catalyst)',sulfuricAcidPos.x,sulfuricAcidPos.y+60)}
+        function drawStep3_Mixing(p){drawFlask(flaskCenterX,flaskBottomY-flaskHeight/2,flaskWidth,flaskHeight,flaskNeckWidth,flaskNeckHeight);drawText('Mixing Reactants',flaskCenterX,flaskBottomY+40);const mP=easeInOutQuad(Math.min(1,p*2)),xP=easeInOutQuad(Math.max(0,(p-.5)*2));const eFT={x:flaskCenterX-30,y:flaskLiquidCenterY},aFT={x:flaskCenterX+30,y:flaskLiquidCenterY},sFT={x:flaskCenterX,y:flaskLiquidCenterY-10};let tEP={x:_currentEthanolPos.x+(eFT.x-_currentEthanolPos.x)*mP,y:_currentEthanolPos.y+(eFT.y-_currentEthanolPos.y)*mP};let tAP={x:_currentAceticAcidPos.x+(aFT.x-_currentAceticAcidPos.x)*mP,y:_currentAceticAcidPos.y+(aFT.y-_currentAceticAcidPos.y)*mP};let tSP={x:sulfuricAcidPos.x+(sFT.x-sulfuricAcidPos.x)*mP,y:sulfuricAcidPos.y+(sFT.y-sulfuricAcidPos.y)*mP};if(xP>0){mixAngle+=.15;const mR=20;tEP.x=eFT.x+Math.cos(mixAngle)*mR;tEP.y=eFT.y+Math.sin(mixAngle)*mR*.5;tAP.x=aFT.x+Math.cos(mixAngle+Math.PI)*mR;tAP.y=aFT.y+Math.sin(mixAngle+Math.PI)*mR*.5;tSP.x=sFT.x+Math.cos(mixAngle+Math.PI/2)*mR*.7;tSP.y=sFT.y+Math.sin(mixAngle+Math.PI/2)*mR*.3}ctx.beginPath();ctx.arc(tEP.x,tEP.y,20,0,Math.PI*2);ctx.fillStyle=COLORS.ethanol;ctx.fill();ctx.beginPath();ctx.arc(tAP.x,tAP.y,20,0,Math.PI*2);ctx.fillStyle=COLORS.aceticAcid;ctx.fill();ctx.beginPath();ctx.arc(tSP.x,tSP.y,15,0,Math.PI*2);ctx.fillStyle=COLORS.sulfuricAcid;ctx.fill();if(p>.1)drawFlask(flaskCenterX,flaskBottomY-flaskHeight/2,flaskWidth,flaskHeight,flaskNeckWidth,flaskNeckHeight,.6+p*.1,'rgba(127,199,217,0.6)')}
+        function drawStep4_Heating(progress){drawFlask(flaskCenterX,flaskBottomY-flaskHeight/2,flaskWidth,flaskHeight,flaskNeckWidth,flaskNeckHeight,.7,'rgba(127,199,217,0.7)');drawText('Heating the Mixture',flaskCenterX,flaskBottomY+40);const fX=flaskCenterX,fY=flaskBottomY+flaskHeight/2+10,bFH=60,fF=Math.sin(currentTimeInStep*15)*8,fH=bFH+fF,fW=70;ctx.fillStyle=COLORS.flameOuter;ctx.beginPath();ctx.moveTo(fX-fW/2,fY);ctx.bezierCurveTo(fX-fW/3,fY-fH*.8,fX-fW/6,fY-fH*1.2,fX,fY-fH*1.5);ctx.bezierCurveTo(fX+fW/6,fY-fH*1.2,fX+fW/3,fY-fH*.8,fX+fW/2,fY);ctx.fill();ctx.fillStyle=COLORS.flameInner;ctx.beginPath();ctx.moveTo(fX-fW/4,fY);ctx.bezierCurveTo(fX-fW/8,fY-fH*.7,fX-fW/12,fY-fH*.9,fX,fY-fH);ctx.bezierCurveTo(fX+fW/12,fY-fH*.9,fX+fW/8,fY-fH*.7,fX+fW/4,fY);ctx.fill();if(progress>.2){ctx.strokeStyle='rgba(255,165,0,0.2)';for(let i=0;i<3;i++){ctx.beginPath();const wX=fX+(i-1)*20+Math.sin(currentTimeInStep*5+i)*5,wSY=flaskLiquidCenterY-flaskHeight*.3;ctx.moveTo(wX-10,wSY);ctx.bezierCurveTo(wX-5,wSY-15,wX+5,wSY-15,wX+10,wSY);ctx.stroke()}}}
+
+        function drawStep5_Distillation(progress) {
+            drawFlask(flaskCenterX, flaskBottomY - flaskHeight/2, flaskWidth, flaskHeight, flaskNeckWidth, flaskNeckHeight, 0.65 - progress*0.15, 'rgba(127, 199, 217, 0.7)');
+            const flameX = flaskCenterX, flameY = flaskBottomY + flaskHeight/2 + 10, baseFlameHeight = 60;
+            const flameFlicker = Math.sin(currentTimeInStep*15)*8; const flameHeight = baseFlameHeight + flameFlicker, flameWidth = 70;
+            ctx.fillStyle=COLORS.flameOuter;ctx.beginPath();ctx.moveTo(flameX-flameWidth/2,flameY);ctx.bezierCurveTo(flameX-flameWidth/3,flameY-flameHeight*.8,flameX-flameWidth/6,flameY-flameHeight*1.2,flameX,flameY-flameHeight*1.5);ctx.bezierCurveTo(flameX+flameWidth/6,flameY-flameHeight*1.2,flameX+flameWidth/3,flameY-flameHeight*.8,flameX+flameWidth/2,flameY);ctx.fill();
+            ctx.fillStyle=COLORS.flameInner;ctx.beginPath();ctx.moveTo(flameX-flameWidth/4,flameY);ctx.bezierCurveTo(flameX-flameWidth/8,flameY-flameHeight*.7,flameX-flameWidth/12,flameY-flameHeight*.9,flameX,flameY-flameHeight);ctx.bezierCurveTo(flameX+flameWidth/12,flameY-flameHeight*.9,flameX+flameWidth/8,flameY-flameHeight*.7,flameX+flameWidth/4,flameY);ctx.fill();
+
+            // Use visual condenser constants
+            const cStartX = condenserSetupX, cStartY = condenserSetupY;
+            const cEndX = C_VISUAL_END_X, cEndY = C_VISUAL_END_Y; // Use globally defined visual end points
+            ctx.strokeStyle = '#9EB8D9'; ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(cStartX, cStartY); ctx.lineTo(cEndX, cEndY); ctx.stroke();
+            ctx.strokeStyle = '#E0E0E0'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(cStartX, cStartY); ctx.lineTo(cEndX, cEndY); ctx.stroke();
+            ctx.lineWidth = 1;
+            drawText('Distillation', cStartX + C_LENGTH/2, cStartY - 40);
+
+            drawBeaker(COLLECTION_BEAKER_X_CENTER, COLLECTION_BEAKER_Y_CENTER, BEAKER_WIDTH, BEAKER_HEIGHT, collectedEthylAcetateHeight, COLORS.ethylAcetate);
+            drawText('Ethyl Acetate', COLLECTION_BEAKER_X_CENTER, COLLECTION_BEAKER_Y_CENTER + BEAKER_HEIGHT/2 + 30);
+            drawSubText('(Collected Product)', COLLECTION_BEAKER_X_CENTER, COLLECTION_BEAKER_Y_CENTER + BEAKER_HEIGHT/2 + 50);
+
+            if (distillParticles.length < 30 && Math.random() < 0.4) {
+                 distillParticles.push(new Particle( flaskCenterX + (Math.random()-0.5) * flaskNeckWidth * 0.5, flaskBottomY - flaskHeight/2 - flaskNeckHeight - 15 ));
+            }
+
+            const beakerTopEdgeY = COLLECTION_BEAKER_Y_CENTER - BEAKER_HEIGHT / 2;
+            const beakerBottomEdgeY = COLLECTION_BEAKER_Y_CENTER + BEAKER_HEIGHT / 2;
+            const beakerLeftEdgeX = COLLECTION_BEAKER_X_CENTER - BEAKER_WIDTH / 2;
+            const beakerRightEdgeX = COLLECTION_BEAKER_X_CENTER + BEAKER_WIDTH / 2;
+            const currentLiquidSurfaceInBeakerY = beakerBottomEdgeY - (BEAKER_HEIGHT * (1- (1-collectedEthylAcetateHeight))); // surface Y, accounting for fill from bottom
+
+            distillParticles.forEach((particle, index) => {
+                particle.update(); particle.draw();
+                if (particle.phase==='liquid' &&
+                    particle.x > beakerLeftEdgeX && particle.x < beakerRightEdgeX && // Within beaker X
+                    particle.y > beakerTopEdgeY && // Below beaker top opening
+                    particle.y < beakerBottomEdgeY - 5) { // And above beaker bottom (allowing some space for collection animation)
+
+                    // Check if particle is "entering" the collected liquid or the empty part of beaker
+                    if (particle.y > currentLiquidSurfaceInBeakerY - 5) { // Near or into the liquid surface
+                         distillParticles.splice(index, 1);
+                         if (collectedEthylAcetateHeight < 0.75) { collectedEthylAcetateHeight += 0.0045; } // Slightly increased collection
+                    } else if (particle.y > beakerTopEdgeY + 5 && particle.y < currentLiquidSurfaceInBeakerY - 5) { // In empty part, but heading for liquid
+                        // Allow to fall further, could add splash later if desired
+                    }
+                } else if (particle.age > particle.lifespan || particle.y > canvas.height + 20 || particle.y < -20 || particle.x < -20 || particle.x > canvas.width + 20) {
+                    distillParticles.splice(index, 1);
+                }
+            });
+
+            /* // DEBUGGING TEXT ON CANVAS - Commented out
+            ctx.fillStyle = 'black'; ctx.font = '16px Arial'; ctx.textAlign = 'left';
+            ctx.fillText(`Step 5 Time: ${currentTimeInStep.toFixed(2)}s / ${STEP_DURATIONS.DISTILLATION}s`, 10, 20);
+            ctx.fillText(`Progress: ${progress.toFixed(3)}`, 10, 40);
+            ctx.fillText(`Particles: ${distillParticles.length}`, 10, 60);
+            ctx.fillText(`Collected H: ${collectedEthylAcetateHeight.toFixed(3)}`, 10, 80);
+            ctx.fillText(`Flask Liquid: ${(0.65 - progress*0.15).toFixed(3)}`, 10, 100);
+            */
+        }
+
+        function drawStep6_ProductDisplay(progress) { const eP=easeInOutQuad(progress);ctx.globalAlpha=Math.min(1,eP*1.5);drawText('Ethyl Acetate has been formed!',canvas.width/2,80,24,COLORS.text,'center');ctx.globalAlpha=1;if(imageLoaded){const img=ethylAcetateImage;let bDW=img.width,bDH=img.height;const mW=canvas.width*.6,mH=canvas.height*.6;if(bDW>mW){const r=mW/bDW;bDW=mW;bDH*=r}if(bDH>mH){const r=mH/bDH;bDH=mH;bDW*=r}const cDW=bDW*eP,cDH=bDH*eP,iX=(canvas.width-cDW)/2,iY=(canvas.height-cDH)/2+40;ctx.globalAlpha=eP;ctx.drawImage(img,iX,iY,cDW,cDH);ctx.globalAlpha=1}else{drawText('Loading ethyl.png...',canvas.width/2,canvas.height/2,18,'gray','center')}}
+
+        function animate() {
+            if (!animationRunning) {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                drawText('Animation Complete!',canvas.width/2,canvas.height/2-30,28,'#2c3e50');
+                drawSubText('Click Restart to play again.',canvas.width/2,canvas.height/2+10,18,'#34495e');
+                return;
+            }
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+
+            if (waitingForClick) {
+                let finalProgress = 1;
+                switch (step) {
+                    case 0: drawStep0_Ingredients(finalProgress); break;
+                    case 1: drawStep1_ReactantsPopOut(finalProgress); break;
+                    case 2: drawStep2_CatalystEnters(finalProgress); break;
+                    case 3: drawStep3_Mixing(finalProgress); break;
+                    case 4: drawStep4_Heating(finalProgress); break;
+                    case 5: drawStep5_Distillation(finalProgress); break;
+                    case 6: drawStep6_ProductDisplay(finalProgress); break;
+                }
+                drawText("Click to Continue...", canvas.width/2, canvas.height-50, 20, '#007bff','center');
+                animationId = requestAnimationFrame(animate); return;
+            }
+
+            currentTimeInStep += 1/60;
+            let currentStepDuration = 0;
+            let progress = 0;
+
+            switch (step) {
+                case 0: currentStepDuration=STEP_DURATIONS.SHOW_INGREDIENTS; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep0_Ingredients(progress); break;
+                case 1: currentStepDuration=STEP_DURATIONS.POP_OUT_REACTANTS; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep1_ReactantsPopOut(progress); break;
+                case 2: currentStepDuration=STEP_DURATIONS.CATALYST_ENTERS; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep2_CatalystEnters(progress); break;
+                case 3: currentStepDuration=STEP_DURATIONS.MIXING; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep3_Mixing(progress); break;
+                case 4: currentStepDuration=STEP_DURATIONS.HEATING; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep4_Heating(progress); break;
+                case 5: currentStepDuration=STEP_DURATIONS.DISTILLATION; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep5_Distillation(progress); break;
+                case 6: currentStepDuration=STEP_DURATIONS.SHOW_PRODUCT; progress=Math.min(1,currentTimeInStep/currentStepDuration); drawStep6_ProductDisplay(progress); break;
+            }
+
+            if (currentTimeInStep >= currentStepDuration) {
+                // console.log(`Step ${step} animation complete. Setting waitingForClick=true.`);
+                currentTimeInStep = currentStepDuration;
+                waitingForClick = true;
+            }
+            animationId = requestAnimationFrame(animate);
+        }
+        resetAnimationState();
+        animate();
+    </script>
+</body>
+</html>
+
+<!-- ---END OF FILE Esterification Animation for Ethyl Acetate.html --- -->
