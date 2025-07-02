@@ -1,6 +1,5 @@
 import { useMainStore } from '@/stores/main-state-provider';
 import client from '@/utils/sanityClient';
-import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
 import { PortableText } from 'next-sanity';
 import { useEffect } from 'react';
@@ -60,7 +59,7 @@ const About = () => {
                 block: ({ children }) => <div className='text-lg text-slate-400'>{children}</div>,
               }}
               // format links as target blank
-              value={about?.body}
+              value={typeof about?.body === 'string' ? [{ _type: 'block', children: [{ _type: 'span', text: about.body }], markDefs: [], style: 'normal' }] : about?.body || []}
             />
           </div>
         </div>
