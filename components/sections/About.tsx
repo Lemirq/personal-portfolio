@@ -1,6 +1,7 @@
 import { useMainStore } from '@/stores/main-state-provider';
 import client from '@/utils/sanityClient';
 import imageUrlBuilder from '@sanity/image-url';
+import { PortableText } from 'next-sanity';
 import { useEffect } from 'react';
 
 const About = () => {
@@ -60,7 +61,13 @@ const About = () => {
 
 					<div className="w-full fc sm:items-start gap-2">
 						<h2 className="text-5xl">{about && about.heading}</h2>
-						<p className="text-lg text-slate-400">{about && about.body}</p>
+						<PortableText
+											components={{
+												block: ({ children }) => <div className="text-sm">{children}</div>,
+											}}
+											// format links as target blank
+											value={about?.body || []}
+										/>
 					</div>
 				</div>
 			</div>
