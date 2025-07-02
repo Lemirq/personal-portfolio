@@ -2,6 +2,7 @@ import { useMainStore } from '@/stores/main-state-provider';
 import client from '@/utils/sanityClient';
 import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
+import { PortableText } from 'next-sanity';
 import { useEffect } from 'react';
 
 const About = () => {
