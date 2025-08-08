@@ -1,9 +1,9 @@
-import Container from './container';
-import client from '@/utils/sanityClient';
+import Container from "./container";
+import { client } from "@/sanity/lib/client";
 
 export const revalidate = 60;
 const fetchSanityData = async () => {
-	const unorderedProjects: project[] = await client.fetch(`
+  const unorderedProjects: project[] = await client.fetch(`
     *[_type == "project"]{
       title,
       order,
@@ -22,13 +22,13 @@ const fetchSanityData = async () => {
     }				
     `);
 
-	const projectOrdering = await client.fetch(
-		`*[_type == "visible-projects"]{
+  const projectOrdering = await client.fetch(
+    `*[_type == "visible-projects"]{
         projectOrdering,
      }`
-	);
+  );
 
-	const iknow = await client.fetch(`
+  const iknow = await client.fetch(`
       *[_type == "iknow"]{
         _id,
         title,
@@ -37,7 +37,7 @@ const fetchSanityData = async () => {
       }				
       `);
 
-	const about = await client.fetch(`
+  const about = await client.fetch(`
         *[_type == "about"]{
           body,
           heading,
@@ -51,21 +51,23 @@ const fetchSanityData = async () => {
       }
         `);
 
-	const tech = await client.fetch(
-		`*[_type == "tech"]{
+  const tech = await client.fetch(
+    `*[_type == "tech"]{
             techName,
             _id
             }`
-	);
+  );
 
-	// match projects to projectOrdering
-	const projects = projectOrdering[0].projectOrdering.map((projecto: any) => {
-		return unorderedProjects.find((project: any) => project._id === projecto._ref);
-	});
-	return { projects, iknow, about, tech };
+  // match projects to projectOrdering
+  const projects = projectOrdering[0].projectOrdering.map((projecto: any) => {
+    return unorderedProjects.find(
+      (project: any) => project._id === projecto._ref
+    );
+  });
+  return { projects, iknow, about, tech };
 };
 
 export default async function Home() {
-	const allData = await fetchSanityData();
-	return <Container sanityData={allData} />;
+  const allData = await fetchSanityData();
+  return <Container sanityData={allData} />;
 }
