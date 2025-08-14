@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// Removed PDF generation; we now send public links instead
 import InvoicePreview, { BusinessInfo } from "./InvoicePreview";
 import InvoiceList from "./InvoiceList";
 import { format } from "date-fns";
@@ -151,84 +150,7 @@ export default function InvoiceEditor() {
     }));
   };
 
-  const emailInvoice = async () => {
-    if (!invoice._id) return alert("Please save the invoice first");
-    const base64 = await generatePdfFromPreview();
-    await fetch(`/api/invoices/email?id=${invoice._id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pdf: base64 }),
-    });
-    alert("Email sent");
-  };
-
-  const downloadPdf = async () => {
-    const base64 = await generatePdfFromPreview();
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "in",
-      format: "letter",
-    });
-    const bytes = atob(base64);
-    const len = bytes.length;
-    const arr = new Uint8Array(len);
-    for (let i = 0; i < len; i++) arr[i] = bytes.charCodeAt(i);
-    const blob = new Blob([arr], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${invoice.invoiceNumber || "invoice"}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-  };
-
-  async function generatePdfFromPreview(): Promise<string> {
-    const node = document.getElementById(
-      previewRootId
-    ) as HTMLDivElement | null;
-    if (!node) throw new Error("Preview not ready");
-    // Clone unscaled preview to avoid capturing scaled/blurred text
-    const offscreen = document.createElement("div");
-    offscreen.style.position = "fixed";
-    offscreen.style.left = "-10000px";
-    offscreen.style.top = "0";
-    offscreen.style.background = "#ffffff";
-    offscreen.style.width = `${8.5 * 96}px`;
-    offscreen.style.height = `${11 * 96}px`;
-    const clone = node.cloneNode(true) as HTMLElement;
-    clone.style.transform = "none";
-    clone.style.width = "8.5in";
-    clone.style.height = "11in";
-    // Improve text spacing and rendering for rasterization
-    clone.style.letterSpacing = "normal";
-    clone.style.lineHeight = "1.35";
-    clone.style.textRendering = "optimizeLegibility";
-    offscreen.appendChild(clone);
-    document.body.appendChild(offscreen);
-    try {
-      // @ts-ignore
-      if (document.fonts && document.fonts.ready)
-        await (document.fonts as any).ready;
-    } catch {}
-    const scale = Math.max(2, Math.ceil((window.devicePixelRatio || 1) * 2));
-    const canvas = await html2canvas(clone, {
-      scale,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-      letterRendering: true,
-    });
-    document.body.removeChild(offscreen);
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "in",
-      format: "letter",
-    });
-    pdf.addImage(imgData, "PNG", 0, 0, 8.5, 11);
-    return pdf.output("datauristring").split(",")[1];
-  }
+  // PDF generation removed in favor of hosted invoice page links
 
   const loadInvoice = async (id: string) => {
     const res = await fetchJSON<{ invoice: InvoiceDoc }>(
@@ -443,17 +365,24 @@ export default function InvoiceEditor() {
                 </button>
                 <button
                   className={`${btnBase} bg-indigo-600`}
-                  onClick={emailInvoice}
+                  onClick={async () => {
+                    if (!invoice._id) return alert("Save invoice first");
+                    await fetch(`/api/invoices/email?id=${invoice._id}`, {
+                      method: "POST",
+                    });
+                    alert("Email sent");
+                  }}
                 >
                   Send Email
                 </button>
                 {invoice._id ? (
-                  <button
-                    className={`${btnBase} bg-emerald-600`}
-                    onClick={downloadPdf}
+                  <a
+                    className={`${btnBase} bg-emerald-600 text-center`}
+                    href={`/invoice/${invoice._id}`}
+                    target="_blank"
                   >
-                    Download PDF
-                  </button>
+                    Open Public Link
+                  </a>
                 ) : null}
               </div>
             </div>

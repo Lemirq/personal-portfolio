@@ -34,34 +34,20 @@ export async function POST(request: NextRequest) {
   const tax = subtotal * (Number(invoice.taxRate || 0) / 100);
   const total = subtotal + tax;
 
-  // Minimal body; PDF will be attached
+  // Minimal body with link to hosted invoice page
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const invoiceUrl = `${origin}/invoice/${id}`;
   const html = `
     <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0b1225">
       <p>Hi ${(invoice.client as any)?.name || ""},</p>
-      <p>Your invoice ${invoice.invoiceNumber || ""} is attached as a PDF.</p>
+      <p>Your invoice ${invoice.invoiceNumber || ""} is available here:</p>
+      <p><a href="${invoiceUrl}">${invoiceUrl}</a></p>
       <p>Total: $${total.toFixed(2)}</p>
       <p>Thank you!</p>
     </div>
   `;
 
-  // Prefer base64 PDF from client; if not provided, generate server-side via Puppeteer PDF endpoint
-  let pdfBase64: string | undefined;
-  if (request.headers.get("content-type")?.includes("application/json")) {
-    try {
-      const data = await request.json();
-      if (data?.pdf && typeof data.pdf === "string") pdfBase64 = data.pdf;
-    } catch {}
-  }
-  if (!pdfBase64) {
-    const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const res = await fetch(
-      `${origin}/api/invoices/pdf?id=${encodeURIComponent(id)}`
-    );
-    if (res.ok) {
-      const buf = await res.arrayBuffer();
-      pdfBase64 = Buffer.from(buf).toString("base64");
-    }
-  }
+  // We no longer attach PDFs
 
   const resend = new Resend(process.env.RESEND);
   const { error } = await resend.emails.send({
@@ -69,14 +55,6 @@ export async function POST(request: NextRequest) {
     to,
     subject: `Invoice ${invoice.invoiceNumber || ""}`,
     html,
-    attachments: pdfBase64
-      ? [
-          {
-            filename: `${invoice.invoiceNumber || "invoice"}.pdf`,
-            content: pdfBase64,
-          },
-        ]
-      : undefined,
   });
 
   if (error) return NextResponse.json({ error }, { status: 500 });

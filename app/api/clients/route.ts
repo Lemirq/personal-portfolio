@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const clients: ClientDoc[] =
     await client.fetch(`*[_type == "client"] | order(name asc){
     _id, _type, name, email, phone, address

@@ -9,6 +9,7 @@ const fetchSanityData = async () => {
       order,
       headline,
       url,
+      videoUrl,
       invisible,
       tech,
       body,

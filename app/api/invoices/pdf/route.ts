@@ -1,6 +1,5 @@
+// Deprecated endpoint with Puppeteer – keep returning 410 to indicate removed
 import { NextRequest, NextResponse } from "next/server";
-import { client } from "@/sanity/lib/client";
-import puppeteer from "puppeteer-core";
 
 function resolveExecutablePath(): string | undefined {
   if (process.env.CHROMIUM_PATH) return process.env.CHROMIUM_PATH;
@@ -22,49 +21,9 @@ function resolveExecutablePath(): string | undefined {
   });
 }
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-  if (!id)
-    return NextResponse.json({ error: "id is required" }, { status: 400 });
-
-  // Ensure invoice exists (fast fail)
-  const exists = await client.fetch(
-    `defined(*[_type=="invoice" && _id==$id][0]._id)`,
-    { id }
+export async function GET() {
+  return NextResponse.json(
+    { error: "PDF generation removed. Use hosted invoice page." },
+    { status: 410 }
   );
-  if (!exists)
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const targetUrl = `${origin}/invoices?id=${encodeURIComponent(id)}&print=1`;
-
-  const path = resolveExecutablePath();
-  if (!path)
-    return NextResponse.json(
-      { error: "Chromium not configured" },
-      { status: 500 }
-    );
-
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    executablePath: path,
-  });
-  const page = await browser.newPage();
-  await page.goto(targetUrl, { waitUntil: "networkidle0" });
-  const pdfBuffer = await page.pdf({
-    format: "Letter",
-    printBackground: true,
-    margin: { top: "0.5in", right: "0.5in", bottom: "0.5in", left: "0.5in" },
-  });
-  await browser.close();
-
-  return new NextResponse(pdfBuffer, {
-    status: 200,
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${id}.pdf"`,
-      "Cache-Control": "no-store",
-    },
-  });
 }
