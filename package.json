@@ -13,7 +13,7 @@
     "build:sanity": "sanity build",
     "deploy:sanity": "sanity deploy",
     "deploy-graphql:sanity": "sanity graphql deploy",
-    "prepare": "husky"
+    "prepare": "npx husky install"
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
@@ -32,6 +32,7 @@
     "framer-motion": "^11.3.17",
     "gsap": "^3.12.5",
     "html2canvas": "^1.4.1",
+    "husky": "^9.1.7",
     "install": "^0.13.0",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.539.0",
