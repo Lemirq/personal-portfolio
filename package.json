@@ -42,7 +42,7 @@
     "posthog-js": "^1.255.1",
     "posthog-node": "^5.1.1",
     "puppeteer-core": "^24.16.0",
-    "react": "^18",
+    "react": "^19.1.1",
     "react-dom": "^18",
     "react-globe": "^5.0.2",
     "react-hook-form": "^7.52.1",

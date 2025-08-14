@@ -229,7 +229,7 @@ const Bento = () => {
             transition={{ duration: 0.3 }}
             className="fr gap-2 flex-wrap"
           >
-            {about?.iknow.map((i) => {
+            {about?.iknow?.map((i) => {
               const curr = iknow.find((t) => t._id === i._ref);
               if (!curr) return null;
               return (
