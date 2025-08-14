@@ -22,10 +22,18 @@ declare global {
         url: string;
       };
     };
+    gallery?: Array<{
+      asset: {
+        _id: string;
+        url: string;
+      };
+    }>;
   }
 
   type tech = SanityTech;
-  type about = SanityAbout;
+  interface about extends Omit<SanityAbout, "body"> {
+    body: BlockContent;
+  }
   type iknow = SanityIknow;
 
   // Keep convenient aliases for client/invoice docs from Sanity

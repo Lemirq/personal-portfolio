@@ -69,5 +69,19 @@ export default defineType({
         hotspot: true,
       },
     }),
+    defineField({
+      name: "gallery",
+      title: "Gallery",
+      description: "Additional images to showcase in the project modal.",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+        },
+      ],
+    }),
   ],
 });

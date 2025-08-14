@@ -38,6 +38,13 @@ export default async function PublicInvoicePage({
   const tax = subtotal * (Number(invoice.taxRate || 0) / 100);
   const total = subtotal + tax;
 
+  function formatCurrency(amount: number): string {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
   return (
     <div className="min-h-screen w-screen bg-[#f6f7fb] text-[#0b1225] py-10 px-4">
       <div className="mx-auto max-w-3xl bg-white rounded-xl shadow p-8">
@@ -127,10 +134,10 @@ export default async function PublicInvoicePage({
                 {Number(s.quantity || 0).toFixed(2)}
               </div>
               <div className="col-span-2 p-2 text-right">
-                ${Number(s.rate || 0).toFixed(2)}
+                ${formatCurrency(Number(s.rate || 0))}
               </div>
               <div className="col-span-2 p-2 text-right">
-                ${((s.quantity || 0) * (s.rate || 0)).toFixed(2)}
+                ${formatCurrency((s.quantity || 0) * (s.rate || 0))}
               </div>
             </div>
           ))}
@@ -140,17 +147,17 @@ export default async function PublicInvoicePage({
           <div className="w-64">
             <div className="flex justify-between">
               <div className="text-slate-600">Subtotal</div>
-              <div>${subtotal.toFixed(2)}</div>
+              <div>${formatCurrency(subtotal)}</div>
             </div>
             <div className="flex justify-between">
               <div className="text-slate-600">
                 Tax ({Number(invoice.taxRate || 0).toFixed(2)}%)
               </div>
-              <div>${tax.toFixed(2)}</div>
+              <div>${formatCurrency(tax)}</div>
             </div>
             <div className="flex justify-between font-semibold mt-1 border-t border-slate-300 pt-2 text-base">
               <div>Total</div>
-              <div>${total.toFixed(2)}</div>
+              <div>${formatCurrency(total)}</div>
             </div>
           </div>
         </div>

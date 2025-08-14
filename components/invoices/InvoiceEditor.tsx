@@ -284,7 +284,7 @@ export default function InvoiceEditor() {
                       type="number"
                       min={0}
                       placeholder="Qty"
-                      value={svc.quantity}
+                      value={svc.quantity || ""}
                       onChange={(e) =>
                         updateService(i, "quantity", e.target.value)
                       }
@@ -294,7 +294,7 @@ export default function InvoiceEditor() {
                       type="number"
                       min={0}
                       placeholder="Rate"
-                      value={svc.rate}
+                      value={svc.rate || ""}
                       onChange={(e) => updateService(i, "rate", e.target.value)}
                     />
                     <div className="col-span-1 text-right text-sm">

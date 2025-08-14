@@ -9,13 +9,7 @@ import {
   DialogClose,
 } from "./core/dialog";
 import { IoClose } from "react-icons/io5";
-import {
-  motion,
-  useInView,
-  Variant,
-  Transition,
-  UseInViewOptions,
-} from "framer-motion";
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { useMeasure } from "@uidotdev/usehooks";
 import { BiLink } from "react-icons/bi";

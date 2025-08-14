@@ -1,8 +1,15 @@
-'use client';
-import { Footer, Navbar } from '@/components';
-import { About, Approach, Bento, Contact, Hero, Projects } from '@/components/sections';
-import { useMainStore } from '@/stores/main-state-provider';
-import React, { useEffect } from 'react';
+"use client";
+import { Footer, Navbar } from "@/components";
+import {
+  About,
+  Approach,
+  Bento,
+  Contact,
+  Hero,
+  Projects,
+} from "@/components/sections";
+import { useMainStore } from "@/stores/main-state-provider";
+import React, { useEffect } from "react";
 
 const Container = ({
   sanityData,
@@ -15,7 +22,9 @@ const Container = ({
   };
 }) => {
   const { projects, iknow, about, tech } = sanityData;
-  const { setProjects, setAbout, setTech, setIknow } = useMainStore((state) => state);
+  const { setProjects, setAbout, setTech, setIknow } = useMainStore(
+    (state) => state
+  );
 
   useEffect(() => {
     setTech(tech);
@@ -25,13 +34,13 @@ const Container = ({
   }, []);
 
   return (
-    <main className='bg-[#000318] bg-grid-white/[0.02] text-white h-screen w-full overflow-x-hidden dark overscroll-none'>
+    <main className="bg-[#000318] bg-grid-white/[0.02] text-white h-screen w-full overflow-x-hidden dark overscroll-none">
       <Navbar />
       <Hero />
       <About />
       <Projects />
       <Bento />
-      <Approach />
+      {/* <Approach /> */}
       <Contact />
       <Footer />
     </main>

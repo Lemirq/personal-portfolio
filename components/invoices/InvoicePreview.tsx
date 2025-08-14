@@ -10,6 +10,13 @@ export interface BusinessInfo {
   taxLabel?: string;
 }
 
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
 function computeTotals(
   services: Array<{ quantity?: number; rate?: number }>,
   taxRate: number
@@ -124,10 +131,10 @@ const InvoicePreview = forwardRef<
               {Number(s.quantity || 0).toFixed(2)}
             </div>
             <div className="col-span-2 p-2 text-right">
-              ${Number(s.rate || 0).toFixed(2)}
+              ${formatCurrency(Number(s.rate || 0))}
             </div>
             <div className="col-span-2 p-2 text-right">
-              ${((s.quantity || 0) * (s.rate || 0)).toFixed(2)}
+              ${formatCurrency((s.quantity || 0) * (s.rate || 0))}
             </div>
           </div>
         ))}
@@ -137,18 +144,18 @@ const InvoicePreview = forwardRef<
         <div className="w-72">
           <div className="flex justify-between">
             <div className="text-slate-600">Subtotal</div>
-            <div>${subtotal.toFixed(2)}</div>
+            <div>${formatCurrency(subtotal)}</div>
           </div>
           <div className="flex justify-between">
             <div className="text-slate-600">
               {business.taxLabel || "Tax"} (
               {Number(invoice.taxRate || 0).toFixed(2)}%)
             </div>
-            <div>${tax.toFixed(2)}</div>
+            <div>${formatCurrency(tax)}</div>
           </div>
           <div className="flex justify-between font-semibold mt-1 border-t border-slate-300 pt-2 text-base">
             <div>Total</div>
-            <div>${total.toFixed(2)}</div>
+            <div>${formatCurrency(total)}</div>
           </div>
         </div>
       </div>

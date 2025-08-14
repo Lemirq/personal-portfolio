@@ -151,6 +151,19 @@ export type Project = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  gallery?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
 };
 
 export type Tech = {
@@ -169,7 +182,7 @@ export type About = {
   _updatedAt: string;
   _rev: string;
   heading?: string;
-  body?: string;
+  body?: BlockContent;
   iknow?: Array<{
     _ref: string;
     _type: "reference";

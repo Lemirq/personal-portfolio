@@ -1,8 +1,14 @@
+"use client";
 import { useMainStore } from "@/stores/main-state-provider";
 import { client } from "@/sanity/lib/client";
 import imageUrlBuilder from "@sanity/image-url";
 import { PortableText } from "next-sanity";
-import { useEffect } from "react";
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { motion } from "framer-motion";
+
+gsap.registerPlugin(useGSAP);
 
 const About = () => {
   const { about } = useMainStore((state) => state);
@@ -11,16 +17,48 @@ const About = () => {
   function urlFor(source: object) {
     return builder.image(source);
   }
-  useEffect(() => {
-    console.log(about);
-  }, [about]);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  useGSAP(
+    () => {
+      if (!svgRef.current) return;
+      const q = gsap.utils.selector(svgRef);
+
+      // Subtle and slower range for frequency and scale
+      gsap.fromTo(
+        q("feTurbulence"),
+        { attr: { baseFrequency: 0.56, seed: 4 } },
+        {
+          duration: 60,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          attr: { baseFrequency: 0.7, seed: 4 },
+        }
+      );
+
+      gsap.fromTo(
+        q("feDisplacementMap"),
+        { attr: { scale: 200 } },
+        {
+          duration: 1,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          attr: { scale: 100 },
+        }
+      );
+    },
+    { scope: svgRef }
+  );
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.8 }}
       className="w-full max-w-6xl mx-auto py-16 md:py-32 md:pt-12 overflow-x-scroll px-5 md:px-10"
       id="about"
     >
-      <div className="fr gap-10 justify-between"></div>
-
       <div className="w-full max-w-6xl fc gap-24">
         <div className="fc md:fr gap-11 w-full">
           {/* <img
@@ -30,6 +68,7 @@ const About = () => {
 						height="100%"
 					/> */}
           <svg
+            ref={svgRef}
             id="pfp"
             viewBox="0 0 2000 2000"
             fill="none"
@@ -40,16 +79,16 @@ const About = () => {
               <filter id="displacementFilter">
                 <feTurbulence
                   type="fractalNoise"
-                  baseFrequency="1"
+                  baseFrequency="0.9"
                   numOctaves="1"
                   result="noise"
                 />
                 <feDisplacementMap
                   in="SourceGraphic"
                   in2="noise"
-                  scale="200"
                   xChannelSelector="R"
                   yChannelSelector="G"
+                  scale="120"
                 />
               </filter>
               <mask id="circleMask">
@@ -67,9 +106,9 @@ const About = () => {
             <image
               className="rounded-full w-full h-full md:max-w-md md:w-full md:h-auto md:rounded-lg"
               href={
-                (about &&
-                  urlFor(about.mainImage).width(1000).height(1000).url()) ||
-                "/images/vihaan-sq.jpg"
+                about?.mainImage
+                  ? urlFor(about.mainImage).width(1000).height(1000).url()
+                  : "/images/vihaan-sq.jpg"
               }
               width="100%"
               height="100%"
@@ -86,24 +125,12 @@ const About = () => {
                   <div className="text-lg text-slate-400">{children}</div>
                 ),
               }}
-              // format links as target blank
-              value={
-                typeof about?.body === "string"
-                  ? [
-                      {
-                        _type: "block",
-                        children: [{ _type: "span", text: about.body }],
-                        markDefs: [],
-                        style: "normal",
-                      },
-                    ]
-                  : about?.body || []
-              }
+              value={about?.body || []}
             />
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
