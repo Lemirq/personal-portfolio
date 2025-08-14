@@ -10,7 +10,10 @@ export interface BusinessInfo {
   taxLabel?: string;
 }
 
-function computeTotals(services: InvoiceServiceItem[], taxRate: number) {
+function computeTotals(
+  services: Array<{ quantity?: number; rate?: number }>,
+  taxRate: number
+) {
   const subtotal = services.reduce(
     (a, s) => a + (s.quantity || 0) * (s.rate || 0),
     0
@@ -28,7 +31,7 @@ const InvoicePreview = forwardRef<
     invoice.services || [],
     Number(invoice.taxRate || 0)
   );
-  const client = invoice.client as ClientDoc;
+  const client = invoice.client as unknown as Partial<ClientDoc>;
   return (
     <div
       ref={ref as any}
@@ -60,6 +63,7 @@ const InvoicePreview = forwardRef<
           ) : null}
         </div>
         {business.logoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={business.logoUrl}
             alt="Logo"
