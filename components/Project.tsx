@@ -83,7 +83,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
               ) : (
                 <DialogImage
                   src={project.mainImage?.asset?.url || "/images/meta.png"}
-                  alt={project.title}
+                  alt={project.title!}
                   className="w-full rounded-2xl aspect-video"
                 />
               )}
@@ -128,7 +128,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
                   ) : (
                     <DialogImage
                       src={project.mainImage?.asset?.url || "/images/meta.png"}
-                      alt={project.title}
+                      alt={project.title!}
                       className="rounded-2xl w-full col-span-3 row-span-3 pointer-events-auto"
                     />
                   )}
@@ -144,7 +144,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
                       <BiLink />
                     </a>
                     <ul className="fr gap-2 justify-start flex-wrap">
-                      {project?.tech.map((tag, i) => (
+                      {project?.tech?.map((tag, i) => (
                         <li
                           key={i}
                           className=" px-4 py-1 rounded-full bg-violet-500 text-[12px]"
@@ -181,14 +181,14 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
             </DialogContainer>
           </Dialog>
         </div>
-        <Link href={project.url} target="blank">
+        <Link href={project.url!} target="blank">
           <h4 className="text-lg sm:text-2xl font-bold text-white inline-flex justify-start gap-2">
             <span>{project.title}</span>{" "}
             <span className="text-violet-500 fc">{<FaLink />}</span>
           </h4>
         </Link>
         <ul className="fr gap-2 justify-start flex-wrap">
-          {project?.tech.map((tag, i) => (
+          {project?.tech?.map((tag, i) => (
             <li
               key={i}
               className=" px-4 py-1 rounded-full bg-violet-500 text-[12px]"

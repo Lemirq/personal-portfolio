@@ -197,24 +197,74 @@ const Projects = () => {
                         <DialogContent className="relative p-2 w-full max-w-5xl rounded-2xl">
                           <div className="w-full rounded-2xl bg-[#0c0a1d] text-white p-4 m:p-8">
                             <div className="w-full fr justify-between items-start">
-                              <h3 className="text-2xl sm:text-3xl font-bold mb-4">
-                                {p.title}
-                              </h3>
+                              <Link
+                                className="group text-2xl sm:text-3xl mb-4"
+                                href={p.url as string}
+                              >
+                                <h3 className="font-bold hover:text-violet-400 transition-colors fr gap-1">
+                                  <span>{p.title}</span>
+                                  <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                                </h3>
+                              </Link>
                               <DialogClose className="h-fit w-fit rounded-full" />
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                              {images.length === 0 && (
-                                <div className="aspect-video rounded-lg bg-white/5" />
-                              )}
-                              {images.map((src, i) => (
-                                <DialogImage
-                                  key={i}
-                                  src={src}
-                                  alt={`${p.title}-${i}`}
-                                  className="w-full rounded-lg object-cover aspect-video"
-                                />
-                              ))}
-                            </div>
+                            {p.videoUrl ? (
+                              <div className="w-full rounded-xl overflow-hidden mb-4">
+                                <div className="w-full aspect-video">
+                                  <iframe
+                                    className="w-full h-full"
+                                    src={(() => {
+                                      try {
+                                        const url = new URL(
+                                          p.videoUrl as string
+                                        );
+                                        if (url.hostname.includes("youtu.be")) {
+                                          const id = url.pathname.replace(
+                                            "/",
+                                            ""
+                                          );
+                                          return `https://www.youtube.com/embed/${id}`;
+                                        }
+                                        if (
+                                          url.hostname.includes("youtube.com")
+                                        ) {
+                                          const v = url.searchParams.get("v");
+                                          if (v) {
+                                            const start =
+                                              url.searchParams.get("start") ||
+                                              url.searchParams.get("t");
+                                            return `https://www.youtube.com/embed/${v}${start ? `?start=${start.replace("s", "")}` : ""}`;
+                                          }
+                                          if (url.pathname.includes("/embed/"))
+                                            return p.videoUrl as string;
+                                        }
+                                      } catch (e) {}
+                                      return p.videoUrl as string;
+                                    })()}
+                                    title={p.title}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    allowFullScreen
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                                {images.length === 0 && (
+                                  <div className="aspect-video rounded-lg bg-white/5" />
+                                )}
+                                {images.map((src, i) => (
+                                  <DialogImage
+                                    key={i}
+                                    src={src}
+                                    alt={`${p.title}-${i}`}
+                                    className="w-full rounded-lg object-cover aspect-video"
+                                  />
+                                ))}
+                              </div>
+                            )}
+
                             <div className="fc items-start gap-3">
                               <ul className="fr gap-2 justify-start flex-wrap">
                                 {p?.tech?.map((tag, i) => (

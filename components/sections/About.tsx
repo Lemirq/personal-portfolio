@@ -2,7 +2,7 @@
 import { useMainStore } from "@/stores/main-state-provider";
 import { client } from "@/sanity/lib/client";
 import imageUrlBuilder from "@sanity/image-url";
-import { PortableText } from "next-sanity";
+import { PortableText } from "@portabletext/react";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
