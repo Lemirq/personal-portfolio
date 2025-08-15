@@ -2,6 +2,38 @@ import { Spotlight } from "@/components/Spotlight";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
+import { BiCodeAlt } from "react-icons/bi";
+
+const socialLinks = [
+  {
+    label: "Email",
+    icon: <MdOutlineMailOutline />,
+    url: "mailto:sharmavihaan190@gmail.com",
+  },
+  {
+    label: "GitHub",
+    icon: <AiFillGithub />,
+    url: "https://github.com/Lemirq",
+  },
+  {
+    label: "LinkedIn",
+    icon: <AiFillLinkedin />,
+    url: "https://www.linkedin.com/in/vs190",
+  },
+  {
+    label: "Instagram",
+    icon: <AiFillInstagram />,
+    url: "https://www.instagram.com/vhaan.ca/",
+  },
+  {
+    label: "DevPost",
+    icon: <BiCodeAlt />,
+    url: "https://devpost.com/sharmavihaan190",
+  },
+];
+
 const Hero = () => {
   return (
     <section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-32 md:pt-0 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
@@ -66,6 +98,21 @@ const Hero = () => {
           Full-stack developer in Canada. I turn ideas into <i>smooth</i>,
           high-performance web experiences that people actually enjoy using.
         </motion.p>
+
+        <div className="mt-8 flex justify-center gap-6 text-2xl text-neutral-400">
+          {socialLinks.map(({ label, icon, url }) => (
+            <a
+              key={label}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-transform hover:-translate-y-1 hover:text-white"
+              data-cursor="fill"
+            >
+              {icon}
+            </a>
+          ))}
+        </div>
 
         <Link href="/resume" className="text-center">
           <motion.button

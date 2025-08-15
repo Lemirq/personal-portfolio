@@ -37,8 +37,8 @@ const Container = ({
     <main className="bg-[#000318] bg-grid-white/[0.02] text-white h-screen w-full overflow-x-hidden dark overscroll-none">
       <Navbar />
       <Hero />
-      <About />
       <Projects />
+      <About />
       <Bento />
       {/* <Approach /> */}
       <Contact />

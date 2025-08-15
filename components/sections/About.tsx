@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { motion } from "framer-motion";
+import Markdown from "../Markdown";
 
 gsap.registerPlugin(useGSAP);
 
@@ -119,14 +120,9 @@ const About = () => {
           <div className="w-full fc sm:items-start gap-2">
             <h2 className="text-5xl">{about && about.heading}</h2>
             {/* <p className="text-lg text-slate-400">{about && about.body}</p> */}
-            <PortableText
-              components={{
-                block: ({ children }) => (
-                  <div className="text-lg text-slate-400">{children}</div>
-                ),
-              }}
-              value={about?.body || []}
-            />
+            {about?.body && (
+              <Markdown block="text-sm text-slate-400" markdown={about.body} />
+            )}
           </div>
         </div>
       </div>

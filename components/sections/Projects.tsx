@@ -7,11 +7,12 @@ import {
   DialogImage,
   DialogTrigger,
 } from "../core/dialog";
-import { PortableText } from "@portabletext/react";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import Badge from "../Badge";
+import Markdown from "../Markdown";
 
 const Projects = () => {
   const { projects, tech } = useMainStore((state) => state);
@@ -99,36 +100,14 @@ const Projects = () => {
                     </Link>
                     <ul className="fr gap-2 justify-start flex-wrap">
                       {active?.tech?.map((tag, i) => (
-                        <li
-                          key={i}
-                          className="px-4 py-1 rounded-full border border-violet-500/50 text-[12px]"
-                        >
-                          {tech.find((t) => t._id === tag._ref)?.techName}
+                        <li key={i}>
+                          <Badge>
+                            {tech.find((t) => t._id === tag._ref)?.techName}
+                          </Badge>
                         </li>
                       ))}
                     </ul>
-                    {active.body && (
-                      <PortableText
-                        components={{
-                          block: ({ children }) => (
-                            <div className="text-sm text-slate-300">
-                              {children}
-                            </div>
-                          ),
-                          list: ({ children }) => (
-                            <ul className="list-disc list-outside pl-5 text-sm text-slate-300">
-                              {children}
-                            </ul>
-                          ),
-                          listItem: ({ children }) => (
-                            <li className="text-sm text-slate-300">
-                              {children}
-                            </li>
-                          ),
-                        }}
-                        value={active.body}
-                      />
-                    )}
+                    {active.body && <Markdown markdown={active.body} />}
                     {active.gallery && active.gallery.length > 0 && (
                       <div className="w-full grid grid-cols-2 xl:grid-cols-3 gap-3 pt-2">
                         {active.gallery.map((g, i) => (
@@ -268,26 +247,20 @@ const Projects = () => {
                             <div className="fc items-start gap-3">
                               <ul className="fr gap-2 justify-start flex-wrap">
                                 {p?.tech?.map((tag, i) => (
-                                  <li
-                                    key={i}
-                                    className="px-4 py-1 rounded-full border border-violet-500/10 text-[12px]"
-                                  >
-                                    {
-                                      tech.find((t) => t._id === tag._ref)
-                                        ?.techName
-                                    }
+                                  <li key={i}>
+                                    <Badge>
+                                      {
+                                        tech.find((t) => t._id === tag._ref)
+                                          ?.techName
+                                      }
+                                    </Badge>
                                   </li>
                                 ))}
                               </ul>
                               {p.body && (
-                                <PortableText
-                                  components={{
-                                    block: ({ children }) => (
-                                      <div className="text-sm">{children}</div>
-                                    ),
-                                  }}
-                                  value={p.body}
-                                />
+                                <div className="max-h-72 overflow-y-auto w-full pr-2">
+                                  <Markdown markdown={p.body} />
+                                </div>
                               )}
                             </div>
                           </div>
