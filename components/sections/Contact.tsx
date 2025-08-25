@@ -30,7 +30,7 @@ const Contact = () => {
             >
               <a className="fr gap-1" href={url} target="blank">
                 {icon}
-                {label}
+                {label !== "X" ? label : ""}
               </a>
             </li>
           ))}

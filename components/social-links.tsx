@@ -1,10 +1,6 @@
 import { MdOutlineMailOutline } from "react-icons/md";
-import {
-  AiFillGithub,
-  AiFillInstagram,
-  AiFillLinkedin,
-  AiFillTwitterCircle,
-} from "react-icons/ai";
+import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
+import { RiTwitterXFill } from "react-icons/ri";
 
 export type SocialLink = {
   label: string;
@@ -34,9 +30,8 @@ export const SOCIAL_LINKS: SocialLink[] = [
     url: "https://www.instagram.com/vhaan.ca/",
   },
   {
-    label: "Twitter",
-    icon: <AiFillTwitterCircle />,
+    label: "X",
+    icon: <RiTwitterXFill />,
     url: "https://x.com/vs190",
   },
 ];
-
