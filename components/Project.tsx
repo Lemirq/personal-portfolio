@@ -16,6 +16,8 @@ import { BiLink } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
 
 import Link from "next/link";
+import Markdown from "./Markdown";
+import Badge from "./Badge";
 const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
   const [showMore, setShowMore] = useState<boolean>(false);
   const [ref, { height }] = useMeasure();
@@ -153,15 +155,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
                         </li>
                       ))}
                     </ul>
-                    <PortableText
-                      components={{
-                        block: ({ children }) => (
-                          <div className="text-sm">{children}</div>
-                        ),
-                      }}
-                      // format links as target blank
-                      value={project.body}
-                    />
+                    {project.body && <Markdown markdown={project.body} />}
                   </div>
                 </div>
               </DialogContent>
@@ -191,9 +185,9 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
           {project?.tech?.map((tag, i) => (
             <li
               key={i}
-              className=" px-4 py-1 rounded-full bg-violet-500 text-[12px]"
+              className="px-4 py-1 rounded-full bg-violet-500 text-[12px]"
             >
-              {tech.find((t) => t._id === tag._ref)?.techName}
+              <Badge>{tech.find((t) => t._id === tag._ref)?.techName}</Badge>
             </li>
           ))}
         </ul>

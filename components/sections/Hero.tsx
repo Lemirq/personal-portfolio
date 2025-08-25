@@ -1,7 +1,13 @@
+"use client";
+
 import { Spotlight } from "@/components/Spotlight";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
+import { SOCIAL_LINKS } from "@/components/social-links";
+
+const socialLinks = SOCIAL_LINKS;
+
 const Hero = () => {
   return (
     <section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-32 md:pt-0 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
@@ -66,6 +72,21 @@ const Hero = () => {
           Full-stack developer in Canada. I turn ideas into <i>smooth</i>,
           high-performance web experiences that people actually enjoy using.
         </motion.p>
+
+        <div className="mt-8 flex justify-center gap-6 text-2xl text-neutral-400">
+          {socialLinks.map(({ label, icon, url }) => (
+            <a
+              key={label}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-transform hover:-translate-y-1 hover:text-white"
+              data-cursor="fill"
+            >
+              {icon}
+            </a>
+          ))}
+        </div>
 
         <Link href="/resume" className="text-center">
           <motion.button

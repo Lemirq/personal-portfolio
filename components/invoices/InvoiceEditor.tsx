@@ -269,7 +269,7 @@ export default function InvoiceEditor() {
             <div>
               <label className="text-xs text-slate-400">Services</label>
               <div className="space-y-2">
-                {invoice.services.map((svc, i) => (
+                {invoice.services?.map((svc, i) => (
                   <div key={i} className="grid grid-cols-12 gap-2 items-center">
                     <input
                       className={`${inputBase} col-span-6`}

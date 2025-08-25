@@ -1,4 +1,5 @@
 import { client } from "@/sanity/lib/client";
+import Image from "next/image";
 
 export default async function PublicInvoicePage({
   params,
@@ -68,7 +69,7 @@ export default async function PublicInvoicePage({
             ) : null}
           </div>
           {business.logoUrl ? (
-            <img
+            <Image
               src={business.logoUrl}
               alt="Logo"
               className="w-20 h-20 object-contain"
