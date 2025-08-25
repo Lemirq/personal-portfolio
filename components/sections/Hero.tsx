@@ -1,38 +1,12 @@
+"use client";
+
 import { Spotlight } from "@/components/Spotlight";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
-import { MdOutlineMailOutline } from "react-icons/md";
-import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
-import { BiCodeAlt } from "react-icons/bi";
+import { SOCIAL_LINKS } from "@/components/social-links";
 
-const socialLinks = [
-  {
-    label: "Email",
-    icon: <MdOutlineMailOutline />,
-    url: "mailto:sharmavihaan190@gmail.com",
-  },
-  {
-    label: "GitHub",
-    icon: <AiFillGithub />,
-    url: "https://github.com/Lemirq",
-  },
-  {
-    label: "LinkedIn",
-    icon: <AiFillLinkedin />,
-    url: "https://www.linkedin.com/in/vs190",
-  },
-  {
-    label: "Instagram",
-    icon: <AiFillInstagram />,
-    url: "https://www.instagram.com/vhaan.ca/",
-  },
-  {
-    label: "DevPost",
-    icon: <BiCodeAlt />,
-    url: "https://devpost.com/sharmavihaan190",
-  },
-];
+const socialLinks = SOCIAL_LINKS;
 
 const Hero = () => {
   return (

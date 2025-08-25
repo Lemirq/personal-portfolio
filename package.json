@@ -37,6 +37,7 @@
     "jspdf": "^2.5.1",
     "lucide-react": "^0.539.0",
     "mini-svg-data-uri": "^1.4.4",
+    "motion": "^12.23.12",
     "next": "^15.0.3",
     "next-sanity": "^10.0.10",
     "npm": "^10.8.2",
