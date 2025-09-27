@@ -61,7 +61,7 @@ const Hero = () => {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="mt-4 text-lg text-neutral-300 max-w-3xl font-semibold text-center mx-auto"
         >
-          📍 Toronto, UTM CS
+          📍 Toronto, UofT CS
         </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 20 }}

@@ -7,6 +7,7 @@ import iknow from "./iknow";
 import VisibleProjects from "./VisibleProjects";
 import Client from "./Client";
 import Invoice from "./Invoice";
+import Redirect from "./Redirect";
 export const schemaTypes = [
   About,
   Tech,
@@ -17,4 +18,5 @@ export const schemaTypes = [
   VisibleProjects,
   Client,
   Invoice,
+  Redirect,
 ];

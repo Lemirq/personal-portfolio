@@ -49,6 +49,7 @@ const fetchSanityData = async () => {
           body,
           heading,
           iknow,
+          "resume": resume.asset->url,
           mainImage{
             asset->{
             _id,

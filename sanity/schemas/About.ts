@@ -32,5 +32,13 @@ export default defineType({
       title: "Image",
       type: "image",
     }),
+    defineField({
+      name: "resume",
+      title: "Resume (PDF)",
+      type: "file",
+      options: {
+        accept: "application/pdf",
+      },
+    }),
   ],
 });

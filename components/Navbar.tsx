@@ -39,7 +39,7 @@ const sections = [
 const Navbar = () => {
   return (
     <div className="fixed top-5 sm:top-7 fr w-screen z-50">
-      <ul className="bg-zinc-900/50 backdrop-blur-xl border border-slate-300/10 rounded-3xl px-4 py-2 fr text-sm md:text-md gap-4 sm:gap-3">
+      <ul className="nav-glass border border-slate-300/10 rounded-3xl px-4 py-2 fr text-sm md:text-md gap-4 sm:gap-3">
         {sections.map(({ label, url, className }) => {
           if (url.toString().includes("http"))
             return (

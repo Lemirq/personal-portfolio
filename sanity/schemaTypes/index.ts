@@ -8,6 +8,7 @@ import iknow from "../schemas/iknow";
 import VisibleProjects from "../schemas/VisibleProjects";
 import Client from "../schemas/Client";
 import Invoice from "../schemas/Invoice";
+import Redirect from "../schemas/Redirect";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -20,5 +21,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     VisibleProjects,
     Client,
     Invoice,
+    Redirect,
   ],
 };

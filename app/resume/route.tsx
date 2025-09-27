@@ -3,11 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const res = await client.fetch(`
-    *[_type == "resume"]{
-    name,  
-    "file": file.asset->url,
+    *[_type == "about"][0]{
+      "file": resume.asset->url,
     }
-    `);
+  `);
 
-  return NextResponse.redirect(res[0].file);
+  if (!res?.file) {
+    return NextResponse.json({ error: "Resume not found" }, { status: 404 });
+  }
+
+  return NextResponse.redirect(res.file);
 }
