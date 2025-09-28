@@ -1,5 +1,6 @@
 import Container from "./container";
 import { client } from "@/sanity/lib/client";
+import ReactLenis from "lenis/react";
 
 export const revalidate = 60;
 const fetchSanityData = async () => {
@@ -77,5 +78,11 @@ const fetchSanityData = async () => {
 
 export default async function Home() {
   const allData = await fetchSanityData();
-  return <Container sanityData={allData} />;
+  return (
+    <>
+      <ReactLenis root options={{ lerp: 0.1, anchors: { duration: 0.5 } }}>
+        <Container sanityData={allData} />
+      </ReactLenis>
+    </>
+  );
 }

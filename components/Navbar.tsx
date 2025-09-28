@@ -20,7 +20,7 @@ const sections = [
         />
       </>
     ),
-    url: "https://vhaan.me",
+    url: "/",
     className: "border-none hover:bg-transparent",
   },
   {
@@ -56,32 +56,15 @@ const Navbar = () => {
       >
         <ul className="rounded-3xl px-4 py-2 fr text-sm md:text-md gap-4 sm:gap-3 mix-blend-difference">
           {sections.map(({ label, url, className }) => {
-            if (url.toString().includes("http"))
-              return (
-                <li
-                  key={label.toString()}
-                  className={cn(
-                    "sm:px-3 py-2 rounded-full sm:border border-zinc-800 sm:hover:bg-zinc-800 transition-colors bg-transparent cursor-pointer bg-blend-screen",
-                    className
-                  )}
-                >
-                  <a href={url}>{label}</a>
-                </li>
-              );
             return (
               <li
                 key={label.toString()}
                 className={cn(
-                  "sm:px-3 py-2 rounded-full sm:border border-slate-300/10 sm:hover:bg-zinc-800 transition-colors bg-transparent cursor-pointer bg-blend-difference",
+                  "sm:px-3 py-2 rounded-full sm:border border-zinc-800 sm:hover:bg-zinc-800 transition-colors bg-transparent cursor-pointer bg-blend-screen",
                   className
                 )}
-                onClick={() =>
-                  document
-                    .querySelector(url)
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
               >
-                {label}
+                <a href={url}>{label}</a>
               </li>
             );
           })}

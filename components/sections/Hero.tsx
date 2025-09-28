@@ -73,7 +73,12 @@ const Hero = () => {
           high-performance web experiences that people actually enjoy using.
         </motion.p>
 
-        <div className="mt-8 flex justify-center gap-6 text-2xl text-neutral-400">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+          className="mt-8 flex justify-center gap-6 text-2xl text-neutral-400"
+        >
           {socialLinks.map(({ label, icon, url }) => (
             <a
               key={label}
@@ -86,7 +91,7 @@ const Hero = () => {
               {icon}
             </a>
           ))}
-        </div>
+        </motion.div>
 
         <Link href="/resume" className="text-center">
           <motion.button
