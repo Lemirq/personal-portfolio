@@ -13,6 +13,18 @@
  */
 
 // Source: schema.json
+export type Redirect = {
+  _id: string;
+  _type: "redirect";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  from: string;
+  to: string;
+  permanent?: boolean;
+  enabled?: boolean;
+};
+
 export type Invoice = {
   _id: string;
   _type: "invoice";
@@ -202,6 +214,16 @@ export type About = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  resume?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    media?: unknown;
+    _type: "file";
+  };
 };
 
 export type SanityImagePaletteSwatch = {
@@ -322,5 +344,5 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Invoice | Client | VisibleProjects | Iknow | ExcludedDirectories | BlockContent | Project | Tech | About | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Redirect | Invoice | Client | VisibleProjects | Iknow | ExcludedDirectories | BlockContent | Project | Tech | About | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;

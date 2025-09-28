@@ -1,5 +1,6 @@
 "use client";
-import { Footer, Navbar } from "@/components";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import {
   About,
   Approach,
@@ -34,7 +35,7 @@ const Container = ({
   }, []);
 
   return (
-    <main className="bg-[#000318] bg-grid-white/[0.02] text-white h-screen w-full overflow-x-hidden dark overscroll-none">
+    <main className="bg-[#000318] bg-grid-white/[0.02] text-white w-full overflow-x-hidden dark overscroll-none">
       <Navbar />
       <Hero />
       <Projects />
