@@ -3,11 +3,11 @@ import { extractTextFromBlockContent } from "@/utils/extractTextFromBlockContent
 
 /**
  * HiddenContentBlock component
- * 
+ *
  * Renders all key textual content from Sanity CMS in a hidden div for LLM and crawler accessibility.
  * This ensures that content loaded interactively or hidden behind hover effects is accessible
  * in the HTML source for search engines and AI crawlers.
- * 
+ *
  * The component is server-rendered and updates automatically when Sanity content changes.
  */
 export default async function HiddenContentBlock() {
@@ -30,6 +30,7 @@ export default async function HiddenContentBlock() {
     `),
     client.fetch<tech[]>(`
       *[_type == "tech"]{
+        _id,
         techName
       }
     `),
@@ -39,7 +40,6 @@ export default async function HiddenContentBlock() {
       }
     `),
   ]);
-
   const aboutData = about[0];
 
   return (
@@ -70,12 +70,14 @@ export default async function HiddenContentBlock() {
               )}
               {project.tech && project.tech.length > 0 && (
                 <ul>
-                  {project.tech.map((t, idx) => (
-                    <li key={idx}>
-                      {tech.find((techItem) => techItem._id === t._ref)
-                        ?.techName || ""}
-                    </li>
-                  ))}
+                  {project.tech.map((t, idx) => {
+                    return (
+                      <li key={idx}>
+                        {tech.find((techItem) => techItem._id === t._ref)
+                          ?.techName || ""}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </article>
