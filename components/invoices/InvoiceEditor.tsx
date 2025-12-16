@@ -15,7 +15,7 @@ const defaultBusiness: BusinessInfo = {
 };
 
 const inputBase =
-  "bg-[#0d112a] border border-[#1a1f3d] rounded px-3 py-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-violet-600";
+  "bg-[#0d112a] border border-[#1a1f3d] rounded px-3 py-2 w-full text-sm focus:outline-hidden focus:ring-2 focus:ring-violet-600";
 const btnBase = "px-3 py-2 rounded text-sm font-medium";
 
 async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
@@ -485,7 +485,7 @@ export default function InvoiceEditor() {
         </div>
 
         <aside
-          className="md:sticky md:top-6 flex-shrink-0 max-h-[calc(100vh-5rem)] overflow-hidden md:pl-4 w-full md:w-[min(48vw,900px)] lg:w-[min(44vw,960px)]"
+          className="md:sticky md:top-6 shrink-0 max-h-[calc(100vh-5rem)] overflow-hidden md:pl-4 w-full md:w-[min(48vw,900px)] lg:w-[min(44vw,960px)]"
           ref={previewContainerRef}
         >
           <div className="bg-white/5 border border-[#1a1f3d] rounded-xl p-3">
@@ -496,7 +496,7 @@ export default function InvoiceEditor() {
               </span>
             </div>
             <div
-              className="rounded-lg shadow"
+              className="rounded-lg shadow-sm"
               style={{
                 transform: `scale(${previewScale})`,
                 transformOrigin: "top left",

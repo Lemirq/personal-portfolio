@@ -58,7 +58,7 @@ const Approach = () => {
 export default Approach;
 const Card = ({ index, children, item }: { index: number; children?: React.ReactNode; item: any }) => {
 	return (
-		<div className="border border-black/[0.2] group flex items-center justify-center dark:border-white/[0.2]  max-w-sm w-full mx-auto p-4 relative h-[30rem]">
+		<div className="border border-black/20 group flex items-center justify-center dark:border-white/20  max-w-sm w-full mx-auto p-4 relative h-120">
 			<Icon className="absolute h-6 w-6 -top-3 -left-3 dark:text-white text-black" />
 			<Icon className="absolute h-6 w-6 -bottom-3 -left-3 dark:text-white text-black" />
 			<Icon className="absolute h-6 w-6 -top-3 -right-3 dark:text-white text-black" />

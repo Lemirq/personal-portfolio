@@ -81,7 +81,7 @@ export default async function ProjectPage({ params }: Props) {
       />
       
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-[#050511]/80 backdrop-blur-sm border-b border-white/5">
+      <nav className="fixed top-0 left-0 w-full z-50 bg-[#050511]/80 backdrop-blur-xs border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link
             href="/#projects"
@@ -98,7 +98,7 @@ export default async function ProjectPage({ params }: Props) {
           {/* Header Section */}
           <header className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
+              <h1 className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
                 {project.title}
               </h1>
               {project.headline && (
@@ -162,7 +162,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.overview && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-indigo-500"></span>
+                  <span className="w-8 h-px bg-indigo-500"></span>
                   Overview
                 </h2>
                 <div className="prose prose-invert prose-xl prose text-gray-300">
@@ -175,7 +175,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.problemStatement && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-red-500"></span>
+                  <span className="w-8 h-px bg-red-500"></span>
                   The Problem
                 </h2>
                 <div className="prose prose-invert prose-lg text-gray-300">
@@ -188,7 +188,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.solution && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-emerald-500"></span>
+                  <span className="w-8 h-px bg-emerald-500"></span>
                   The Solution
                 </h2>
                 <div className="prose prose-invert prose-lg text-gray-300">
@@ -201,7 +201,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.features && project.features.length > 0 && (
               <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-violet-500"></span>
+                  <span className="w-8 h-px bg-violet-500"></span>
                   Key Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
@@ -225,7 +225,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.results && project.results.length > 0 && (
               <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-amber-500"></span>
+                  <span className="w-8 h-px bg-amber-500"></span>
                   Results & Impact
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">

@@ -70,7 +70,7 @@ export default function TransformPage() {
                 name="schemaId" 
                 id="schemaId" 
                 required
-                className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none appearance-none"
+                className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-hidden appearance-none"
               >
                 {schemas.map(s => (
                   <option key={s} value={s}>{s}</option>
@@ -89,7 +89,7 @@ export default function TransformPage() {
                   id="docType"
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none appearance-none"
+                  className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-hidden appearance-none"
                 >
                   <option value="">Select Type...</option>
                   {types.map(t => (
@@ -109,7 +109,7 @@ export default function TransformPage() {
                   id="documentId" 
                   required
                   disabled={!selectedType}
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none appearance-none disabled:opacity-50"
+                  className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-hidden appearance-none disabled:opacity-50"
                 >
                   <option value="">{selectedType ? "Select a document..." : "Select type first"}</option>
                   {documents.map(doc => (
@@ -131,7 +131,7 @@ export default function TransformPage() {
               rows={4}
               placeholder="e.g. Change all instances of 'Alien' to 'Lifeform'. Match case."
               required
-              className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-hidden"
             />
           </div>
 

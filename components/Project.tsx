@@ -82,7 +82,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
           )}
         </div>
 
-        <div className="p-6 flex flex-col gap-4 flex-grow">
+        <div className="p-6 flex flex-col gap-4 grow">
           <div className="flex flex-col gap-2">
             <h4 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">
               {project.title}

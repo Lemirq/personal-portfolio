@@ -147,7 +147,7 @@ const ClientLanding = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className='text-4xl md:text-6xl font-bold text-left md:text-left bg-gradient-to-br from-violet-400 via-indigo-300 to-white bg-clip-text text-transparent'>
+            className='text-4xl md:text-6xl font-bold text-left md:text-left bg-linear-to-br from-violet-400 via-indigo-300 to-white bg-clip-text text-transparent'>
             Let&apos;s Build Something Exceptional
           </motion.h1>
           <motion.p
@@ -165,11 +165,11 @@ const ClientLanding = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.7 }}
           className='flex-1 flex justify-center items-center'>
-          <div className='rounded-full bg-gradient-to-br from-violet-600 via-indigo-700 to-black p-1 w-64 h-64 flex items-center justify-center shadow-2xl'>
+          <div className='rounded-full bg-linear-to-br from-violet-600 via-indigo-700 to-black p-1 w-64 h-64 flex items-center justify-center shadow-2xl'>
             <Image src='/images/Vihaan-sq.jpg' alt='Vihaan Sharma' width={240} height={240} className='rounded-full w-60 h-60 object-cover border-4 border-indigo-900' />
           </div>
         </motion.div>
-        <div className='absolute -z-10 left-0 top-0 w-full h-full bg-gradient-to-br from-violet-900/30 via-indigo-900/10 to-black/0 rounded-3xl blur-2xl' />
+        <div className='absolute -z-10 left-0 top-0 w-full h-full bg-linear-to-br from-violet-900/30 via-indigo-900/10 to-black/0 rounded-3xl blur-2xl' />
       </div>
       {/* Services - Card Row */}
       <div className='mb-20'>
@@ -181,7 +181,7 @@ const ClientLanding = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
-              className='bg-gradient-to-br from-[#1a133a] to-[#05081B] rounded-2xl p-8 border border-[#070a1f] shadow-lg hover:scale-105 transition-transform'>
+              className='bg-linear-to-br from-[#1a133a] to-[#05081B] rounded-2xl p-8 border border-[#070a1f] shadow-lg hover:scale-105 transition-transform'>
               <h3 className='text-xl font-semibold mb-2 text-violet-400'>{s.title}</h3>
               <p className='text-slate-300'>{s.description}</p>
             </motion.div>
@@ -201,7 +201,7 @@ const ClientLanding = () => {
               <p className='text-slate-400 text-sm text-center mb-4'>{p.desc}</p>
               {i < process.length - 1 && (
                 <div
-                  className='hidden md:block absolute right-0 top-6 w-full h-1 bg-gradient-to-r from-violet-700/40 to-indigo-700/10 z-0'
+                  className='hidden md:block absolute right-0 top-6 w-full h-1 bg-linear-to-r from-violet-700/40 to-indigo-700/10 z-0'
                   style={{ left: '50%', width: '100%' }}
                 />
               )}
@@ -212,7 +212,7 @@ const ClientLanding = () => {
       {/* Portfolio Highlights - Masonry Style */}
       <div className='mb-20'>
         <h2 className='text-3xl font-bold mb-8 text-center'>Portfolio Highlights</h2>
-        <div className='columns-1 md:columns-2 lg:columns-3 gap-6 [column-fill:_balance]'>
+        <div className='columns-1 md:columns-2 lg:columns-3 gap-6 [column-fill:balance]'>
           <div className='flex flex-col gap-6'>
             {portfolio.map((proj, i) => (
               <motion.div
@@ -254,9 +254,9 @@ const ClientLanding = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
-              className={`relative rounded-2xl p-8 border-2 ${tier.highlight ? 'border-violet-500 bg-gradient-to-br from-violet-900/60 to-indigo-900/40 shadow-2xl scale-105 z-10' : 'border-[#070a1f] bg-[#0d112a] shadow-lg'} flex flex-col items-center`}>
+              className={`relative rounded-2xl p-8 border-2 ${tier.highlight ? 'border-violet-500 bg-linear-to-br from-violet-900/60 to-indigo-900/40 shadow-2xl scale-105 z-10' : 'border-[#070a1f] bg-[#0d112a] shadow-lg'} flex flex-col items-center`}>
               {tier.highlight && (
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-violet-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow'>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 bg-violet-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-sm'>
                   Most Popular
                 </div>
               )}
@@ -271,7 +271,7 @@ const ClientLanding = () => {
               </ul>
               <a
                 href='#client-contact'
-                className={`mt-auto px-6 py-3 rounded-xl font-semibold text-white transition bg-violet-600 hover:bg-violet-700 shadow ${tier.highlight ? 'ring-2 ring-violet-400' : ''}`}>
+                className={`mt-auto px-6 py-3 rounded-xl font-semibold text-white transition bg-violet-600 hover:bg-violet-700 shadow-sm ${tier.highlight ? 'ring-2 ring-violet-400' : ''}`}>
                 {tier.cta}
               </a>
             </motion.div>
@@ -279,7 +279,7 @@ const ClientLanding = () => {
         </div>
         <p className='text-slate-400 text-center mt-6'>Contact me for a detailed quote. Pricing depends on complexity, features, and timeline.</p>
         {/* Bare Minimum Included List */}
-        <div className='max-w-2xl mx-auto mt-10 bg-[#13162b] rounded-2xl p-6 border border-[#262b4c] shadow fc gap-2'>
+        <div className='max-w-2xl mx-auto mt-10 bg-[#13162b] rounded-2xl p-6 border border-[#262b4c] shadow-sm fc gap-2'>
           <h3 className='text-xl font-bold mb-2 text-violet-400 text-center'>Bare Minimum Included in Every Project</h3>
           <ul className='list-disc ml-6 text-slate-300 text-base space-y-1'>
             <li>HTTPS/SSL by default</li>
@@ -305,7 +305,7 @@ const ClientLanding = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
-              className='bg-gradient-to-br from-violet-900/60 to-indigo-900/40 rounded-2xl p-8 border border-[#070a1f] fc gap-3 shadow-xl flex-1 min-w-[250px]'>
+              className='bg-linear-to-br from-violet-900/60 to-indigo-900/40 rounded-2xl p-8 border border-[#070a1f] fc gap-3 shadow-xl flex-1 min-w-[250px]'>
               <FaQuoteLeft className='text-violet-500 text-2xl mb-2' />
               <p className='text-slate-200 italic'>&quot;{t.quote}&quot;</p>
               <div className='text-slate-400 text-sm mt-2'>{t.name}</div>
@@ -331,7 +331,7 @@ const ClientLanding = () => {
       </div>
       {/* CTA - Gradient Card */}
       <div className='mb-20' id='client-contact'>
-        <div className='max-w-2xl mx-auto bg-gradient-to-br from-violet-900/60 to-indigo-900/40 rounded-2xl p-10 shadow-2xl'>
+        <div className='max-w-2xl mx-auto bg-linear-to-br from-violet-900/60 to-indigo-900/40 rounded-2xl p-10 shadow-2xl'>
           <h2 className='text-3xl font-bold mb-4 text-center'>Let&apos;s Build Your Next Solution</h2>
           <p className='text-slate-300 mb-6 text-center'>
             Schedule a free consultation or request a project assessment. I&apos;ll respond within 24 hours.
