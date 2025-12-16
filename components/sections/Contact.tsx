@@ -20,7 +20,7 @@ const Contact = () => {
         </p>
       </div>
 
-      <div className="fc sm:fr gap-5 lg:gap-10	w-full">
+      <div className="fc md:fr gap-5 lg:gap-10	w-full">
         <ul className="fr flex-wrap sm:fc gap-2 sm:flex-nowrap sm:gap-4 text-xl sm:text-3xl">
           {contact.map(({ label, icon, url }) => (
             <li

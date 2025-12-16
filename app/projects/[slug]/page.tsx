@@ -2,7 +2,7 @@ import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import Image from "next/image";
-import { BsArrowLeft, BsGithub, BsGlobe } from "react-icons/bs";
+import { BsArrowLeft, BsArrowUpRight, BsGithub, BsGlobe } from "react-icons/bs";
 import { notFound } from "next/navigation";
 import { Spotlight } from "@/components/Spotlight";
 import GlassSurface from "@/components/GlassSurface";
@@ -128,30 +128,21 @@ export default async function ProjectPage({ params }: Props) {
                 })}
               </div>
 
-              <div className="flex gap-4">
                 {project.url && (
-                  <Button
-                    // className="bg-slate-900 text-white border-neutral-200 dark:border-slate-800"
-                    as="a"
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 px-4 py-2 rounded-xl text-lg cursor-pointer"
                   >
-                   <div className="flex items-center gap-2">
-                     <BsGlobe /> Visit Site
-                   </div>
-                  </Button>
+                  <Link href={project.url} target="_blank" rel="noopener noreferrer" className=" w-full h-full">
+                     Visit Site <BsArrowUpRight className="inline-block ml-2" />
+                  </Link>
+                  </button>
                 )}
-                {/* Note: Repo link field wasn't generic, assumed 'url' is live site. 
-                    If there's a repo link in specific field, add it here. */}
-              </div>
             </div>
           </header>
 
           {/* Media Gallery */}
           {project.gallery && project.gallery.length > 0 && (
-            <section className="space-y-8 animate-in fade-in zoom-in-95 duration-700 delay-150">
-              <h2 className="text-3xl font-bold text-white">Media Gallery</h2>
+            <section className="space-y-4 animate-in fade-in zoom-in-95 duration-700 delay-150">
               <ProjectGalleryCarousel gallery={project.gallery} projectTitle={project.title} />
             </section>
           )}
@@ -165,8 +156,8 @@ export default async function ProjectPage({ params }: Props) {
                   <span className="w-8 h-px bg-indigo-500"></span>
                   Overview
                 </h2>
-                <div className="prose prose-invert prose-xl prose text-gray-300">
-                  <PortableText value={project.overview} />
+                <div className="prose prose-invert prose-xl text-gray-300 w-full max-w-none">
+                  <PortableText value={project.overview}/>
                 </div>
               </section>
             )}
@@ -175,10 +166,10 @@ export default async function ProjectPage({ params }: Props) {
             {project.problemStatement && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-red-500"></span>
+                  <span className="w-8 h-px bg-indigo-500"></span>
                   The Problem
                 </h2>
-                <div className="prose prose-invert prose-lg text-gray-300">
+                <div className="prose prose-invert prose-xl text-gray-300 w-full max-w-none">
                   <PortableText value={project.problemStatement} />
                 </div>
               </section>
@@ -188,10 +179,10 @@ export default async function ProjectPage({ params }: Props) {
             {project.solution && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-emerald-500"></span>
+                  <span className="w-8 h-px bg-indigo-500"></span>
                   The Solution
                 </h2>
-                <div className="prose prose-invert prose-lg text-gray-300">
+                <div className="prose prose-invert prose-xl text-gray-300 w-full max-w-none">
                   <PortableText value={project.solution} />
                 </div>
               </section>
@@ -201,17 +192,17 @@ export default async function ProjectPage({ params }: Props) {
             {project.features && project.features.length > 0 && (
               <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-violet-500"></span>
+                  <span className="w-8 h-px bg-indigo-500"></span>
                   Key Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                   {project.features.map((feature: any, i: number) => (
                     <Card key={i} className="bg-white/5 border-white/10 text-gray-300">
                       <CardHeader>
-                        <CardTitle className="text-violet-300">{feature.title}</CardTitle>
+                        <CardTitle className="text-indigo-300">{feature.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="prose prose-invert prose-sm text-gray-300 max-w-none">
+                        <div className="prose prose-invert prose-lg text-gray-300 max-w-none">
                           <PortableText value={feature.description} />
                         </div>
                       </CardContent>
@@ -225,7 +216,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.results && project.results.length > 0 && (
               <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-amber-500"></span>
+                  <span className="w-8 h-px bg-indigo-500"></span>
                   Results & Impact
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
@@ -235,7 +226,7 @@ export default async function ProjectPage({ params }: Props) {
                         <CardTitle className="text-amber-300">{result.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="prose prose-invert prose-sm text-gray-300 max-w-none">
+                        <div className="prose prose-invert prose-lg text-gray-300 max-w-none">
                           <PortableText value={result.description} />
                         </div>
                       </CardContent>
