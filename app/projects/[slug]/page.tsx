@@ -7,12 +7,20 @@ import { notFound } from "next/navigation";
 import { Spotlight } from "@/components/Spotlight";
 import GlassSurface from "@/components/GlassSurface";
 import { Button } from "@/components/MovingBorder";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ProjectGalleryCarousel } from "@/components/ProjectGalleryCarousel";
 
 // Revalidate project data every hour
 export const revalidate = 3600;
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 async function getProject(slug: string) {
@@ -20,26 +28,30 @@ async function getProject(slug: string) {
     *[_type == "project" && slug.current == $slug][0] {
       title,
       headline,
+      description,
       url,
-      videoUrl,
       tech,
-      body,
       overview,
       problemStatement,
       solution,
-      features,
-      results,
-      mainImage {
-        asset-> {
-          _id,
-          url
-        }
+      solution,
+      features[] {
+        title,
+        description
+      },
+      results[] {
+        title,
+        description
       },
       gallery[] {
+        _type,
+        _key,
         asset-> {
           _id,
           url
-        }
+        },
+        url,
+        caption
       }
     }
   `;
@@ -53,7 +65,7 @@ async function getTech() {
 }
 
 export default async function ProjectPage({ params }: Props) {
-  const { slug } = params;
+  const { slug } = await params;
   const project = await getProject(slug);
   const allTech = await getTech();
 
@@ -136,54 +148,24 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           </header>
 
-          {/* Hero Media */}
-          <section className="rounded-2xl overflow-hidden border border-white/10 bg-black/50 aspect-video relative animate-in fade-in zoom-in-95 duration-700 delay-150 shadow-2xl shadow-indigo-500/10">
-            {project.videoUrl ? (
-              <iframe
-                className="w-full h-full"
-                src={(() => {
-                  try {
-                    const url = new URL(project.videoUrl as string);
-                    if (url.hostname.includes("youtu.be")) {
-                      const id = url.pathname.replace("/", "");
-                      return `https://www.youtube.com/embed/${id}?autoplay=0`;
-                    }
-                    if (url.hostname.includes("youtube.com")) {
-                      const v = url.searchParams.get("v");
-                      if (v) return `https://www.youtube.com/embed/${v}?autoplay=0`;
-                      if (url.pathname.includes("/embed/"))
-                        return project.videoUrl as string;
-                    }
-                  } catch (e) {}
-                  return project.videoUrl as string;
-                })()}
-                title={project.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              project.mainImage && (
-                <Image
-                  src={project.mainImage.asset.url}
-                  alt={project.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              )
-            )}
-          </section>
+          {/* Media Gallery */}
+          {project.gallery && project.gallery.length > 0 && (
+            <section className="space-y-8 animate-in fade-in zoom-in-95 duration-700 delay-150">
+              <h2 className="text-3xl font-bold text-white">Media Gallery</h2>
+              <ProjectGalleryCarousel gallery={project.gallery} projectTitle={project.title} />
+            </section>
+          )}
 
           {/* Detailed Content */}
-          <div className="space-y-16">
+          <div className="space-y-16 w-full">
             {/* Overview */}
             {project.overview && (
-              <section className="space-y-4">
+              <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <span className="w-8 h-[1px] bg-indigo-500"></span>
                   Overview
                 </h2>
-                <div className="prose prose-invert prose-lg text-gray-300">
+                <div className="prose prose-invert prose-xl prose text-gray-300">
                   <PortableText value={project.overview} />
                 </div>
               </section>
@@ -191,7 +173,7 @@ export default async function ProjectPage({ params }: Props) {
 
             {/* Problem Statement */}
             {project.problemStatement && (
-              <section className="space-y-4">
+              <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <span className="w-8 h-[1px] bg-red-500"></span>
                   The Problem
@@ -204,7 +186,7 @@ export default async function ProjectPage({ params }: Props) {
 
             {/* Solution */}
             {project.solution && (
-              <section className="space-y-4">
+              <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <span className="w-8 h-[1px] bg-emerald-500"></span>
                   The Solution
@@ -216,78 +198,54 @@ export default async function ProjectPage({ params }: Props) {
             )}
 
             {/* Features */}
-            {project.features && (
-              <section className="space-y-4">
+            {project.features && project.features.length > 0 && (
+              <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <span className="w-8 h-[1px] bg-violet-500"></span>
                   Key Features
                 </h2>
-                <GlassSurface
-                  className="p-8 rounded-3xl !block w-full"
-                  backgroundOpacity={0.05}
-                  borderWidth={0.5}
-                >
-                  <div className="prose prose-invert prose-lg text-gray-300">
-                    <PortableText value={project.features} />
-                  </div>
-                </GlassSurface>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                  {project.features.map((feature: any, i: number) => (
+                    <Card key={i} className="bg-white/5 border-white/10 text-gray-300">
+                      <CardHeader>
+                        <CardTitle className="text-violet-300">{feature.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="prose prose-invert prose-sm text-gray-300 max-w-none">
+                          <PortableText value={feature.description} />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </section>
             )}
 
             {/* Results */}
-            {project.results && (
-              <section className="space-y-4">
+            {project.results && project.results.length > 0 && (
+              <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                   <span className="w-8 h-[1px] bg-amber-500"></span>
                   Results & Impact
                 </h2>
-                <GlassSurface
-                  className="p-8 rounded-3xl !block w-full"
-                  backgroundOpacity={0.05}
-                  borderWidth={0.5}
-                >
-                  <div className="prose prose-invert prose-lg text-gray-300">
-                    <PortableText value={project.results} />
-                  </div>
-                </GlassSurface>
-              </section>
-            )}
-
-            {/* Body (Legacy Support) */}
-            {!project.overview && project.body && (
-              <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-[1px] bg-gray-500"></span>
-                  Details
-                </h2>
-                <div className="prose prose-invert prose-lg text-gray-300">
-                  <PortableText value={project.body} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                  {project.results.map((result: any, i: number) => (
+                    <Card key={i} className="bg-white/5 border-white/10 text-gray-300">
+                      <CardHeader>
+                        <CardTitle className="text-amber-300">{result.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="prose prose-invert prose-sm text-gray-300 max-w-none">
+                          <PortableText value={result.description} />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </section>
             )}
-          </div>
 
-          {/* Gallery */}
-          {project.gallery && project.gallery.length > 0 && (
-            <section className="space-y-8 pt-12 border-t border-white/10">
-              <h2 className="text-3xl font-bold">Gallery</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {project.gallery.map((image: any, i: number) => (
-                  <div
-                    key={image.asset._id}
-                    className="relative aspect-video rounded-xl overflow-hidden border border-white/10 group grayscale hover:grayscale-0 transition-all duration-500"
-                  >
-                    <Image
-                      src={image.asset.url}
-                      alt={`Gallery image ${i + 1}`}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+          </div>
         </div>
       </div>
     </main>

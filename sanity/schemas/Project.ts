@@ -6,9 +6,9 @@ export default defineType({
   type: "document",
   orderings: [
     {
-      title: "Display Order",
-      name: "orderAsc",
-      by: [{ field: "order", direction: "asc" }],
+      title: "Manual Order",
+      name: "manualOrder",
+      by: [{ field: "orderRank", direction: "asc" }],
     },
     {
       title: "Title",
@@ -42,28 +42,27 @@ export default defineType({
       type: "string",
     }),
     defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
+      rows: 3,
+      description: "A brief description of the project (used for previews and summaries)",
+    }),
+    defineField({
       name: "invisible",
       title: "Invisible",
       type: "boolean",
     }),
     defineField({
-      name: "order",
-      title: "Display Order",
-      type: "number",
-      description: "Controls the order projects appear on the site (lower numbers appear first)",
-      validation: (Rule) => Rule.min(0),
+      name: "orderRank",
+      title: "Order Rank",
+      type: "string",
+      hidden: true,
     }),
     defineField({
       name: "url",
       title: "URL",
       type: "url",
-    }),
-    defineField({
-      name: "videoUrl",
-      title: "Video URL",
-      type: "url",
-      description:
-        "Optional YouTube (or other) video URL to embed for this project. If present, it will be shown instead of the image.",
     }),
     defineField({
       name: "tech",
@@ -75,12 +74,6 @@ export default defineType({
           to: [{ type: "tech" }],
         },
       ],
-    }),
-
-    defineField({
-      name: "body",
-      title: "Body",
-      type: "blockContent",
     }),
     defineField({
       name: "overview",
@@ -103,34 +96,137 @@ export default defineType({
     defineField({
       name: "features",
       title: "Key Features",
-      type: "blockContent",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          title: "Feature Card",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+            },
+          ],
+          preview: {
+            select: {
+              title: "title",
+              description: "description",
+            },
+            prepare({ title }) {
+              return {
+                title: title || "Feature",
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "results",
       title: "Results / Impact",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "mainImage",
-      title: "Main image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
+      type: "array",
+      of: [
+        {
+          type: "object",
+          title: "Result Card",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+            },
+          ],
+          preview: {
+            select: {
+              title: "title",
+            },
+            prepare({ title }) {
+              return {
+                title: title || "Result",
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "gallery",
-      title: "Gallery",
-      description: "Additional images to showcase in the project modal.",
+      title: "Media Gallery",
+      description: "Images and videos to showcase the project. Add images or YouTube/video URLs.",
       type: "array",
       of: [
         {
           type: "image",
+          title: "Image",
           options: {
             hotspot: true,
+          },
+        },
+        {
+          type: "object",
+          name: "video",
+          title: "Video",
+          fields: [
+            {
+              name: "url",
+              title: "Video URL",
+              type: "url",
+              description: "YouTube or other video embed URL",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "caption",
+              title: "Caption",
+              type: "string",
+              description: "Optional caption for the video",
+            },
+          ],
+          preview: {
+            select: {
+              url: "url",
+              caption: "caption",
+            },
+            prepare({ url, caption }) {
+              return {
+                title: caption || "Video",
+                subtitle: url,
+                media: () => "🎥",
+              };
+            },
           },
         },
       ],
     }),
   ],
+  preview: {
+    select: {
+      title: "title",
+      invisible: "invisible",
+      gallery: "gallery",
+    },
+    prepare({ title, invisible, gallery }) {
+      // Get first gallery item as media preview
+      const firstItem = gallery?.[0];
+      const media = firstItem?._type === "image" ? firstItem : undefined;
+
+      return {
+        title,
+        subtitle: invisible ? "Hidden" : "Visible",
+        media,
+      };
+    },
+  },
 });

@@ -13,8 +13,36 @@ import Link from "next/link";
 import Markdown from "./Markdown";
 import Badge from "./Badge";
 
+// Helper to convert YouTube URLs to embed URLs
+const getEmbedUrl = (url: string): string => {
+  try {
+    const urlObj = new URL(url);
+    if (urlObj.hostname.includes("youtu.be")) {
+      const id = urlObj.pathname.replace("/", "");
+      return `https://www.youtube.com/embed/${id}`;
+    }
+    if (urlObj.hostname.includes("youtube.com")) {
+      const v = urlObj.searchParams.get("v");
+      if (v) return `https://www.youtube.com/embed/${v}`;
+      if (urlObj.pathname.includes("/embed/")) return url;
+    }
+  } catch (e) {
+    // If URL parsing fails, return as-is
+  }
+  return url;
+};
+
 const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
   const projectSlug = project.slug?.current;
+
+  // Get first item from gallery (can be image or video)
+  const firstGalleryItem = project.gallery?.[0];
+  const isVideo = firstGalleryItem?._type === "video";
+  const imageUrl = firstGalleryItem && firstGalleryItem._type === "image" && firstGalleryItem.asset
+    ? firstGalleryItem.asset.url
+    : "/images/meta.png";
+  const videoUrl = isVideo && firstGalleryItem._type === "video" ? getEmbedUrl(firstGalleryItem.url) : null;
+
   return (
     <Link href={projectSlug ? `/projects/${projectSlug}` : "#"}>
       <motion.div
@@ -37,12 +65,21 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
             </div>
           </div>
 
-          <Image
-            src={project.mainImage?.asset?.url || "/images/meta.png"}
-            alt={project.title!}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          {isVideo && videoUrl ? (
+            <iframe
+              src={videoUrl}
+              title={project.title!}
+              className="w-full h-full object-cover pointer-events-none transition-transform duration-500 group-hover:scale-105"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            />
+          ) : (
+            <Image
+              src={imageUrl}
+              alt={project.title!}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          )}
         </div>
 
         <div className="p-6 flex flex-col gap-4 flex-grow">
@@ -50,9 +87,9 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
             <h4 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">
               {project.title}
             </h4>
-            {project.headline && (
-              <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
-                {project.headline}
+            {project.description && (
+              <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
+                {project.description}
               </p>
             )}
           </div>

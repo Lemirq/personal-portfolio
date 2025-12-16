@@ -13,28 +13,32 @@ declare global {
   interface ExcludedDirectories extends SanityExcludedDirectories {}
 
   // Align our runtime shape with GROQ selections (asset-> { _id, url })
-  interface project extends Omit<SanityProject, "body" | "mainImage"> {
+  interface project extends Omit<SanityProject, "gallery"> {
     slug: { current: string };
     headline: string;
+    description?: string;
     overview: BlockContent;
     problemStatement: BlockContent;
     solution: BlockContent;
     features: BlockContent;
     results: BlockContent;
-    order?: number | null;
-    body: BlockContent;
-    mainImage: {
-      asset: {
-        _id: string;
-        url: string;
-      };
-    };
-    gallery?: Array<{
-      asset: {
-        _id: string;
-        url: string;
-      };
-    }>;
+    orderRank?: string | null;
+    gallery?: Array<
+      | {
+          _type: "image";
+          _key: string;
+          asset: {
+            _id: string;
+            url: string;
+          };
+        }
+      | {
+          _type: "video";
+          _key: string;
+          url: string;
+          caption?: string;
+        }
+    >;
   }
 
   type tech = SanityTech;

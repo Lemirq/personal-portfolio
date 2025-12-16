@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState, useId, useCallback } from "react";
 
 export interface GlassSurfaceProps {
+  id?: string;
   children?: React.ReactNode;
   width?: number | string;
   height?: number | string;
@@ -60,6 +61,7 @@ const useDarkMode = () => {
 };
 
 const GlassSurface: React.FC<GlassSurfaceProps> = ({
+  id,
   children,
   width = 200,
   height = 80,
@@ -81,7 +83,8 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   className = "",
   style = {},
 }) => {
-  const uniqueId = useId().replace(/:/g, "-");
+  const uniqueIdKey = useId().replace(/:/g, "-");
+  const uniqueId = id || uniqueIdKey;
   const filterId = `glass-filter-${uniqueId}`;
   const redGradId = `red-grad-${uniqueId}`;
   const blueGradId = `blue-grad-${uniqueId}`;

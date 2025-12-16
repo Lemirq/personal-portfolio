@@ -8,28 +8,25 @@ const fetchSanityData = async () => {
   const unorderedProjects: project[] = await client.fetch(`
     *[_type == "project" && !invisible]{
       title,
-      order,
+      orderRank,
       headline,
+      description,
       slug,
       url,
-      videoUrl,
       invisible,
       tech,
-      body,
       _id,
-      mainImage{
+      gallery[]{
+        _type,
+        _key,
         asset->{
           _id,
           url
         },
-      },
-      gallery[]{
-        asset->{
-          _id,
-          url
-        }
+        url,
+        caption
       }
-    } | order(_createdAt desc)				
+    } | order(orderRank asc)
     `);
 
 

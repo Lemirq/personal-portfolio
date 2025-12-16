@@ -41,6 +41,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-5 sm:top-7 fr w-screen z-50">
       <GlassSurface
+        id="navbar-glass"
         displace={0.5}
         distortionScale={-180}
         redOffset={0}
