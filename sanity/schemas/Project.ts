@@ -6,6 +6,11 @@ export default defineType({
   type: "document",
   orderings: [
     {
+      title: "Display Order",
+      name: "orderAsc",
+      by: [{ field: "order", direction: "asc" }],
+    },
+    {
       title: "Title",
       name: "titleAsc",
       by: [{ field: "title", direction: "asc" }],
@@ -40,6 +45,13 @@ export default defineType({
       name: "invisible",
       title: "Invisible",
       type: "boolean",
+    }),
+    defineField({
+      name: "order",
+      title: "Display Order",
+      type: "number",
+      description: "Controls the order projects appear on the site (lower numbers appear first)",
+      validation: (Rule) => Rule.min(0),
     }),
     defineField({
       name: "url",
