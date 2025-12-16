@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState, useId } from "react";
+"use client"
+import React, { useEffect, useRef, useState, useId, useCallback } from "react";
 
 export interface GlassSurfaceProps {
   children?: React.ReactNode;
@@ -94,7 +95,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
 
   const isDarkMode = useDarkMode();
 
-  const generateDisplacementMap = () => {
+  const generateDisplacementMap = useCallback(() => {
     const rect = containerRef.current?.getBoundingClientRect();
     const actualWidth = rect?.width || 400;
     const actualHeight = rect?.height || 200;
@@ -120,11 +121,20 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     `;
 
     return `data:image/svg+xml,${encodeURIComponent(svgContent)}`;
-  };
+  }, [
+    borderWidth,
+    borderRadius,
+    mixBlendMode,
+    brightness,
+    opacity,
+    blur,
+    redGradId,
+    blueGradId,
+  ]);
 
-  const updateDisplacementMap = () => {
+  const updateDisplacementMap = useCallback(() => {
     feImageRef.current?.setAttribute("href", generateDisplacementMap());
-  };
+  }, [generateDisplacementMap]);
 
   useEffect(() => {
     updateDisplacementMap();
@@ -175,27 +185,15 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     return () => {
       resizeObserver.disconnect();
     };
-  }, []);
+  }, [updateDisplacementMap]);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver(() => {
-      setTimeout(updateDisplacementMap, 0);
-    });
-
-    resizeObserver.observe(containerRef.current);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
 
   useEffect(() => {
     setTimeout(updateDisplacementMap, 0);
-  }, [width, height]);
+  }, [width, height, updateDisplacementMap]);
 
-  const supportsSVGFilters = () => {
+  const supportsSVGFilters = useCallback(() => {
     const isWebkit =
       /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     const isFirefox = /Firefox/.test(navigator.userAgent);
@@ -207,7 +205,13 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     const div = document.createElement("div");
     div.style.backdropFilter = `url(#${filterId})`;
     return div.style.backdropFilter !== "";
-  };
+  }, [filterId]);
+
+  const supportsBackdropFilter = useCallback(() => {
+    if (typeof window === "undefined") return false;
+    return CSS.supports("backdrop-filter", "blur(10px)");
+  }, []);
+
   const [supportsSVGFiltersState, setSupportsSVGFiltersState] = useState(false);
   const [supportsBackdropFilterState, setSupportsBackdropFilterState] =
     useState(false);
@@ -215,12 +219,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   useEffect(() => {
     setSupportsSVGFiltersState(supportsSVGFilters());
     setSupportsBackdropFilterState(supportsBackdropFilter());
-  }, []);
-
-  const supportsBackdropFilter = () => {
-    if (typeof window === "undefined") return false;
-    return CSS.supports("backdrop-filter", "blur(10px)");
-  };
+  }, [supportsSVGFilters, supportsBackdropFilter]);
 
   const getContainerStyles = (): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {

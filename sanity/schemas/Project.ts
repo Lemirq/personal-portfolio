@@ -23,6 +23,15 @@ export default defineType({
       type: "string",
     }),
     defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "title",
+        maxLength: 96,
+      },
+    }),
+    defineField({
       name: "headline",
       title: "Headline",
       type: "string",
@@ -59,6 +68,34 @@ export default defineType({
     defineField({
       name: "body",
       title: "Body",
+      type: "blockContent",
+    }),
+    defineField({
+      name: "overview",
+      title: "Overview",
+      description: "A high-level summary of the project.",
+      type: "blockContent",
+    }),
+    defineField({
+      name: "problemStatement",
+      title: "Problem Statement",
+      description: "What problem were you solving?",
+      type: "blockContent",
+    }),
+    defineField({
+      name: "solution",
+      title: "Solution",
+      description: "How did you solve it?",
+      type: "blockContent",
+    }),
+    defineField({
+      name: "features",
+      title: "Key Features",
+      type: "blockContent",
+    }),
+    defineField({
+      name: "results",
+      title: "Results / Impact",
       type: "blockContent",
     }),
     defineField({

@@ -15,7 +15,7 @@ import {
   MotionConfig,
   Transition,
   Variant,
-} from "framer-motion";
+} from "motion/react";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 import useClickOutside from "@/hooks/useClickOutside";

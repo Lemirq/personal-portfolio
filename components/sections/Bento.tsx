@@ -1,5 +1,5 @@
 import { useMainStore } from "@/stores/main-state-provider";
-import { motion } from "framer-motion";
+import { motion, Variants } from "motion/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
@@ -19,7 +19,7 @@ const Bento = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -27,7 +27,7 @@ const Bento = () => {
     }),
   };
 
-  const child = {
+  const child: Variants = {
     visible: {
       // opacity: 1,
       x: 0,
@@ -110,7 +110,7 @@ const Bento = () => {
             }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="absolute inset-0  z-10"
+            className="absolute inset-0 z-10"
           />
         </div>
 
@@ -220,7 +220,7 @@ const Bento = () => {
           <h3 className="text-lg md:text-2xl font-bold mb-4">
             My Technologies
           </h3>
-          {/* this section shows all skills in a bubble, whick are draggable with framer-motion random positions need to be generated within the bounds of the container */}
+          {/* this section shows all skills in a bubble, whick are draggable with motion/react random positions need to be generated within the bounds of the container */}
           <motion.ul
             initial="hidden"
             whileInView="visible"

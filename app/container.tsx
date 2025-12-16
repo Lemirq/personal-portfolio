@@ -32,7 +32,7 @@ const Container = ({
     setProjects(projects);
     setAbout(about[0]);
     setIknow(iknow);
-  }, []);
+  }, [projects, iknow, about, tech, setProjects, setAbout, setTech, setIknow]);
 
   return (
     <main className="bg-[#000318] bg-grid-white/[0.02] text-white w-full overflow-x-hidden dark overscroll-none">

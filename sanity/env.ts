@@ -4,6 +4,7 @@ export const apiVersion =
 export const dataset = "production";
 
 export const projectId = "zvfxtzrz";
+export const token = process.env.SANITY_TOKEN;
 function assertValue<T>(v: T | undefined, errorMessage: string): T {
   if (v === undefined) {
     throw new Error(errorMessage);

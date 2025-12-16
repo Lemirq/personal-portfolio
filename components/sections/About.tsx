@@ -6,7 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Markdown from "../Markdown";
 
 gsap.registerPlugin(useGSAP);

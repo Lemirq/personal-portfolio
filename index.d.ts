@@ -14,6 +14,13 @@ declare global {
 
   // Align our runtime shape with GROQ selections (asset-> { _id, url })
   interface project extends Omit<SanityProject, "body" | "mainImage"> {
+    slug: { current: string };
+    headline: string;
+    overview: BlockContent;
+    problemStatement: BlockContent;
+    solution: BlockContent;
+    features: BlockContent;
+    results: BlockContent;
     order?: number | null;
     body: BlockContent;
     mainImage: {
