@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function InvoicesLoginPage() {
+function LoginForm() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -56,5 +56,21 @@ export default function InvoicesLoginPage() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function InvoicesLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen w-screen bg-[#000318] text-white flex items-center justify-center p-6">
+          <div className="w-full max-w-sm bg-[#0b0f26] border border-[#1a1f3d] rounded-xl p-5 space-y-4 text-sm">
+            Loading…
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
