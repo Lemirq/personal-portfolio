@@ -22,7 +22,7 @@ function basicAuthOk(request: NextRequest): boolean {
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = new URL(request.url);
 
   // 1) URL shortener: check redirects from Sanity

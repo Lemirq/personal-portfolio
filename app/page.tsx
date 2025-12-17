@@ -4,6 +4,7 @@ import ReactLenis from "lenis/react";
 import HiddenContentBlock from "@/components/HiddenContentBlock";
 import PageWrapper from "@/components/PageWrapper";
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 const fetchSanityData = async () => {
   const unorderedProjects: project[] = await client.fetch(`
