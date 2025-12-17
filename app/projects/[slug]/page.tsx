@@ -18,6 +18,7 @@ import { ProjectGalleryCarousel } from "@/components/ProjectGalleryCarousel";
 import BackButton from "@/components/BackButton";
 
 // Revalidate project data every hour
+export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 interface Props {
