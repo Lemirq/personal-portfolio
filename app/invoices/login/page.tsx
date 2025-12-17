@@ -41,7 +41,7 @@ export default function InvoicesLoginPage() {
       >
         <h1 className="text-xl font-semibold">Invoices Login</h1>
         <input
-          className="w-full bg-[#0d112a] border border-[#1a1f3d] rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-600"
+          className="w-full bg-[#0d112a] border border-[#1a1f3d] rounded px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-violet-600"
           type="password"
           placeholder="Enter password"
           value={password}

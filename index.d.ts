@@ -13,21 +13,32 @@ declare global {
   interface ExcludedDirectories extends SanityExcludedDirectories {}
 
   // Align our runtime shape with GROQ selections (asset-> { _id, url })
-  interface project extends Omit<SanityProject, "body" | "mainImage"> {
-    order?: number | null;
-    body: BlockContent;
-    mainImage: {
-      asset: {
-        _id: string;
-        url: string;
-      };
-    };
-    gallery?: Array<{
-      asset: {
-        _id: string;
-        url: string;
-      };
-    }>;
+  interface project extends Omit<SanityProject, "gallery"> {
+    slug: { current: string };
+    headline: string;
+    description?: string;
+    overview: BlockContent;
+    problemStatement: BlockContent;
+    solution: BlockContent;
+    features: BlockContent;
+    results: BlockContent;
+    orderRank?: string | null;
+    gallery?: Array<
+      | {
+          _type: "image";
+          _key: string;
+          asset: {
+            _id: string;
+            url: string;
+          };
+        }
+      | {
+          _type: "video";
+          _key: string;
+          url: string;
+          caption?: string;
+        }
+    >;
   }
 
   type tech = SanityTech;
@@ -51,3 +62,18 @@ declare global {
 
 // Fallback types for packages without TS in this project
 declare module "react-to-print";
+
+// JSX namespace augmentation for three.js components
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mesh: any;
+      planeGeometry: any;
+      primitive: any;
+      ambientLight: any;
+      directionalLight: any;
+      pointLight: any;
+      threeGlobe: any;
+    }
+  }
+}

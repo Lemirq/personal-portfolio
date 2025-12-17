@@ -2,40 +2,35 @@ import Container from "./container";
 import { client } from "@/sanity/lib/client";
 import ReactLenis from "lenis/react";
 import HiddenContentBlock from "@/components/HiddenContentBlock";
+import PageWrapper from "@/components/PageWrapper";
 
 export const revalidate = 60;
 const fetchSanityData = async () => {
   const unorderedProjects: project[] = await client.fetch(`
-    *[_type == "project"]{
+    *[_type == "project" && !invisible]{
       title,
-      order,
+      orderRank,
       headline,
+      description,
+      slug,
       url,
-      videoUrl,
       invisible,
       tech,
-      body,
       _id,
-      mainImage{
+      gallery[]{
+        _type,
+        _key,
         asset->{
           _id,
           url
         },
-      },
-      gallery[]{
-        asset->{
-          _id,
-          url
-        }
+        url,
+        caption
       }
-    }				
+    } | order(orderRank asc)
     `);
 
-  const projectOrdering = await client.fetch(
-    `*[_type == "visible-projects"]{
-        projectOrdering,
-     }`
-  );
+
 
   const iknow = await client.fetch(`
       *[_type == "iknow"]{
@@ -69,22 +64,18 @@ const fetchSanityData = async () => {
   );
 
   // match projects to projectOrdering
-  const projects = projectOrdering[0].projectOrdering.map((projecto: any) => {
-    return unorderedProjects.find(
-      (project: any) => project._id === projecto._ref
-    );
-  });
+  const projects = unorderedProjects;
   return { projects, iknow, about, tech };
 };
 
 export default async function Home() {
   const allData = await fetchSanityData();
   return (
-    <>
+    <PageWrapper>
       <HiddenContentBlock />
       <ReactLenis root options={{ lerp: 0.1, anchors: { duration: 0.5 } }}>
         <Container sanityData={allData} />
       </ReactLenis>
-    </>
+    </PageWrapper>
   );
 }

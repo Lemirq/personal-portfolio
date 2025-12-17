@@ -9,7 +9,13 @@ import dynamic from 'next/dynamic';
 const ReactGlobe = dynamic(import('react-globe'), { ssr: false });
 export function MyGlobe() {
 	// support rendering markers with simple data
-	const markers = [
+	const markers: Array<{
+		id: string;
+		city: string;
+		color: string;
+		coordinates: [number, number];
+		value: number;
+	}> = [
 		{
 			id: 'marker1',
 			city: 'Singapore',
@@ -59,14 +65,14 @@ export function MyGlobe() {
 		ambientLightColor: 'red',
 		cameraRotateSpeed: 0.5,
 		focusAnimationDuration: 2000,
-		focusEasingFunction: ['Linear', 'None'],
+		focusEasingFunction: ['Linear', 'None'] as ['Linear', 'None'],
 		pointLightColor: 'gold',
 		pointLightIntensity: 1.5,
 		globeGlowColor: 'blue',
-		markerTooltipRenderer: (marker) => `${marker.city} (${marker.value})`,
+		markerTooltipRenderer: (marker: any) => `${marker.city || 'Unknown'} (${marker.value || 0})`,
 	};
 
-	const [globe, setGlobe] = useState(null);
+	const [globe, setGlobe] = useState<any>(null);
 	console.log(globe); // captured globe instance with API methods
 
 	// simple component usage
@@ -80,11 +86,11 @@ export function MyGlobe() {
 			markers={markers}
 			options={options}
 			width="100%"
-			onClickMarker={(marker, markerObject, event) => console.log(marker, markerObject, event)}
-			onGetGlobe={setGlobe}
-			onMouseOutMarker={(marker, markerObject, event) => console.log(marker, markerObject, event)}
+			onClickMarker={(marker: any, markerObject: any, event: any) => console.log(marker, markerObject, event)}
+			onGetGlobe={(globe: any) => setGlobe(globe)}
+			onMouseOutMarker={(marker: any, markerObject: any, event: any) => console.log(marker, markerObject, event)}
 			onGlobeTextureLoaded={() => console.log('globe loaded')}
-			onMouseOverMarker={(marker, markerObject, event) => console.log(marker, markerObject, event)}
+			onMouseOverMarker={(marker: any, markerObject: any, event: any) => console.log(marker, markerObject, event)}
 		/>
 	);
 }

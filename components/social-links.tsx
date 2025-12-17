@@ -1,6 +1,7 @@
 import { MdOutlineMailOutline } from "react-icons/md";
 import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
 import { RiTwitterXFill } from "react-icons/ri";
+import { JSX } from "react";
 
 export type SocialLink = {
   label: string;

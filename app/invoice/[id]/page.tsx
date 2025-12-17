@@ -48,7 +48,7 @@ export default async function PublicInvoicePage({
 
   return (
     <div className="min-h-screen w-screen bg-[#f6f7fb] text-[#0b1225] py-10 px-4">
-      <div className="mx-auto max-w-3xl bg-white rounded-xl shadow p-8">
+      <div className="mx-auto max-w-3xl bg-white rounded-xl shadow-sm p-8">
         <div className="flex items-start justify-between">
           <div>
             <div className="text-3xl font-extrabold">Invoice</div>

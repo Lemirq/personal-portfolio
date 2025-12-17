@@ -4,7 +4,7 @@
 import { type ReactNode, createContext, useRef, useContext } from 'react';
 import { type StoreApi, useStore } from 'zustand';
 
-import { type MainStore, createMainStore } from './MainStore';
+import { type MainStore, createMainStore, defaultInitState } from './MainStore';
 
 export const MainStoreContext = createContext<StoreApi<MainStore> | null>(null);
 
@@ -13,9 +13,9 @@ export interface MainStoreProviderProps {
 }
 
 export const MainStoreProvider = ({ children }: MainStoreProviderProps) => {
-	const storeRef = useRef<StoreApi<MainStore>>();
+	const storeRef = useRef<StoreApi<MainStore> | undefined>(undefined);
 	if (!storeRef.current) {
-		storeRef.current = createMainStore();
+		storeRef.current = createMainStore(defaultInitState);
 	}
 
 	return <MainStoreContext.Provider value={storeRef.current}>{children}</MainStoreContext.Provider>;

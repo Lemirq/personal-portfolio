@@ -1,14 +1,139 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --rotate-x-0: 0deg;
+  --rotate-x-1: 15deg;
+  --rotate-x-2: 30deg;
+  --rotate-x-3: 45deg;
+  --rotate-x-4: 60deg;
+  --rotate-x-5: 75deg;
+  --rotate-x-6: 90deg;
+
+  --font-dm: DM_Sans, sans-serif;
+
+  --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
+  --animate-shimmer: shimmer 2s linear infinite;
+
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  @keyframes shimmer {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+  @keyframes spotlight {
+    0% {
+      opacity: 0;
+      transform: translate(-72%, -62%) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -40%) scale(1);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
 @layer base {
-  .fc {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+  
+}
+
+@utility fc {
     @apply flex justify-center items-center flex-col;
   }
-  .fr {
+  @utility fr {
     @apply flex justify-center items-center flex-row;
   }
+
+
+@utility bg-grid {
+  /* The color doesn't matter here, just the shape */
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='64' height='64' fill='none' stroke='black'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  mask-size: 64px 64px;
+  mask-repeat: repeat;
+}
+
+@utility bg-grid-small {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='8' height='8' fill='none' stroke='black'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  mask-size: 8px 8px;
+  mask-repeat: repeat;
+}
+
+@utility bg-dot {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3e%3ccircle fill='black' id='pattern-circle' cx='10' cy='10' r='1.6257413380501518'%3e%3c/circle%3e%3c/svg%3e");
+  mask-size: 16px 16px;
+  mask-repeat: repeat;
+}
+
+/* 3. Variables for Colors */
+/* Tailwind v4 does this natively. You can access any color as a var. 
+   Example: var(--color-blue-500) is available automatically.
+   You do not need the 'addVariablesForColors' plugin anymore. */
+
+@layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -64,194 +189,219 @@
   }
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 8px;
+
+/* View Transition Styles */
+::view-transition-group(root) {
+  z-index: auto !important;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  @apply bg-[#000318];
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-300/20 rounded-full;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-body {
-  overscroll-behavior: none;
-}
-
-*::selection {
-  @apply bg-violet-500 text-white;
-}
-
-.iknow:hover::before {
-  opacity: 1;
-}
-
-.iknow::before,
-.iknow::after {
-  border-radius: inherit;
-  content: "";
-  height: 100%;
-  left: 0px;
-  opacity: 0;
-  position: absolute;
-  top: 0px;
-  transition: opacity 500ms;
-  width: 100%;
-}
-
-.iknow::before {
-  background: radial-gradient(
-    300px circle at var(--mouse-x) var(--mouse-y),
-    rgba(255, 255, 255, 0.06),
-    transparent 40%
-  );
-  z-index: 3;
-}
-
-.iknow::after {
-  background: radial-gradient(
-    600px circle at var(--mouse-x) var(--mouse-y),
-    rgba(255, 255, 255, 0.4),
-    transparent 40%
-  );
-  z-index: 1;
-}
-
-.iknow-border {
-  background: radial-gradient(
-    300px circle at var(--mouse-x) var(--mouse-y),
-    rgba(255, 255, 255, 0.4),
-    transparent 40%
-  );
-  z-index: 1;
-}
-
-section {
-  scroll-padding-bottom: 100px;
-}
-
-/* Liquid glass backdrop for navbar and chips */
-.liquid-glass {
-  --lg-glass: #bbbbbc;
-  --lg-light: #ffffff;
-  --lg-dark: #000000;
-  --lg-reflex-dark: 1;
-  --lg-reflex-light: 1;
-  --lg-saturation: 150%;
-
-  background-color: color-mix(in srgb, var(--lg-glass) 15%, transparent);
-  backdrop-filter: blur(8px) saturate(var(--lg-saturation));
-  -webkit-backdrop-filter: blur(8px) saturate(var(--lg-saturation));
-  box-shadow:
-    inset 0 0 0 1px
-      color-mix(
-        in srgb,
-        var(--lg-light) calc(var(--lg-reflex-light) * 10%),
-        transparent
-      ),
-    inset 1.8px 3px 0px -2px
-      color-mix(
-        in srgb,
-        var(--lg-light) calc(var(--lg-reflex-light) * 90%),
-        transparent
-      ),
-    inset -2px -2px 0px -2px
-      color-mix(
-        in srgb,
-        var(--lg-light) calc(var(--lg-reflex-light) * 80%),
-        transparent
-      ),
-    inset -3px -8px 1px -6px
-      color-mix(
-        in srgb,
-        var(--lg-light) calc(var(--lg-reflex-light) * 60%),
-        transparent
-      ),
-    inset -0.3px -1px 4px 0px
-      color-mix(
-        in srgb,
-        var(--lg-dark) calc(var(--lg-reflex-dark) * 12%),
-        transparent
-      ),
-    inset -1.5px 2.5px 0px -2px
-      color-mix(
-        in srgb,
-        var(--lg-dark) calc(var(--lg-reflex-dark) * 20%),
-        transparent
-      ),
-    inset 0px 3px 4px -2px
-      color-mix(
-        in srgb,
-        var(--lg-dark) calc(var(--lg-reflex-dark) * 20%),
-        transparent
-      ),
-    inset 2px -6.5px 1px -4px
-      color-mix(
-        in srgb,
-        var(--lg-dark) calc(var(--lg-reflex-dark) * 10%),
-        transparent
-      ),
-    0px 1px 5px 0px
-      color-mix(
-        in srgb,
-        var(--lg-dark) calc(var(--lg-reflex-dark) * 10%),
-        transparent
-      ),
-    0px 6px 16px 0px
-      color-mix(
-        in srgb,
-        var(--lg-dark) calc(var(--lg-reflex-dark) * 8%),
-        transparent
-      );
-}
-
-@media (prefers-color-scheme: dark) {
-  .liquid-glass {
-    --lg-reflex-dark: 2;
-    --lg-reflex-light: 0.6;
-    --lg-saturation: 150%;
-  }
-}
-
-/* Navbar liquid glass with inner shadow and distorted frost */
-.nav-glass {
-  position: relative;
+::view-transition-image-pair(root) {
   isolation: isolate;
-  border-radius: 1.5rem; /* matches rounded-3xl */
-  box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
+  will-change: transform, opacity, scale;
+  z-index: 1;
 }
 
-.nav-glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: inherit;
-  box-shadow: inset 0 0 20px -5px rgba(6, 8, 28, 0.922);
-  background-color: rgba(6, 8, 28, 0.7);
+::view-transition-new(root) {
+  z-index: 10;
+  animation: none !important;
 }
 
-.nav-glass::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  border-radius: inherit;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  filter: url(#glass-distortion);
-  -webkit-filter: url("#glass-distortion");
+::view-transition-old(root) {
+  z-index: 1;
+  animation: none !important;
+}
+
+@layer utilities {
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-[#000318];
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300/20 rounded-full;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  body {
+    overscroll-behavior: none;
+  }
+
+  *::selection {
+    @apply bg-violet-500 text-white;
+  }
+
+  .iknow:hover::before {
+    opacity: 1;
+  }
+
+  .iknow::before,
+  .iknow::after {
+    border-radius: inherit;
+    content: '';
+    height: 100%;
+    left: 0px;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    transition: opacity 500ms;
+    width: 100%;
+  }
+
+  .iknow::before {
+    background: radial-gradient(
+      300px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%
+    );
+    z-index: 3;
+  }
+
+  .iknow::after {
+    background: radial-gradient(
+      600px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.4),
+      transparent 40%
+    );
+    z-index: 1;
+  }
+
+  .iknow-border {
+    background: radial-gradient(
+      300px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.4),
+      transparent 40%
+    );
+    z-index: 1;
+  }
+
+  section {
+    scroll-padding-bottom: 100px;
+  }
+
+  /* Liquid glass backdrop for navbar and chips */
+  .liquid-glass {
+    --lg-glass: #bbbbbc;
+    --lg-light: #ffffff;
+    --lg-dark: #000000;
+    --lg-reflex-dark: 1;
+    --lg-reflex-light: 1;
+    --lg-saturation: 150%;
+
+    background-color: color-mix(in srgb, var(--lg-glass) 15%, transparent);
+    backdrop-filter: blur(8px) saturate(var(--lg-saturation));
+    -webkit-backdrop-filter: blur(8px) saturate(var(--lg-saturation));
+    box-shadow:
+      inset 0 0 0 1px
+        color-mix(
+          in srgb,
+          var(--lg-light) calc(var(--lg-reflex-light) * 10%),
+          transparent
+        ),
+      inset 1.8px 3px 0px -2px
+        color-mix(
+          in srgb,
+          var(--lg-light) calc(var(--lg-reflex-light) * 90%),
+          transparent
+        ),
+      inset -2px -2px 0px -2px
+        color-mix(
+          in srgb,
+          var(--lg-light) calc(var(--lg-reflex-light) * 80%),
+          transparent
+        ),
+      inset -3px -8px 1px -6px
+        color-mix(
+          in srgb,
+          var(--lg-light) calc(var(--lg-reflex-light) * 60%),
+          transparent
+        ),
+      inset -0.3px -1px 4px 0px
+        color-mix(
+          in srgb,
+          var(--lg-dark) calc(var(--lg-reflex-dark) * 12%),
+          transparent
+        ),
+      inset -1.5px 2.5px 0px -2px
+        color-mix(
+          in srgb,
+          var(--lg-dark) calc(var(--lg-reflex-dark) * 20%),
+          transparent
+        ),
+      inset 0px 3px 4px -2px
+        color-mix(
+          in srgb,
+          var(--lg-dark) calc(var(--lg-reflex-dark) * 20%),
+          transparent
+        ),
+      inset 2px -6.5px 1px -4px
+        color-mix(
+          in srgb,
+          var(--lg-dark) calc(var(--lg-reflex-dark) * 10%),
+          transparent
+        ),
+      0px 1px 5px 0px
+        color-mix(
+          in srgb,
+          var(--lg-dark) calc(var(--lg-reflex-dark) * 10%),
+          transparent
+        ),
+      0px 6px 16px 0px
+        color-mix(
+          in srgb,
+          var(--lg-dark) calc(var(--lg-reflex-dark) * 8%),
+          transparent
+        );
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .liquid-glass {
+      --lg-reflex-dark: 2;
+      --lg-reflex-light: 0.6;
+      --lg-saturation: 150%;
+    }
+  }
+
+  /* Navbar liquid glass with inner shadow and distorted frost */
+  .nav-glass {
+    position: relative;
+    isolation: isolate;
+    border-radius: 1.5rem; /* matches rounded-3xl */
+    box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: inset 0 0 20px -5px rgba(6, 8, 28, 0.922);
+    background-color: rgba(6, 8, 28, 0.7);
+  }
+
+  .nav-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    filter: url(#glass-distortion);
+    -webkit-filter: url('#glass-distortion');
+  }
 }
 
 @layer base {

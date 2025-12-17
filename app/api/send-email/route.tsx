@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     to: ["sharmavihaan190@gmail.com"],
     subject: "Email from vhaan.me",
     text: `${name} (${email}) sent you a message on ${date}:\n\n${message}`,
-    react: EmailTemplate({ name, email, message, date }),
+    react: <EmailTemplate name={name} email={email} message={message} date={date} />,
   });
 
   if (error) {

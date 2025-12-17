@@ -114,7 +114,7 @@ const InvoicePreview = forwardRef<
         </div>
       </div>
 
-      <div className="mt-6 rounded overflow-hidden border border-slate-200 shadow-sm">
+      <div className="mt-6 rounded overflow-hidden border border-slate-200 shadow-xs">
         <div className="grid grid-cols-12 bg-slate-100/80 text-sm font-medium">
           <div className="col-span-6 p-2">Description</div>
           <div className="col-span-2 p-2 text-right">Qty</div>

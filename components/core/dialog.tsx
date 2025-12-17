@@ -15,7 +15,7 @@ import {
   MotionConfig,
   Transition,
   Variant,
-} from "framer-motion";
+} from "motion/react";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 import useClickOutside from "@/hooks/useClickOutside";
@@ -25,7 +25,7 @@ interface DialogContextType {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   uniqueId: string;
-  triggerRef: React.RefObject<HTMLDivElement>;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const DialogContext = React.createContext<DialogContextType | null>(null);
@@ -182,7 +182,7 @@ function DialogContent({ children, className, style }: DialogContent) {
     }
   }, [isOpen, triggerRef]);
 
-  useClickOutside(containerRef, () => {
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => {
     if (isOpen) {
       setIsOpen(false);
     }
@@ -227,7 +227,7 @@ function DialogContainer({ children }: DialogContainerProps) {
         <>
           <motion.div
             key={`backdrop-${uniqueId}`}
-            className="fixed inset-0 h-full w-full backdrop-blur-sm bg-black/40"
+            className="fixed inset-0 h-full w-full backdrop-blur-xs bg-black/40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

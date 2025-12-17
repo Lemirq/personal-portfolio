@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
+import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
+
 
 const dm_sans = DM_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -42,18 +44,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={dm_sans.className}>
-      <head>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-        />
-      </head>
-      <body className="bg-[#000318] h-screen">
-        <Providers>{children}</Providers>
-        <Toaster />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en" className={dm_sans.className}>
+        <head>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+          />
+        </head>
+        <body className="bg-[#000318] h-screen">
+          <Providers>
+            {children}
+          </Providers>
+          <Toaster />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

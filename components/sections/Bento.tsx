@@ -1,5 +1,5 @@
 import { useMainStore } from "@/stores/main-state-provider";
-import { motion } from "framer-motion";
+import { motion, Variants } from "motion/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
@@ -19,7 +19,7 @@ const Bento = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -27,7 +27,7 @@ const Bento = () => {
     }),
   };
 
-  const child = {
+  const child: Variants = {
     visible: {
       // opacity: 1,
       x: 0,
@@ -90,9 +90,9 @@ const Bento = () => {
           <img
             src="/images/Collaboration.jpg"
             alt="Collaboration"
-            className="rounded-2xl aspect-[4/3] mix-blend-luminosity"
+            className="rounded-2xl aspect-4/3 mix-blend-luminosity"
           />
-          <div className="w-full inset-0 bg-gradient-to-b from-transparent to-black via-transparent from-30% absolute fc justify-end items-start ">
+          <div className="w-full inset-0 bg-linear-to-b from-transparent to-black via-transparent from-30% absolute fc justify-end items-start ">
             <h3 className="text-lg md:text-xl font-bold text-left text-white p-4">
               I love working closely with clients, making sure we're always on
               the same page with clear, honest chats.
@@ -110,11 +110,11 @@ const Bento = () => {
             }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="absolute inset-0  z-10"
+            className="absolute inset-0 z-10"
           />
         </div>
 
-        <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-[200px] sm:min-h-[0px] h-full relative overflow-hidden">
+        <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-[200px] sm:min-h-0 h-full relative overflow-hidden">
           <h3 className="text-lg md:text-2xl font-bold text-left absolute z-10">
             I'm very flexible with time zone communications
           </h3>
@@ -216,11 +216,11 @@ const Bento = () => {
             className="absolute inset-0 z-10 pointer-events-none"
           />
         </div>
-        <div className="bg-gradient-to-br to-[#0d112a] to-70% from-[#070a1f] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-full relative overflow-hidden col-span-2 row-span-2 fc">
+        <div className="bg-linear-to-br to-[#0d112a] to-70% from-[#070a1f] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-full relative overflow-hidden col-span-2 row-span-2 fc">
           <h3 className="text-lg md:text-2xl font-bold mb-4">
             My Technologies
           </h3>
-          {/* this section shows all skills in a bubble, whick are draggable with framer-motion random positions need to be generated within the bounds of the container */}
+          {/* this section shows all skills in a bubble, whick are draggable with motion/react random positions need to be generated within the bounds of the container */}
           <motion.ul
             initial="hidden"
             whileInView="visible"
@@ -236,7 +236,7 @@ const Bento = () => {
                 <motion.li
                   variants={child}
                   key={curr._id}
-                  className="iknow-border relative p-[1px] overflow-hidden rounded-2xl"
+                  className="iknow-border relative p-px overflow-hidden rounded-2xl"
                 >
                   <div className="iknow size-16 md:size-24 fc rounded-2xl bg-[#13162b] p-4">
                     {/* <img src={curr.img} className="w-24 h-24 rounded-lg mix-blend-exclusion" /> */}

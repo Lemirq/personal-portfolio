@@ -15,7 +15,7 @@ const defaultBusiness: BusinessInfo = {
 };
 
 const inputBase =
-  "bg-[#0d112a] border border-[#1a1f3d] rounded px-3 py-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-violet-600";
+  "bg-[#0d112a] border border-[#1a1f3d] rounded px-3 py-2 w-full text-sm focus:outline-hidden focus:ring-2 focus:ring-violet-600";
 const btnBase = "px-3 py-2 rounded text-sm font-medium";
 
 async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
@@ -29,11 +29,11 @@ async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
 
 export default function InvoiceEditor() {
   const [clients, setClients] = useState<ClientDoc[]>([]);
-  const [invoice, setInvoice] = useState<InvoiceDoc>({
+  const [invoice, setInvoice] = useState<Partial<InvoiceDoc> & { _type: "invoice"; services: Array<{ description: string; quantity?: number; rate?: number; total?: number; _type: "invoiceService"; _key: string }> }>({
     _id: "",
     _type: "invoice",
     client: { _ref: "", _type: "reference" } as any,
-    services: [{ description: "", quantity: 1, rate: 0 }],
+    services: [{ description: "", quantity: 1, rate: 0, _type: "invoiceService", _key: `service-${Date.now()}` }],
     taxRate: 0,
     invoiceNumber: undefined,
     issueDate: format(new Date(), "yyyy-MM-dd"),
@@ -74,8 +74,9 @@ export default function InvoiceEditor() {
   }, []);
 
   const selectedClient = useMemo(() => {
-    if ((invoice.client as any)?._id) return invoice.client as ClientDoc;
+    if ((invoice.client as any)?._id) return invoice.client as unknown as ClientDoc;
     const ref = (invoice.client as any)?._ref;
+    if (!ref) return undefined;
     return clients.find((c) => c._id === ref);
   }, [invoice.client, clients]);
 
@@ -136,7 +137,7 @@ export default function InvoiceEditor() {
     const payload = {
       ...invoice,
       client: selectedClient?._id
-        ? { _id: selectedClient._id }
+        ? { _type: "reference", _ref: selectedClient._id }
         : invoice.client,
     } as Partial<InvoiceDoc>;
     const res = await fetchJSON<{ invoice: InvoiceDoc }>("/api/invoices", {
@@ -166,7 +167,11 @@ export default function InvoiceEditor() {
       client: (loaded.client as any)?._id
         ? { _type: "reference", _ref: (loaded.client as any)._id }
         : loaded.client,
-      services: loaded.services || [],
+      services: (loaded.services || []).map((svc, idx) => ({
+        ...svc,
+        _type: "invoiceService" as const,
+        _key: svc._key || `service-${idx}`,
+      })),
       taxRate: loaded.taxRate || 0,
       notes: loaded.notes || "",
       status: loaded.status || "draft",
@@ -180,7 +185,7 @@ export default function InvoiceEditor() {
   const removeService = (idx: number) => {
     setInvoice((prev) => ({
       ...prev,
-      services: prev.services.filter((_, i) => i !== idx),
+      services: (prev.services || []).filter((_, i) => i !== idx),
     }));
   };
 
@@ -190,8 +195,9 @@ export default function InvoiceEditor() {
     value: string
   ) => {
     setInvoice((prev) => {
-      const copy = [...prev.services];
-      const item = { ...copy[idx] } as InvoiceServiceItem;
+      const services = prev.services || [];
+      const copy = [...services];
+      const item = { ...copy[idx] };
       if (field === "description") item.description = value;
       if (field === "quantity") item.quantity = Number(value);
       if (field === "rate") item.rate = Number(value);
@@ -269,7 +275,7 @@ export default function InvoiceEditor() {
             <div>
               <label className="text-xs text-slate-400">Services</label>
               <div className="space-y-2">
-                {invoice.services?.map((svc, i) => (
+                {(invoice.services || []).map((svc, i) => (
                   <div key={i} className="grid grid-cols-12 gap-2 items-center">
                     <input
                       className={`${inputBase} col-span-6`}
@@ -298,7 +304,7 @@ export default function InvoiceEditor() {
                       onChange={(e) => updateService(i, "rate", e.target.value)}
                     />
                     <div className="col-span-1 text-right text-sm">
-                      ${(svc.quantity * svc.rate).toFixed(2)}
+                      ${((svc.quantity || 0) * (svc.rate || 0)).toFixed(2)}
                     </div>
                     <button
                       className="col-span-1 text-rose-400 text-sm"
@@ -314,8 +320,8 @@ export default function InvoiceEditor() {
                     setInvoice((p) => ({
                       ...p,
                       services: [
-                        ...p.services,
-                        { description: "", quantity: 1, rate: 0 },
+                        ...(p.services || []),
+                        { description: "", quantity: 1, rate: 0, _type: "invoiceService", _key: `service-${Date.now()}-${Math.random()}` },
                       ],
                     }))
                   }
@@ -485,7 +491,7 @@ export default function InvoiceEditor() {
         </div>
 
         <aside
-          className="md:sticky md:top-6 flex-shrink-0 max-h-[calc(100vh-5rem)] overflow-hidden md:pl-4 w-full md:w-[min(48vw,900px)] lg:w-[min(44vw,960px)]"
+          className="md:sticky md:top-6 shrink-0 max-h-[calc(100vh-5rem)] overflow-hidden md:pl-4 w-full md:w-[min(48vw,900px)] lg:w-[min(44vw,960px)]"
           ref={previewContainerRef}
         >
           <div className="bg-white/5 border border-[#1a1f3d] rounded-xl p-3">
@@ -496,7 +502,7 @@ export default function InvoiceEditor() {
               </span>
             </div>
             <div
-              className="rounded-lg shadow"
+              className="rounded-lg shadow-sm"
               style={{
                 transform: `scale(${previewScale})`,
                 transformOrigin: "top left",
@@ -513,8 +519,9 @@ export default function InvoiceEditor() {
                   business={defaultBusiness}
                   invoice={{
                     ...invoice,
+                    _id: invoice._id || "",
                     client: (selectedClient as any) || invoice.client,
-                  }}
+                  } as InvoiceDoc}
                 />
               </div>
             </div>

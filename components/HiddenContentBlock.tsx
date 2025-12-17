@@ -15,10 +15,12 @@ export default async function HiddenContentBlock() {
   const [projects, about, tech, iknow] = await Promise.all([
     client.fetch<project[]>(`
       *[_type == "project" && !invisible]{
+        _id,
         title,
         headline,
+        description,
         url,
-        body,
+        overview,
         tech
       }
     `),
@@ -36,6 +38,7 @@ export default async function HiddenContentBlock() {
     `),
     client.fetch<iknow[]>(`
       *[_type == "iknow"]{
+        _id,
         title
       }
     `),
@@ -64,9 +67,10 @@ export default async function HiddenContentBlock() {
             <article key={project._id}>
               <h3>{project.title}</h3>
               {project.headline && <p>{project.headline}</p>}
+              {project.description && <p>{project.description}</p>}
               {project.url && <a href={project.url}>{project.url}</a>}
-              {project.body && (
-                <div>{extractTextFromBlockContent(project.body)}</div>
+              {project.overview && (
+                <div>{extractTextFromBlockContent(project.overview)}</div>
               )}
               {project.tech && project.tech.length > 0 && (
                 <ul>
