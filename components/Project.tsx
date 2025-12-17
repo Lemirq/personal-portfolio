@@ -1,17 +1,9 @@
-// import { FaLink } from "react-icons/fa";
-import {
-  DialogImage,
-} from "./core/dialog";
 import Image from "next/image";
-// import { IoClose } from "react-icons/io5";
 import { motion } from "motion/react";
-import React from "react";
-// import { BiLink } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
-
 import Link from "next/link";
-import Markdown from "./Markdown";
-import Badge from "./Badge";
+import { useTransitionRouter } from "next-view-transitions";
+import { pageAnimation } from "@/utils/pageAnimation";
 
 // Helper to convert YouTube URLs to embed URLs
 const getEmbedUrl = (url: string): string => {
@@ -33,6 +25,7 @@ const getEmbedUrl = (url: string): string => {
 };
 
 const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
+  const router = useTransitionRouter();
   const projectSlug = project.slug?.current;
 
   // Get first item from gallery (can be image or video)
@@ -42,9 +35,21 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
     ? firstGalleryItem.asset.url
     : "/images/meta.png";
   const videoUrl = isVideo && firstGalleryItem._type === "video" ? getEmbedUrl(firstGalleryItem.url) : null;
+  
+  const href = projectSlug ? `/projects/${projectSlug}` : "#";
 
   return (
-    <Link href={projectSlug ? `/projects/${projectSlug}` : "#"}>
+    <Link 
+      href={href}
+      onClick={(e) => {
+        if (projectSlug) {
+            e.preventDefault();
+            router.push(href, {
+                onTransitionReady: pageAnimation,
+            });
+        }
+      }}
+    >
       <motion.div
         variants={{
           hidden: { opacity: 0, scale: 0.8, filter: "blur(10px)" },

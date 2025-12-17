@@ -2,6 +2,7 @@ import Container from "./container";
 import { client } from "@/sanity/lib/client";
 import ReactLenis from "lenis/react";
 import HiddenContentBlock from "@/components/HiddenContentBlock";
+import PageWrapper from "@/components/PageWrapper";
 
 export const revalidate = 60;
 const fetchSanityData = async () => {
@@ -70,11 +71,11 @@ const fetchSanityData = async () => {
 export default async function Home() {
   const allData = await fetchSanityData();
   return (
-    <>
+    <PageWrapper>
       <HiddenContentBlock />
       <ReactLenis root options={{ lerp: 0.1, anchors: { duration: 0.5 } }}>
         <Container sanityData={allData} />
       </ReactLenis>
-    </>
+    </PageWrapper>
   );
 }

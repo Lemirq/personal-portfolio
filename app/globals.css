@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
@@ -107,6 +108,31 @@
     @apply flex justify-center items-center flex-row;
   }
 
+
+@utility bg-grid {
+  /* The color doesn't matter here, just the shape */
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='64' height='64' fill='none' stroke='black'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  mask-size: 64px 64px;
+  mask-repeat: repeat;
+}
+
+@utility bg-grid-small {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='8' height='8' fill='none' stroke='black'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  mask-size: 8px 8px;
+  mask-repeat: repeat;
+}
+
+@utility bg-dot {
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3e%3ccircle fill='black' id='pattern-circle' cx='10' cy='10' r='1.6257413380501518'%3e%3c/circle%3e%3c/svg%3e");
+  mask-size: 16px 16px;
+  mask-repeat: repeat;
+}
+
+/* 3. Variables for Colors */
+/* Tailwind v4 does this natively. You can access any color as a var. 
+   Example: var(--color-blue-500) is available automatically.
+   You do not need the 'addVariablesForColors' plugin anymore. */
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -163,7 +189,30 @@
   }
 }
 
+
+/* View Transition Styles */
+::view-transition-group(root) {
+  z-index: auto !important;
+}
+
+::view-transition-image-pair(root) {
+  isolation: isolate;
+  will-change: transform, opacity, scale;
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 10;
+  animation: none !important;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+  animation: none !important;
+}
+
 @layer utilities {
+
   /* width */
   ::-webkit-scrollbar {
     width: 8px;

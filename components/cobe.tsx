@@ -5,12 +5,12 @@ import { useEffect, useRef } from 'react';
 // https://github.com/shuding/cobe
 
 export default function Cobe() {
-	const canvasRef = useRef();
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	useEffect(() => {
 		let phi = 0;
 
-		const globe = createGlobe(canvasRef.current, {
+		const globe = createGlobe(canvasRef.current!, {
 			devicePixelRatio: 2,
 			width: 600,
 			height: 600,

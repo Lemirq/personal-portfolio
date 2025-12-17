@@ -1,6 +1,9 @@
 import { cn } from "../utils/cn";
 import Logo from "./Logo";
 import GlassSurface from "./GlassSurface";
+import Link from "next/link";
+import { useTransitionRouter } from "next-view-transitions";
+import { pageAnimation } from "@/utils/pageAnimation";
 
 const sections = [
   {
@@ -38,6 +41,8 @@ const sections = [
 ];
 
 const Navbar = () => {
+  const router = useTransitionRouter();
+
   return (
     <div className="fixed top-5 sm:top-7 fr w-screen z-50">
       <GlassSurface
@@ -59,13 +64,31 @@ const Navbar = () => {
           {sections.map(({ label, url, className }) => {
             return (
               <li
-                key={label.toString()}
+                key={typeof label === "string" ? label : "home-logo"}
                 className={cn(
                   "sm:px-3 py-2 rounded-full sm:border border-zinc-800 sm:hover:bg-zinc-800 transition-colors bg-transparent cursor-pointer bg-blend-screen",
                   className
                 )}
               >
-                <a href={url}>{label}</a>
+                <Link
+                  href={url}
+                  onClick={(e) => {
+                    if (url.startsWith("/")) {
+                        if (url.includes('#')) {
+                            return;
+                        }
+                        
+                        if (url === '/' || !url.startsWith('#')) {
+                            e.preventDefault();
+                            router.push(url, {
+                                onTransitionReady: pageAnimation,
+                            });
+                        }
+                    }
+                  }}
+                >
+                  {label}
+                </Link>
               </li>
             );
           })}

@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ProjectGalleryCarousel } from "@/components/ProjectGalleryCarousel";
+import BackButton from "@/components/BackButton";
 
 // Revalidate project data every hour
 export const revalidate = 3600;
@@ -83,13 +84,7 @@ export default async function ProjectPage({ params }: Props) {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#050511]/80 backdrop-blur-xs border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link
-            href="/#projects"
-            className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-          >
-            <BsArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Projects</span>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

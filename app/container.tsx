@@ -35,7 +35,9 @@ const Container = ({
   }, [projects, iknow, about, tech, setProjects, setAbout, setTech, setIknow]);
 
   return (
-    <main className="bg-[#000318] bg-grid-white/[0.02] text-white w-full overflow-x-hidden dark overscroll-none">
+    <main className="relative w-full overflow-x-hidden bg-[#000318] text-white overscroll-none dark">
+      <div className="absolute inset-0 bg-white/3 bg-grid pointer-events-none" />
+      <div className="relative z-10">
       <Navbar />
       <Hero />
       <Projects />
@@ -44,6 +46,7 @@ const Container = ({
       {/* <Approach /> */}
       <Contact />
       <Footer />
+      </div>
     </main>
   );
 };
