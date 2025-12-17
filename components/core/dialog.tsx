@@ -25,7 +25,7 @@ interface DialogContextType {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   uniqueId: string;
-  triggerRef: React.RefObject<HTMLDivElement>;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const DialogContext = React.createContext<DialogContextType | null>(null);
@@ -182,7 +182,7 @@ function DialogContent({ children, className, style }: DialogContent) {
     }
   }, [isOpen, triggerRef]);
 
-  useClickOutside(containerRef, () => {
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => {
     if (isOpen) {
       setIsOpen(false);
     }

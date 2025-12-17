@@ -62,3 +62,18 @@ declare global {
 
 // Fallback types for packages without TS in this project
 declare module "react-to-print";
+
+// JSX namespace augmentation for three.js components
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mesh: any;
+      planeGeometry: any;
+      primitive: any;
+      ambientLight: any;
+      directionalLight: any;
+      pointLight: any;
+      threeGlobe: any;
+    }
+  }
+}

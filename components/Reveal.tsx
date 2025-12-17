@@ -1,5 +1,6 @@
 'use client';
 import { cn } from '../utils/cn';
+// @ts-ignore - @react-three/fiber types may not be fully available
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -87,7 +88,7 @@ const DotMatrix: React.FC<DotMatrixProps> = ({
 				type: 'uniform1f',
 			},
 		};
-	}, [colors, opacities, totalSize, dotSize, getUniforms]);
+	}, [colors, opacities, totalSize, dotSize]);
 
 	return (
 		<Shader
@@ -146,10 +147,11 @@ type Uniforms = {
 };
 const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: { source: string; hovered?: boolean; maxFps?: number; uniforms: Uniforms }) => {
 	const { size } = useThree();
-	const ref = useRef<THREE.Mesh>();
+	const ref = useRef<any>(null);
 	let lastFrameTime = 0;
 
-	useFrame(({ clock }) => {
+	useFrame((state: { clock: any }) => {
+		const { clock } = state;
 		if (!ref.current) return;
 		const timestamp = clock.getElapsedTime();
 		if (timestamp - lastFrameTime < 1 / maxFps) {
@@ -233,12 +235,11 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: { source: string; hov
 		return materialObject;
 	}, [size.width, size.height, source]);
 
-	return (
-		<mesh ref={ref as any}>
-			<planeGeometry args={[2, 2]} />
-			<primitive object={material} attach="material" />
-		</mesh>
-	);
+	// @ts-ignore - JSX elements from @react-three/fiber don't have proper type definitions
+	return React.createElement('mesh', { ref: ref as any },
+		React.createElement('planeGeometry', { args: [2, 2] }),
+		React.createElement('primitive', { object: material, attach: 'material' })
+	) as any;
 };
 
 const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {

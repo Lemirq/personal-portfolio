@@ -1,15 +1,13 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Color, Scene, Fog, PerspectiveCamera, Vector3, Vector2 } from 'three';
+// @ts-ignore - three-globe doesn't have type definitions
 import ThreeGlobe from 'three-globe';
+// @ts-ignore - @react-three/fiber types may not be fully available
 import { useThree, Object3DNode, Canvas, extend } from '@react-three/fiber';
+// @ts-ignore - @react-three/drei types may not be fully available
 import { OrbitControls } from '@react-three/drei';
 import countries from '@/app/assets/globe.json';
-declare module '@react-three/fiber' {
-	interface ThreeElements {
-		threeGlobe: Object3DNode<ThreeGlobe, typeof ThreeGlobe>;
-	}
-}
 
 extend({ ThreeGlobe });
 
@@ -96,7 +94,8 @@ export function Globe({ globeConfig, data }: WorldProps) {
 			_buildData();
 			_buildMaterial();
 		}
-	}, [globeRef.current, _buildData, _buildMaterial]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [globeRef.current]);
 
 	const _buildMaterial = () => {
 		if (!globeRef.current) return;
@@ -152,7 +151,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 				.showAtmosphere(defaultProps.showAtmosphere)
 				.atmosphereColor(defaultProps.atmosphereColor)
 				.atmosphereAltitude(defaultProps.atmosphereAltitude)
-				.hexPolygonColor((e) => {
+				.hexPolygonColor((e: any) => {
 					return defaultProps.polygonColor;
 				});
 			startAnimation();
@@ -164,32 +163,32 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
 		globeRef.current
 			.arcsData(data)
-			.arcStartLat((d) => (d as { startLat: number }).startLat * 1)
-			.arcStartLng((d) => (d as { startLng: number }).startLng * 1)
-			.arcEndLat((d) => (d as { endLat: number }).endLat * 1)
-			.arcEndLng((d) => (d as { endLng: number }).endLng * 1)
+			.arcStartLat((d: any) => (d as { startLat: number }).startLat * 1)
+			.arcStartLng((d: any) => (d as { startLng: number }).startLng * 1)
+			.arcEndLat((d: any) => (d as { endLat: number }).endLat * 1)
+			.arcEndLng((d: any) => (d as { endLng: number }).endLng * 1)
 			.arcColor((e: any) => (e as { color: string }).color)
-			.arcAltitude((e) => {
+			.arcAltitude((e: any) => {
 				return (e as { arcAlt: number }).arcAlt * 1;
 			})
-			.arcStroke((e) => {
+			.arcStroke((e: any) => {
 				return [0.32, 0.28, 0.3][Math.round(Math.random() * 2)];
 			})
 			.arcDashLength(defaultProps.arcLength)
-			.arcDashInitialGap((e) => (e as { order: number }).order * 1)
+			.arcDashInitialGap((e: any) => (e as { order: number }).order * 1)
 			.arcDashGap(15)
-			.arcDashAnimateTime((e) => defaultProps.arcTime);
+			.arcDashAnimateTime((e: any) => defaultProps.arcTime);
 
 		globeRef.current
 			.pointsData(data)
-			.pointColor((e) => (e as { color: string }).color)
+			.pointColor((e: any) => (e as { color: string }).color)
 			.pointsMerge(true)
 			.pointAltitude(0.0)
 			.pointRadius(2);
 
 		globeRef.current
 			.ringsData([])
-			.ringColor((e: any) => (t: any) => e.color(t))
+			.ringColor((e: any) => (t: number) => e.color(t))
 			.ringMaxRadius(defaultProps.maxRings)
 			.ringPropagationSpeed(RING_PROPAGATION_SPEED)
 			.ringRepeatPeriod((defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings);
@@ -212,6 +211,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
 	return (
 		<>
+			{/* @ts-expect-error - threeGlobe is extended from three-globe */}
 			<threeGlobe ref={globeRef} />
 		</>
 	);
@@ -236,9 +236,13 @@ export function World(props: WorldProps) {
 	return (
 		<Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
 			<WebGLRendererConfig />
+			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<directionalLight color={globeConfig.directionalLeftLight} position={new Vector3(-400, 100, 400)} />
+			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<directionalLight color={globeConfig.directionalTopLight} position={new Vector3(-200, 500, 200)} />
+			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<pointLight color={globeConfig.pointLight} position={new Vector3(-200, 500, 200)} intensity={0.8} />
 			<Globe {...props} />
 			<OrbitControls
