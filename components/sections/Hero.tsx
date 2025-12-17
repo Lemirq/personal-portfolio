@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
 import { SOCIAL_LINKS } from "@/components/social-links";
-import Spline from "../Spline";
 
 const socialLinks = SOCIAL_LINKS;
 
