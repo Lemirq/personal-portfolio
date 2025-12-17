@@ -30,8 +30,6 @@ const fetchSanityData = async () => {
     } | order(orderRank asc)
     `);
 
-
-
   const iknow = await client.fetch(`
       *[_type == "iknow"]{
         _id,

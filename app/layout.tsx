@@ -5,7 +5,6 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
 
-
 const dm_sans = DM_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
@@ -53,10 +52,8 @@ export default function RootLayout({
             href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
           />
         </head>
-        <body className="bg-[#000318] h-screen">
-          <Providers>
-            {children}
-          </Providers>
+        <body className="bg-black h-screen">
+          <Providers>{children}</Providers>
           <Toaster />
         </body>
       </html>

@@ -8,6 +8,8 @@ import { createStore } from 'zustand/vanilla';
 // const [playerVisibility, setPlayerVisibility] = useState(false);
 
 export type MainState = {
+	isPhone: boolean;
+	webGLAvailable: boolean;
 	mobile: boolean;
 	projects: project[];
 	directories: ExcludedDirectories[];
@@ -18,6 +20,8 @@ export type MainState = {
 };
 
 export type MainActions = {
+	setIsPhone: (value: boolean) => void;
+	setWebGLAvailable: (value: boolean) => void;
 	setMobile: (value: boolean) => void;
 	setProjects: (value: project[]) => void;
 	setDirectories: (value: ExcludedDirectories[]) => void;
@@ -30,6 +34,8 @@ export type MainActions = {
 export type MainStore = MainState & MainActions;
 
 export const defaultInitState: MainState = {
+	isPhone: false,
+	webGLAvailable: false,
 	mobile: false,
 	projects: [],
 	directories: [],
@@ -42,6 +48,8 @@ export const defaultInitState: MainState = {
 export const createMainStore = (initState: MainState = defaultInitState) => {
 	return createStore<MainStore>()((set) => ({
 		...initState,
+		setIsPhone: (value: boolean) => set({ isPhone: value }),
+		setWebGLAvailable: (value: boolean) => set({ webGLAvailable: value }),
 		setMobile: (value: boolean) => set({ mobile: value }),
 		setProjects: (value: project[]) => set({ projects: value }),
 		setDirectories: (value: ExcludedDirectories[]) => set({ directories: value }),

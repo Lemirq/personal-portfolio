@@ -10,7 +10,10 @@ import {
   Projects,
 } from "@/components/sections";
 import { useMainStore } from "@/stores/main-state-provider";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import WebGL from 'three/addons/capabilities/WebGL.js';
+
+import NoiseBackground from "@/components/NoiseBackground";
 
 const Container = ({
   sanityData,
@@ -23,7 +26,14 @@ const Container = ({
   };
 }) => {
   const { projects, iknow, about, tech } = sanityData;
-  const { setProjects, setAbout, setTech, setIknow } = useMainStore(
+  const { 
+    setProjects, 
+    setAbout, 
+    setTech, 
+    setIknow,
+    setWebGLAvailable,
+    setIsPhone
+  } = useMainStore(
     (state) => state
   );
 
@@ -32,20 +42,33 @@ const Container = ({
     setProjects(projects);
     setAbout(about[0]);
     setIknow(iknow);
-  }, [projects, iknow, about, tech, setProjects, setAbout, setTech, setIknow]);
+
+    if (WebGL.isWebGL2Available()) {
+      setWebGLAvailable(true);
+    } else {
+      setWebGLAvailable(false);
+    }
+
+    const isPhone = /Android|iPhone/i.test(navigator.userAgent);
+    setIsPhone(isPhone);
+
+  }, [projects, iknow, about, tech, setProjects, setAbout, setTech, setIknow, setWebGLAvailable, setIsPhone]);
 
   return (
-    <main className="relative w-full overflow-x-hidden bg-[#000318] text-white overscroll-none dark">
-      <div className="absolute inset-0 bg-white/3 bg-grid pointer-events-none" />
+    <main className="relative w-full overflow-x-clip bg-transparent text-white overscroll-none dark">
+        <NoiseBackground />
+
+      <div className="absolute inset-0 bg-white/2 bg-grid pointer-events-none" />
       <div className="relative z-10">
-      <Navbar />
-      <Hero />
-      <Projects />
-      <About />
-      <Bento />
-      {/* <Approach /> */}
-      <Contact />
-      <Footer />
+        <Navbar />
+        <Hero />
+        
+        <Projects />
+        <About />
+        <Bento />
+        {/* <Approach /> */}
+        <Contact />
+        <Footer />
       </div>
     </main>
   );

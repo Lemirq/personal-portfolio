@@ -211,7 +211,6 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
 	return (
 		<>
-			{/* @ts-expect-error - threeGlobe is extended from three-globe */}
 			<threeGlobe ref={globeRef} />
 		</>
 	);
@@ -236,13 +235,9 @@ export function World(props: WorldProps) {
 	return (
 		<Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
 			<WebGLRendererConfig />
-			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<ambientLight color={globeConfig.ambientLight} intensity={0.6} />
-			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<directionalLight color={globeConfig.directionalLeftLight} position={new Vector3(-400, 100, 400)} />
-			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<directionalLight color={globeConfig.directionalTopLight} position={new Vector3(-200, 500, 200)} />
-			{/* @ts-expect-error - JSX elements from @react-three/fiber */}
 			<pointLight color={globeConfig.pointLight} position={new Vector3(-200, 500, 200)} intensity={0.8} />
 			<Globe {...props} />
 			<OrbitControls

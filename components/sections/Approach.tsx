@@ -31,7 +31,7 @@ const approachData = [
 ];
 const Approach = () => {
 	return (
-		<section className="max-w-6xl mx-auto py-32 fc overflow-x-scroll px-5 md:px-10" id="approach">
+		<section className="max-w-6xl mx-auto py-32 fc px-5 md:px-10" id="approach">
 			<h2 className="text-3xl sm:text-5xl font-bold mb-10">
 				My <span className="text-violet-500">Approach</span>
 			</h2>

@@ -57,7 +57,7 @@ const About = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.8 }}
-      className="w-full max-w-6xl mx-auto py-16 md:py-32 md:pt-12 overflow-x-scroll px-5 md:px-10"
+      className="w-full max-w-6xl mx-auto py-16 md:py-32 md:pt-12 px-5 md:px-10"
       id="about"
     >
       <div className="w-full max-w-6xl fc gap-24">

@@ -5,12 +5,19 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
 import { SOCIAL_LINKS } from "@/components/social-links";
+import Spline from "../Spline";
 
 const socialLinks = SOCIAL_LINKS;
 
 const Hero = () => {
   return (
     <section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-32 md:pt-0 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
+      {/* Spline Background */}
+      {/* <div className="z-10 w-screen h-[calc(100vh-100px)]">
+        <div className="w-screen h-screen">
+          <Spline />
+        </div>
+      </div> */}
       <div className="w-full h-full fr justify-between absolute">
         <div className="w-full h-full">
           <Spotlight

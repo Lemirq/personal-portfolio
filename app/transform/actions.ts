@@ -13,7 +13,7 @@ const client = createClient({
   dataset,
   apiVersion,
   token,
-  useCdn: false, // We need fresh data and write access
+  useCdn: true, // We need fresh data and write access
 })
 
 export async function runTransformAction(formData: FormData) {

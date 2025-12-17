@@ -27,7 +27,6 @@ const getEmbedUrl = (url: string): string => {
 const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
   const router = useTransitionRouter();
   const projectSlug = project.slug?.current;
-
   // Get first item from gallery (can be image or video)
   const firstGalleryItem = project.gallery?.[0];
   const isVideo = firstGalleryItem?._type === "video";
@@ -36,7 +35,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
     : "/images/meta.png";
   const videoUrl = isVideo && firstGalleryItem._type === "video" ? getEmbedUrl(firstGalleryItem.url) : null;
   
-  const href = projectSlug ? `/projects/${projectSlug}` : "#";
+  const href = projectSlug ? `/projects/${projectSlug}` : "";
 
   return (
     <Link 
@@ -60,12 +59,12 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
           },
         }}
         key={project._id}
-        className="w-full h-full group bg-[#0c0a1d] rounded-2xl border border-indigo-800/50 hover:border-indigo-800 transition-colors flex flex-col overflow-hidden"
+        className="w-full h-full group bg-neutral-700/40 rounded-2xl border border-neutral-800 hover:border-neutral-600 transition-colors flex flex-col overflow-hidden"
       >
-        <div className="w-full aspect-video relative overflow-hidden bg-slate-900 border-b border-indigo-800/50">
+        <div className="w-full aspect-video relative overflow-hidden bg-slate-900 border-b border-neutral-800">
           {/* Overlay */}
           <div className="w-full h-full absolute z-10 top-0 left-0 group-hover:opacity-100 opacity-0 bg-indigo-900/40 backdrop-blur-[2px] transition-opacity duration-300 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-red-500 text-red-500 font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
               View Case Study <BsArrowRight className="text-xl" />
             </div>
           </div>
