@@ -14,9 +14,9 @@ const Contact = () => {
       </h2>
       <div className="max-w-3xl mx-auto mt-10 text-center mb-10">
         <p className="text-lg text-neutral-300">
-          Contact me today, and let&apos;s talk about how I can assist you in
-          reaching your goals, or if you just want to chat :) <br /> In any of
-          the following ways:
+          I'm always looking for interesting new projects and collaborations. <br />
+          Let's talk about how we can work together to achieve your goals—or
+          just connect for a quick chat.
         </p>
       </div>
 

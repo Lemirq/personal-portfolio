@@ -3,6 +3,7 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -144,11 +145,15 @@ const NoisePlane = () => {
 };
 
 export default function NoiseBackground() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <div className="fixed inset-0 h-full w-full bg-black pointer-events-none z-0">
-      <Canvas orthographic camera={{ zoom: 1, position: [0, 0, 100] }}>
-        <NoisePlane />
-      </Canvas>
+      {!prefersReducedMotion && (
+        <Canvas orthographic camera={{ zoom: 1, position: [0, 0, 100] }}>
+          <NoisePlane />
+        </Canvas>
+      )}
     </div>
   );
 }

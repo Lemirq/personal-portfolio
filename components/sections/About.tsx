@@ -121,7 +121,7 @@ const About = () => {
             <h2 className="text-5xl">{about && about.heading}</h2>
             {/* <p className="text-lg text-slate-400">{about && about.body}</p> */}
             {about?.body && (
-              <Markdown block="text-sm text-slate-400" markdown={about.body} />
+              <Markdown block="text-lg text-slate-400" markdown={about.body} />
             )}
           </div>
         </div>

@@ -76,19 +76,19 @@ const Form = () => {
 
   return (
     <form
-      className='fc items-end gap-3 bg-[#05081B] rounded-xl p-5 w-full sm:w-[full] md:w-auto sm:p-10 text-white text-base'
+      className='fc items-end gap-3 bg-neutral-900 rounded-xl p-5 w-full sm:w-[full] md:w-auto sm:p-10 text-white text-base'
       onSubmit={handleSubmit(onSubmit)}>
       <div className='fc md:fr gap-3 w-full'>
         <input
           className={`px-3 py-2 bg-transparent outline-hidden transition-colors duration-200 border-b-2 min-w-[200px] lg:min-w-[250px] w-full ${
-            errors.name ? 'border-red-500' : 'border-zinc-800'
+            errors.name ? 'border-red-500' : 'border-neutral-700'
           }`}
           {...register('name')}
           placeholder='Name'
         />
         <input
           className={`px-3 py-2 bg-transparent outline-hidden transition-colors duration-200 border-b-2 min-w-[200px] lg:min-w-[250px] w-full ${
-            errors.email ? 'border-red-500' : 'border-zinc-800'
+            errors.email ? 'border-red-500' : 'border-neutral-700'
           }`}
           {...register('email')}
           placeholder='Email'
@@ -97,18 +97,21 @@ const Form = () => {
       <textarea
         rows={4}
         className={`h-48 sm:h-60 px-3 py-2 bg-transparent outline-hidden transition-colors duration-200 w-full border-b-2 resize-none ${
-          errors.message ? 'border-red-500' : 'border-zinc-800'
+          errors.message ? 'border-red-500' : 'border-neutral-700'
         }`}
         {...register('message')}
         placeholder='Your Message'
       />
       <button
         type='submit'
-        className='relative inline-flex h-12 overflow-hidden rounded-full p-px focus:outline-hidden focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'>
-        <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
-        <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-10 py-1 text-sm font-medium text-white backdrop-blur-3xl'>
+        // className='relative inline-flex h-12 overflow-hidden rounded-full p-px focus:outline-hidden focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50'>
+        // <span className='absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]' />
+        // <span className='inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-10 py-1 text-sm font-medium text-white backdrop-blur-3xl'
+            className=" px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-36 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
+
+        >
           Send
-        </span>
+         {/* </span> */}
       </button>
     </form>
   );

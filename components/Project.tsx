@@ -64,7 +64,7 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
         <div className="w-full aspect-video relative overflow-hidden bg-slate-900 border-b border-neutral-800">
           {/* Overlay */}
           <div className="w-full h-full absolute z-10 top-0 left-0 group-hover:opacity-100 opacity-0 bg-indigo-900/40 backdrop-blur-[2px] transition-opacity duration-300 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-red-500 text-red-500 font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
               View Case Study <BsArrowRight className="text-xl" />
             </div>
           </div>

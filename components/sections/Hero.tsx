@@ -91,7 +91,7 @@ const Hero = () => {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-transform hover:-translate-y-1 hover:text-white"
+              className="transition-transform hover:-translate-y-0.5 hover:text-white"
               data-cursor="fill"
             >
               {icon}
@@ -104,7 +104,9 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.7 }}
-            className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-size-[200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-hidden focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 mt-10"
+            // className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-size-[200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-hidden focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 mt-10"
+            // low profile styling
+            className=" px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-48 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
           >
             Resume
           </motion.button>

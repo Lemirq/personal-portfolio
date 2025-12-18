@@ -7,6 +7,7 @@ import { easing } from 'maath'
 import { Card } from './3DCard'
 import './cardsUtils'
 import { urlFor } from '@/sanity/lib/image'
+import { motion } from 'framer-motion'
 
 export default function CardsSection({ projects }: { projects: any[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -43,7 +44,14 @@ export default function CardsSection({ projects }: { projects: any[] }) {
     <div ref={containerRef} className="relative h-[400vh] w-full"> 
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <div className="w-full max-w-7xl mx-auto pt-16 md:pt-32 px-5 md:px-10 absolute z-10 left-1/2 -translate-x-1/2 pointer-events-none">
-          <h2 className="text-5xl font-bold text-center">Projects</h2>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 1.2 }}
+            className="text-5xl font-bold text-center"
+          >
+            Projects
+          </motion.h2>
         </div>
         <Canvas dpr={[1, 1.5]} gl={{ antialias: true, powerPreference: "high-performance" }} camera={{ position: [0, 0, 100], fov: 15 }} style={{ background: 'transparent' }}>
           <Rig rotation={[0, 0, 0.15]} progress={progress}>
@@ -51,7 +59,7 @@ export default function CardsSection({ projects }: { projects: any[] }) {
                <Carousel projects={projects} />
              </Suspense>
           </Rig>
-          <Environment preset="dawn" blur={0.5} />
+          <Environment preset="night" blur={0.5} />
         </Canvas>
       </div>
     </div>

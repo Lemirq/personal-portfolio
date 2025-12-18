@@ -23,6 +23,7 @@ export function Card({ url, slug, title, ...props }: CardProps) {
   // ... existing implementation
   const ref = useRef<any>(null)
   const [hovered, hover] = useState(false)
+  const [entered, setEntered] = useState(false)
   const router = useRouter()
   
   useCursor(hovered)
@@ -36,7 +37,14 @@ export function Card({ url, slug, title, ...props }: CardProps) {
   }
   
   useFrame((state: any, delta: number) => {
-    easing.damp3(ref.current.scale, hovered ? 1.15 : 1, 0.1, delta)
+    // Entrance animation
+    if (!entered && ref.current) {
+      // Start slightly delayed? We can check state.clock.elapsedTime but simpler to just damp slower or use a flag
+      easing.damp3(ref.current.scale, 1, 0.8, delta)
+      if (ref.current.scale.x > 0.99) setEntered(true)
+    } else if (ref.current) {
+      easing.damp3(ref.current.scale, hovered ? 1.15 : 1, 0.1, delta)
+    }
   })
 
   // Preload texture to avoid pop-in
@@ -52,6 +60,7 @@ export function Card({ url, slug, title, ...props }: CardProps) {
       onPointerOver={pointerOver} 
       onPointerOut={pointerOut} 
       onClick={handleClick}
+      scale={[0, 0, 0]}
       {...props}
     >
       <CardMesh url={url} hovered={hovered} geometry={geometry} />
