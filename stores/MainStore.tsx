@@ -17,6 +17,7 @@ export type MainState = {
 	navbarHidden: boolean;
 	tech: tech[];
 	iknow: iknow[];
+	experience: experience[];
 };
 
 export type MainActions = {
@@ -29,6 +30,7 @@ export type MainActions = {
 	setNavbarHidden: (value: boolean) => void;
 	setTech: (value: tech[]) => void;
 	setIknow: (value: iknow[]) => void;
+	setExperience: (value: experience[]) => void;
 };
 
 export type MainStore = MainState & MainActions;
@@ -43,6 +45,7 @@ export const defaultInitState: MainState = {
 	navbarHidden: false,
 	tech: [],
 	iknow: [],
+	experience: [],
 };
 
 export const createMainStore = (initState: MainState = defaultInitState) => {
@@ -57,5 +60,6 @@ export const createMainStore = (initState: MainState = defaultInitState) => {
 		setNavbarHidden: (value: boolean) => set({ navbarHidden: value }),
 		setTech: (value: tech[]) => set({ tech: value }),
 		setIknow: (value: iknow[]) => set({ iknow: value }),
+		setExperience: (value: experience[]) => set({ experience: value }),
 	}));
 };

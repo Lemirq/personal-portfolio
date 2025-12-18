@@ -7,6 +7,7 @@ import type {
   Invoice as SanityInvoice,
   BlockContent,
   ExcludedDirectories as SanityExcludedDirectories,
+  Experience as SanityExperience,
 } from "./sanity.types";
 
 declare global {
@@ -46,6 +47,7 @@ declare global {
     body: BlockContent;
   }
   type iknow = SanityIknow;
+  type experience = SanityExperience;
 
   // Keep convenient aliases for client/invoice docs from Sanity
   type ClientDoc = SanityClient;

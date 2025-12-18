@@ -7,7 +7,7 @@
     "build": "bun run --bun next build",
     "start": "bun run --bun next start",
     "lint": "tsc --noEmit",
-    "types": "bunx sanity schema extract --engeorce-required-fields && npx sanity typegen generate",
+    "types": "bunx sanity schema extract --enforce-required-fields && npx sanity typegen generate",
     "dev:sanity": "sanity dev",
     "start:sanity": "sanity start",
     "build:sanity": "sanity build",

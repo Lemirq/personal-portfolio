@@ -1,10 +1,12 @@
 import { defineField, defineType } from "sanity";
+import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
 
 export default defineType({
   name: "project",
   title: "Project",
   type: "document",
   orderings: [
+    orderRankOrdering,
     {
       title: "Manual Order",
       name: "manualOrder",
@@ -53,12 +55,7 @@ export default defineType({
       title: "Invisible",
       type: "boolean",
     }),
-    defineField({
-      name: "orderRank",
-      title: "Order Rank",
-      type: "string",
-      hidden: true,
-    }),
+    orderRankField({ type: "project" }),
     defineField({
       name: "url",
       title: "URL",
@@ -218,9 +215,10 @@ export default defineType({
       gallery: "gallery",
     },
     prepare({ title, invisible, gallery }) {
-      // Get first gallery item as media preview
-      const firstItem = gallery?.[0];
-      const media = firstItem?._type === "image" ? firstItem : undefined;
+      // filter gallery by type image 
+      const imageGallery = gallery?.filter((item: any) => item._type === "image");
+      const firstItem = imageGallery?.[0];
+      const media = firstItem ? firstItem : undefined;
 
       return {
         title,

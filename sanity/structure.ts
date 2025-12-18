@@ -15,8 +15,14 @@ export const structure: StructureResolver = (S, context) =>
         S,
         context,
       }),
+      orderableDocumentListDeskItem({
+        type: "experience",
+        title: "Experience",
+        S,
+        context,
+      }),
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !["about", "project"].includes(listItem.getId() || "")
+          !["about", "project", "experience"].includes(listItem.getId() || "")
       ),
     ]);

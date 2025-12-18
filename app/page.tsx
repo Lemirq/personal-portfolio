@@ -61,9 +61,13 @@ const fetchSanityData = async () => {
             }`
   );
 
+  const experience = await client.fetch(
+    `*[_type == "experience"] | order(orderRank asc)`
+  );
+
   // match projects to projectOrdering
   const projects = unorderedProjects;
-  return { projects, iknow, about, tech };
+  return { projects, iknow, about, tech, experience };
 };
 
 export default async function Home() {

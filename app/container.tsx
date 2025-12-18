@@ -6,6 +6,7 @@ import {
   Approach,
   Bento,
   Contact,
+  Experience,
   Hero,
   Projects,
 } from "@/components/sections";
@@ -23,16 +24,18 @@ const Container = ({
     iknow: iknow[];
     about: about[];
     tech: tech[];
+    experience: experience[];
   };
 }) => {
-  const { projects, iknow, about, tech } = sanityData;
+  const { projects, iknow, about, tech, experience } = sanityData;
   const { 
     setProjects, 
     setAbout, 
     setTech, 
     setIknow,
     setWebGLAvailable,
-    setIsPhone
+    setIsPhone,
+    setExperience,
   } = useMainStore(
     (state) => state
   );
@@ -42,6 +45,7 @@ const Container = ({
     setProjects(projects);
     setAbout(about[0]);
     setIknow(iknow);
+    setExperience(experience);
 
     if (WebGL.isWebGL2Available()) {
       setWebGLAvailable(true);
@@ -52,7 +56,7 @@ const Container = ({
     const isPhone = /Android|iPhone/i.test(navigator.userAgent);
     setIsPhone(isPhone);
 
-  }, [projects, iknow, about, tech, setProjects, setAbout, setTech, setIknow, setWebGLAvailable, setIsPhone]);
+  }, [projects, iknow, about, tech, experience, setProjects, setAbout, setTech, setIknow, setWebGLAvailable, setIsPhone, setExperience]);
 
   return (
     <main className="relative w-full overflow-x-clip bg-transparent text-white overscroll-none dark">
@@ -65,6 +69,7 @@ const Container = ({
         
         <Projects />
         <About />
+        <Experience />
         <Bento />
         {/* <Approach /> */}
         <Contact />
