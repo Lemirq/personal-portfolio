@@ -33,6 +33,6 @@ export const SOCIAL_LINKS: SocialLink[] = [
   {
     label: "X",
     icon: <RiTwitterXFill />,
-    url: "https://x.com/vs190",
+    url: "https://x.com/vhaanca",
   },
 ];

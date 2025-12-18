@@ -35,6 +35,10 @@ const sections = [
     url: "#about",
   },
   {
+    label: "Experience",
+    url: "#experience",
+  },
+  {
     label: "Contact",
     url: "#contact",
   },
