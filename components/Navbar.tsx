@@ -60,7 +60,7 @@ const Navbar = () => {
         opacity={0.93}
         backgroundOpacity={0.5}
         // mixBlendMode="screen"
-        width={350}
+        width={450}
         borderRadius={24}
         className="border border-black/5"
       >
