@@ -94,8 +94,7 @@ const Bento = () => {
           />
           <div className="w-full inset-0 bg-linear-to-b from-transparent to-black via-transparent from-30% absolute fc justify-end items-start ">
             <h3 className="text-lg md:text-xl font-bold text-left text-white p-4">
-              I love working closely with clients, making sure we're always on
-              the same page with clear, honest chats.
+              I prioritize clear communication and regular check-ins to keep projects aligned with your goals.
             </h3>
           </div>
           {/* purple radial gradient top right */}
@@ -116,7 +115,7 @@ const Bento = () => {
 
         <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-[200px] sm:min-h-0 h-full relative overflow-hidden">
           <h3 className="text-lg md:text-2xl font-bold text-left absolute z-10">
-            I'm very flexible with time zone communications
+            Flexible availability across time zones
           </h3>
           {/* <div className="md:absolute w-full aspect-square md:top-5 z-10">
 						<Cobe />
@@ -193,8 +192,7 @@ const Bento = () => {
       <div className="w-full grid md:grid-cols-3 md:grid-rows-2 grid-cols-1 gap-4 p-4">
         <div className="group bg-[#05081B] bg-grid-white/[0.02] rounded-2xl text-center border border-[#070a1f] w-full h-full relative overflow-hidden fc items-end">
           <h3 className="text-lg md:text-2xl font-bold text-left mb-16 p-4 group-hover:translate-x-2 transition-transform">
-            I've been coding since Grade 8 and still get a kick out of diving
-            into new projects.
+            Building software since 2019, with a focus on delivering reliable, production-ready solutions.
           </h3>
           <img
             src="/images/Page.jpg"
@@ -257,7 +255,7 @@ const Bento = () => {
         </div>
         <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full h-full relative overflow-hidden fc gap-2">
           <h3 className="text-lg md:text-2xl font-bold text-left p-4">
-            Ready to build something awesome together? <br /> Let's get started!
+            Have a project in mind? <br /> Let's discuss.
           </h3>
 
           <button

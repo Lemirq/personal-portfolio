@@ -54,8 +54,8 @@ const getEmbedUrl = (url: string): string => {
 
 // Define grid spans for items - creates visual variety
 const getGridClass = (index: number, totalItems: number) => {
-  // First item is always large if we have 4+ items
-  if (index === 0 && totalItems >= 4) {
+  // First item is always large if we have 3+ items
+  if (index === 0 && totalItems >= 3) {
     return "md:col-span-2 md:row-span-2";
   }
 
@@ -71,6 +71,13 @@ const getGridClass = (index: number, totalItems: number) => {
 export function MediaBentoGrid({ gallery, projectTitle }: MediaBentoGridProps) {
   if (!gallery || gallery.length === 0) return null;
 
+  // Reorder gallery: put video first if exists, otherwise keep first image first
+  const sortedGallery = [...gallery].sort((a, b) => {
+    if (a._type === "video" && b._type !== "video") return -1;
+    if (a._type !== "video" && b._type === "video") return 1;
+    return 0;
+  });
+
   return (
     <div
       className={cn(
@@ -82,7 +89,7 @@ export function MediaBentoGrid({ gallery, projectTitle }: MediaBentoGridProps) {
           : "md:grid-cols-3"
       )}
     >
-      {gallery.map((item, index) => {
+      {sortedGallery.map((item, index) => {
         const isVideo = item._type === "video";
         const gridClass = getGridClass(index, gallery.length);
 
@@ -109,7 +116,7 @@ export function MediaBentoGrid({ gallery, projectTitle }: MediaBentoGridProps) {
 
               {/* Media content */}
               {isVideo ? (
-                <div className="w-full h-full relative">
+                <div className="w-full aspect-video relative">
                   <iframe
                     className="w-full h-full pointer-events-none"
                     src={getEmbedUrl(item.url)}
@@ -119,11 +126,13 @@ export function MediaBentoGrid({ gallery, projectTitle }: MediaBentoGridProps) {
                   />
                 </div>
               ) : (
-                <DialogImage
-                  src={item.asset.url}
-                  alt={`${projectTitle} - Gallery image`}
-                  className="w-full"
-                />
+                <div className="w-full aspect-video relative">
+                  <DialogImage
+                    src={item.asset.url}
+                    alt={`${projectTitle} - Gallery image`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               )}
             </DialogTrigger>
 
@@ -141,11 +150,11 @@ export function MediaBentoGrid({ gallery, projectTitle }: MediaBentoGridProps) {
                     />
                   </div>
                 ) : (
-                  <div className="relative max-w-[90vw] max-h-[85vh] rounded-2xl overflow-hidden border border-white/10">
-                    <DialogImage
+                  <div className="relative w-[90vw] max-w-6xl max-h-[85vh] rounded-2xl overflow-hidden flex items-center justify-center">
+                    <img
                       src={item.asset.url}
                       alt={`${projectTitle} - Full size`}
-                      className="w-full object-contain"
+                      className="max-w-full max-h-[85vh] object-contain"
                     />
                   </div>
                 )}
