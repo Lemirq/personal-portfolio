@@ -1,36 +1,110 @@
 import { revalidatePath } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
+import { parseBody } from 'next-sanity/webhook';
 
 const WEBHOOK_SECRET = process.env.SANITY_WEBHOOK_SECRET;
 
+type SanityWebhookPayload = {
+  _type: string;
+  _id: string;
+  slug?: { current: string };
+  project?: {
+    _id: string;
+    slug?: { current: string };
+  };
+};
+
 export async function POST(request: NextRequest) {
   try {
-    const secret = request.headers.get('sanity-webhook-secret');
-    if (secret !== WEBHOOK_SECRET) {
-      console.error('Invalid webhook secret');
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!WEBHOOK_SECRET) {
+      console.error('Missing SANITY_WEBHOOK_SECRET environment variable');
+      return NextResponse.json(
+        { message: 'Webhook secret not configured' },
+        { status: 500 },
+      );
     }
 
-    const body = await request.json();
+    const { isValidSignature, body } = await parseBody<SanityWebhookPayload>(
+      request,
+      WEBHOOK_SECRET,
+    );
 
-    if (body.project && body.project._id) {
-      revalidatePath('/');
-
-      if (body.project.slug && body.project.slug.current) {
-        revalidatePath(`/projects/${body.project.slug.current}`);
-      }
-
-      console.log(`Revalidated project: ${body.project._id}`);
+    if (!isValidSignature) {
+      console.warn('Invalid webhook signature received');
+      return NextResponse.json(
+        { message: 'Invalid signature' },
+        { status: 401 },
+      );
     }
 
-    if (body._type === 'about' || body._type === 'experience' || body._type === 'tech' || body._type === 'iknow') {
-      revalidatePath('/');
-      console.log(`Revalidated ${body._type}`);
+    if (!body) {
+      return NextResponse.json(
+        { message: 'No body received' },
+        { status: 400 },
+      );
     }
 
-    return NextResponse.json({ revalidated: true, timestamp: new Date().toISOString() });
+    const { _type, _id, slug } = body;
+    console.log(`Revalidation triggered for ${_type}: ${_id}`);
+
+    switch (_type) {
+      case 'project':
+        revalidatePath('/');
+
+        if (slug?.current) {
+          revalidatePath(`/projects/${slug.current}`);
+          console.log(`Revalidated project path: /projects/${slug.current}`);
+        }
+
+        revalidatePath('/');
+        console.log('Revalidated homepage (projects changed)');
+        break;
+
+      case 'about':
+        revalidatePath('/');
+        console.log('Revalidated homepage (about changed)');
+        break;
+
+      case 'experience':
+        revalidatePath('/');
+        console.log('Revalidated homepage (experience changed)');
+        break;
+
+      case 'tech':
+        revalidatePath('/');
+        revalidatePath('/projects');
+        console.log('Revalidated all project pages (tech changed)');
+        break;
+
+      case 'iknow':
+        revalidatePath('/');
+        console.log('Revalidated homepage (skills changed)');
+        break;
+
+      default:
+        console.log(`Unknown type ${_type}, revalidating homepage as fallback`);
+        revalidatePath('/');
+    }
+
+    return NextResponse.json({
+      revalidated: true,
+      type: _type,
+      id: _id,
+      slug: slug?.current,
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
-    console.error('Webhook error:', error);
-    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
+    console.error('Revalidation error:', error);
+    return NextResponse.json(
+      { message: 'Error revalidating', error: String(error) },
+      { status: 500 },
+    );
   }
+}
+
+export async function GET() {
+  return NextResponse.json({
+    status: 'ok',
+    message: 'Sanity revalidation webhook endpoint',
+  });
 }
