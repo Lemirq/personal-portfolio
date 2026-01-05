@@ -8,7 +8,7 @@
       "type": "remote",
       "url": "https://mcp.sanity.io",
       "headers": {
-        "Authorization": "Bearer skM0i8fYvJszjZN49V3cd0I1KcJmcvUJbOwVGSgKJ5AqCbO4oXZ5p7LLQ0UeYGaMODbi3OxvSlWm9XeUZEZdWMEajJ7jQDSHlbigOVecdui87IM7qtDo4cT1fr6tM0LmvuPnPg4wQVEq3gGBgnq9bN5VLfyTWSI04JmTC3q8Ql5L8WuEZNR1"
+        "Authorization": "Bearer s"
       },
       "enabled": true
     }

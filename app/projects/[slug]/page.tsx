@@ -24,46 +24,53 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-async function getProject(slug: string) {
-  const query = `
-    *[_type == "project" && slug.current == $slug][0] {
-      title,
-      headline,
-      description,
-      url,
-      tech,
-      overview,
-      problemStatement,
-      solution,
-      solution,
-      features[] {
-        title,
-        description
-      },
-      results[] {
-        title,
-        description
-      },
-      gallery[] {
-        _type,
-        _key,
-        asset-> {
-          _id,
-          url
-        },
-        url,
-        caption
-      }
-    }
-  `;
-  const project = await client.fetch(query, { slug });
-  return project;
-}
+ async function getProject(slug: string) {
+   const query = `
+     *[_type == "project" && slug.current == $slug][0] {
+       title,
+       headline,
+       description,
+       url,
+       tech,
+       overview,
+       problemStatement,
+       solution,
+       solution,
+       features[] {
+         title,
+         description
+       },
+       results[] {
+         title,
+         description
+       },
+       gallery[] {
+         _type,
+         _key,
+         asset-> {
+           _id,
+           url
+         },
+         url,
+         caption
+       }
+     }
+   `;
+   const project = await client.fetch(
+     query,
+     { slug },
+     { next: { tags: ['projects', `project-${slug}`] } }
+   );
+   return project;
+ }
 
-// Fetch all technologies for mapping
-async function getTech() {
-  return await client.fetch(`*[_type == "tech"]{techName, _id}`);
-}
+ async function getTech() {
+   return await client.fetch(
+     `*[_type == "tech"]{techName, _id}`,
+     {},
+     { next: { tags: ['tech'] } }
+   );
+ }
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
