@@ -4,9 +4,9 @@ import Image from "next/image";
 export default async function PublicInvoicePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = params.id;
+  const { id } = await params;
   const business = {
     name: "Vihaan Sharma",
     address: "210 Huguenot Rd, Oakville, ON, L6H 0L6",
@@ -72,6 +72,8 @@ export default async function PublicInvoicePage({
             <Image
               src={business.logoUrl}
               alt="Logo"
+              width={80}
+              height={80}
               className="w-20 h-20 object-contain"
             />
           ) : null}
