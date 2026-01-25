@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { ProjectGalleryCarousel } from "@/components/ProjectGalleryCarousel";
 import BackButton from "@/components/BackButton";
+import { TrackedProjectLink } from "@/components/TrackedProjectLink";
 
 // Revalidate project data every hour
 export const revalidate = 3600;
@@ -24,8 +25,8 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
- async function getProject(slug: string) {
-   const query = `
+async function getProject(slug: string) {
+  const query = `
      *[_type == "project" && slug.current == $slug][0] {
        title,
        headline,
@@ -56,21 +57,21 @@ interface Props {
        }
      }
    `;
-   const project = await client.fetch(
-     query,
-     { slug },
-     { next: { tags: ['projects', `project-${slug}`] } }
-   );
-   return project;
- }
+  const project = await client.fetch(
+    query,
+    { slug },
+    { next: { tags: ["projects", `project-${slug}`] } },
+  );
+  return project;
+}
 
- async function getTech() {
-   return await client.fetch(
-     `*[_type == "tech"]{techName, _id}`,
-     {},
-     { next: { tags: ['tech'] } }
-   );
- }
+async function getTech() {
+  return await client.fetch(
+    `*[_type == "tech"]{techName, _id}`,
+    {},
+    { next: { tags: ["tech"] } },
+  );
+}
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
@@ -87,7 +88,7 @@ export default async function ProjectPage({ params }: Props) {
         className="-top-40 left-0 md:left-60 md:-top-20"
         fill="white"
       />
-      
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#050511]/80 backdrop-blur-xs border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -115,7 +116,7 @@ export default async function ProjectPage({ params }: Props) {
               <div className="flex flex-wrap gap-2">
                 {project.tech?.map((techRef: any) => {
                   const technology = allTech.find(
-                    (t: any) => t._id === techRef._ref
+                    (t: any) => t._id === techRef._ref,
                   );
                   return (
                     technology && (
@@ -130,22 +131,22 @@ export default async function ProjectPage({ params }: Props) {
                 })}
               </div>
 
-                {project.url && (
-                  <button
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 px-4 py-2 rounded-xl text-lg cursor-pointer"
-                  >
-                  <Link href={project.url} target="_blank" rel="noopener noreferrer" className=" w-full h-full">
-                     Visit Site <BsArrowUpRight className="inline-block ml-2" />
-                  </Link>
-                  </button>
-                )}
+              {project.url && (
+                <TrackedProjectLink
+                  url={project.url}
+                  projectTitle={project.title}
+                />
+              )}
             </div>
           </header>
 
           {/* Media Gallery */}
           {project.gallery && project.gallery.length > 0 && (
             <section className="space-y-4 animate-in fade-in zoom-in-95 duration-700 delay-150">
-              <ProjectGalleryCarousel gallery={project.gallery} projectTitle={project.title} />
+              <ProjectGalleryCarousel
+                gallery={project.gallery}
+                projectTitle={project.title}
+              />
             </section>
           )}
 
@@ -155,11 +156,10 @@ export default async function ProjectPage({ params }: Props) {
             {project.overview && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-indigo-500"></span>
                   Overview
                 </h2>
-                <div className="prose prose-invert prose-xl text-gray-300 w-full max-w-none">
-                  <PortableText value={project.overview}/>
+                <div className="prose prose-invert prose-lg text-gray-300 w-full max-w-none">
+                  <PortableText value={project.overview} />
                 </div>
               </section>
             )}
@@ -168,10 +168,9 @@ export default async function ProjectPage({ params }: Props) {
             {project.problemStatement && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-indigo-500"></span>
                   The Problem
                 </h2>
-                <div className="prose prose-invert prose-xl text-gray-300 w-full max-w-none">
+                <div className="prose prose-invert prose-lg text-gray-300 w-full max-w-none">
                   <PortableText value={project.problemStatement} />
                 </div>
               </section>
@@ -181,10 +180,9 @@ export default async function ProjectPage({ params }: Props) {
             {project.solution && (
               <section className="space-y-4 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-indigo-500"></span>
                   The Solution
                 </h2>
-                <div className="prose prose-invert prose-xl text-gray-300 w-full max-w-none">
+                <div className="prose prose-invert prose-lg text-gray-300 w-full max-w-none">
                   <PortableText value={project.solution} />
                 </div>
               </section>
@@ -194,14 +192,18 @@ export default async function ProjectPage({ params }: Props) {
             {project.features && project.features.length > 0 && (
               <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-indigo-500"></span>
                   Key Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                   {project.features.map((feature: any, i: number) => (
-                    <Card key={i} className="bg-white/5 border-white/10 text-gray-300">
+                    <Card
+                      key={i}
+                      className="bg-white/5 border-white/10 text-gray-300"
+                    >
                       <CardHeader>
-                        <CardTitle className="text-indigo-300">{feature.title}</CardTitle>
+                        <CardTitle className="text-indigo-300">
+                          {feature.title}
+                        </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="prose prose-invert prose-lg text-gray-300 max-w-none">
@@ -218,14 +220,18 @@ export default async function ProjectPage({ params }: Props) {
             {project.results && project.results.length > 0 && (
               <section className="space-y-6 w-full">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="w-8 h-px bg-indigo-500"></span>
                   Results & Impact
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                   {project.results.map((result: any, i: number) => (
-                    <Card key={i} className="bg-white/5 border-white/10 text-gray-300">
+                    <Card
+                      key={i}
+                      className="bg-white/5 border-white/10 text-gray-300"
+                    >
                       <CardHeader>
-                        <CardTitle className="text-amber-300">{result.title}</CardTitle>
+                        <CardTitle className="text-amber-300">
+                          {result.title}
+                        </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="prose prose-invert prose-lg text-gray-300 max-w-none">
@@ -237,7 +243,6 @@ export default async function ProjectPage({ params }: Props) {
                 </div>
               </section>
             )}
-
           </div>
         </div>
       </div>

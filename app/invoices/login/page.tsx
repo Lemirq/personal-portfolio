@@ -1,6 +1,7 @@
 "use client";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import posthog from 'posthog-js';
 
 function LoginForm() {
   const [password, setPassword] = useState("");
@@ -23,12 +24,19 @@ function LoginForm() {
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setError(data?.error || "Invalid password");
+        posthog.capture('invoice_login_failed', {
+          error: data?.error || "Invalid password",
+        });
         setLoading(false);
         return;
       }
+      posthog.capture('invoice_login_succeeded');
       router.replace(next);
     } catch (e: any) {
       setError("Something went wrong");
+      posthog.capture('invoice_login_failed', {
+        error: "Something went wrong",
+      });
       setLoading(false);
     }
   };

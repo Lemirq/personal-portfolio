@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
 import { format } from "date-fns";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 const generateInvoiceNumber = async (): Promise<string> => {
   // Generate INV-YYYYMMDD-XXXX based on count that day
@@ -68,14 +69,44 @@ export async function POST(request: NextRequest) {
     status: (body.status as any) ?? "draft",
   } as any;
 
+  const posthog = getPostHogClient();
+  const distinctId = request.headers.get('x-posthog-distinct-id') || 'anonymous-server';
+
+  // Calculate total for tracking
+  const subtotal = services.reduce((sum: number, s: any) => sum + (s.quantity * s.rate), 0);
+  const tax = subtotal * (taxRate / 100);
+  const total = subtotal + tax;
+
   if (hasId && body._id) {
     const patched = await client
       .patch(body._id)
       .set(docBase)
       .commit({ autoGenerateArrayKeys: true });
+    posthog.capture({
+      distinctId,
+      event: 'invoice_updated',
+      properties: {
+        invoice_id: body._id,
+        invoice_number: docBase.invoiceNumber,
+        total_amount: total,
+        services_count: services.length,
+        source: 'api',
+      },
+    });
     return NextResponse.json({ invoice: patched });
   }
   const created = await client.create(docBase);
+  posthog.capture({
+    distinctId,
+    event: 'invoice_created',
+    properties: {
+      invoice_id: created._id,
+      invoice_number: docBase.invoiceNumber,
+      total_amount: total,
+      services_count: services.length,
+      source: 'api',
+    },
+  });
   return NextResponse.json({ invoice: created });
 }
 

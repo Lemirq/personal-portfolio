@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import InvoicePreview, { BusinessInfo } from "./InvoicePreview";
 import InvoiceList from "./InvoiceList";
 import { format } from "date-fns";
+import posthog from 'posthog-js';
 
 const defaultBusiness: BusinessInfo = {
   name: "Vihaan Sharma",
@@ -101,6 +102,7 @@ export default function InvoiceEditor() {
         method: "POST",
         body: JSON.stringify(payload),
       });
+      const isNewClient = !editingClient._id;
       setClients((prev) => {
         const idx = prev.findIndex((c) => c._id === res.client._id);
         if (idx >= 0) {
@@ -118,8 +120,12 @@ export default function InvoiceEditor() {
         client: { _type: "reference", _ref: res.client._id } as any,
       }));
       setEditingClient({});
+      posthog.capture(isNewClient ? 'client_created' : 'client_updated', {
+        client_id: res.client._id,
+      });
       alert("Client saved");
     } catch (err: any) {
+      posthog.captureException(err);
       alert("Failed to save client: " + (err?.message || "Unknown error"));
     }
   };
@@ -134,21 +140,33 @@ export default function InvoiceEditor() {
       alert("Please select a client before saving the invoice");
       return;
     }
+    const isNewInvoice = !invoice._id;
     const payload = {
       ...invoice,
       client: selectedClient?._id
         ? { _type: "reference", _ref: selectedClient._id }
         : invoice.client,
     } as Partial<InvoiceDoc>;
-    const res = await fetchJSON<{ invoice: InvoiceDoc }>("/api/invoices", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    setInvoice((prev) => ({
-      ...prev,
-      _id: res.invoice._id,
-      invoiceNumber: res.invoice.invoiceNumber,
-    }));
+    try {
+      const res = await fetchJSON<{ invoice: InvoiceDoc }>("/api/invoices", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      setInvoice((prev) => ({
+        ...prev,
+        _id: res.invoice._id,
+        invoiceNumber: res.invoice.invoiceNumber,
+      }));
+      posthog.capture(isNewInvoice ? 'invoice_created' : 'invoice_updated', {
+        invoice_id: res.invoice._id,
+        invoice_number: res.invoice.invoiceNumber,
+        total_amount: totals.total,
+        services_count: invoice.services?.length || 0,
+      });
+    } catch (err: any) {
+      posthog.captureException(err);
+      alert("Failed to save invoice: " + (err?.message || "Unknown error"));
+    }
   };
 
   // PDF generation removed in favor of hosted invoice page links
@@ -373,10 +391,19 @@ export default function InvoiceEditor() {
                   className={`${btnBase} bg-indigo-600`}
                   onClick={async () => {
                     if (!invoice._id) return alert("Save invoice first");
-                    await fetch(`/api/invoices/email?id=${invoice._id}`, {
-                      method: "POST",
-                    });
-                    alert("Email sent");
+                    try {
+                      await fetch(`/api/invoices/email?id=${invoice._id}`, {
+                        method: "POST",
+                      });
+                      posthog.capture('invoice_email_sent', {
+                        invoice_id: invoice._id,
+                        invoice_number: invoice.invoiceNumber,
+                      });
+                      alert("Email sent");
+                    } catch (err: any) {
+                      posthog.captureException(err);
+                      alert("Failed to send email");
+                    }
                   }}
                 >
                   Send Email

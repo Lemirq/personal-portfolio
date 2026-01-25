@@ -1,9 +1,18 @@
+'use client';
 import { SOCIAL_LINKS } from "@/components/social-links";
 import Form from "@/components/Form";
+import posthog from 'posthog-js';
 
 const contact = SOCIAL_LINKS;
 
 const Contact = () => {
+  const handleSocialLinkClick = (label: string, url: string) => {
+    posthog.capture('social_link_clicked', {
+      platform: label,
+      url: url,
+    });
+  };
+
   return (
     <section
       className="max-w-6xl mx-auto py-32 pb-16 fc px-5 md:px-10 relative z-10"
@@ -28,7 +37,12 @@ const Contact = () => {
               data-cursor="fill"
               className="transition-transform hover:-translate-y-1"
             >
-              <a className="fr gap-1" href={url} target="blank">
+              <a
+                className="fr gap-1"
+                href={url}
+                target="blank"
+                onClick={() => handleSocialLinkClick(label, url)}
+              >
                 {icon}
                 {label !== "X" ? label : ""}
               </a>

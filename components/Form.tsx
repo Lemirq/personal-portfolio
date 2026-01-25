@@ -1,5 +1,7 @@
+'use client';
 import { useForm, Resolver } from 'react-hook-form';
 import makeToast from '@/utils/makeToast';
+import posthog from 'posthog-js';
 interface FormValues {
   name: string;
   email: string;
@@ -67,7 +69,18 @@ const Form = () => {
     });
 
     console.log(await fetched.json());
-    fetched.status === 200 ? makeToast('Message sent!', 'success') : makeToast('Error sending message!', 'danger');
+
+    if (fetched.status === 200) {
+      makeToast('Message sent!', 'success');
+      posthog.capture('contact_form_submitted', {
+        message_length: data.message.length,
+      });
+    } else {
+      makeToast('Error sending message!', 'danger');
+      posthog.capture('contact_form_failed', {
+        status_code: fetched.status,
+      });
+    }
 
     setValue('name', '');
     setValue('email', '');

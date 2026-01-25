@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
 import { Resend } from "resend";
+import { getPostHogClient } from "@/lib/posthog-server";
 // optional: accept pre-rendered PDF from client
 
 export async function POST(request: NextRequest) {
@@ -57,6 +58,32 @@ export async function POST(request: NextRequest) {
     html,
   });
 
-  if (error) return NextResponse.json({ error }, { status: 500 });
+  const posthog = getPostHogClient();
+  const distinctId = request.headers.get('x-posthog-distinct-id') || 'anonymous-server';
+
+  if (error) {
+    posthog.capture({
+      distinctId,
+      event: 'invoice_email_failed',
+      properties: {
+        invoice_id: id,
+        invoice_number: invoice.invoiceNumber,
+        error: error.message,
+        source: 'api',
+      },
+    });
+    return NextResponse.json({ error }, { status: 500 });
+  }
+
+  posthog.capture({
+    distinctId,
+    event: 'invoice_email_delivered',
+    properties: {
+      invoice_id: id,
+      invoice_number: invoice.invoiceNumber,
+      total_amount: total,
+      source: 'api',
+    },
+  });
   return NextResponse.json({ ok: true });
 }

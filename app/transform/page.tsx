@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { runTransformAction, getDocuments, getSchemas, getDocumentTypes } from './actions'
+import posthog from 'posthog-js'
 
 export default function TransformPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -40,14 +41,33 @@ export default function TransformPage() {
     setError(null)
     setResult(null)
 
+    const schemaId = formData.get('schemaId') as string
+    const documentId = formData.get('documentId') as string
+    const instruction = formData.get('instruction') as string
+
     const res = await runTransformAction(formData)
 
     if (res.success) {
       setStatus('success')
       setResult(res.result)
+      posthog.capture('transform_executed', {
+        schema_id: schemaId,
+        document_id: documentId,
+        document_type: selectedType,
+        instruction_length: instruction.length,
+        success: true,
+      })
     } else {
       setStatus('error')
       setError(res.error as string)
+      posthog.capture('transform_executed', {
+        schema_id: schemaId,
+        document_id: documentId,
+        document_type: selectedType,
+        instruction_length: instruction.length,
+        success: false,
+        error: res.error,
+      })
     }
   }
 

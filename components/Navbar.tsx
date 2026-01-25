@@ -53,9 +53,6 @@ const Navbar = () => {
         id="navbar-glass"
         displace={0.5}
         distortionScale={-180}
-        redOffset={0}
-        greenOffset={10}
-        blueOffset={20}
         brightness={50}
         opacity={0.93}
         backgroundOpacity={0.5}
@@ -71,23 +68,23 @@ const Navbar = () => {
                 key={typeof label === "string" ? label : "home-logo"}
                 className={cn(
                   "sm:px-3 py-2 rounded-full sm:border border-zinc-800 sm:hover:bg-zinc-800 transition-colors bg-transparent cursor-pointer bg-blend-screen",
-                  className
+                  className,
                 )}
               >
                 <Link
                   href={url}
                   onClick={(e) => {
                     if (url.startsWith("/")) {
-                        if (url.includes('#')) {
-                            return;
-                        }
-                        
-                        if (url === '/' || !url.startsWith('#')) {
-                            e.preventDefault();
-                            router.push(url, {
-                                onTransitionReady: pageAnimation,
-                            });
-                        }
+                      if (url.includes("#")) {
+                        return;
+                      }
+
+                      if (url === "/" || !url.startsWith("#")) {
+                        e.preventDefault();
+                        router.push(url, {
+                          onTransitionReady: pageAnimation,
+                        });
+                      }
                     }
                   }}
                 >

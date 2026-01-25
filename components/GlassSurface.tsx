@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useRef, useState, useId, useCallback } from "react";
 
 export interface GlassSurfaceProps {
@@ -74,9 +74,9 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   backgroundOpacity = 0,
   saturation = 1,
   distortionScale = -180,
-  redOffset = 0,
-  greenOffset = 10,
-  blueOffset = 20,
+  redOffset = 25,
+  greenOffset = 25,
+  blueOffset = 25,
   xChannel = "R",
   yChannel = "G",
   mixBlendMode = "difference",
@@ -149,7 +149,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
       if (ref.current) {
         ref.current.setAttribute(
           "scale",
-          (distortionScale + offset).toString()
+          (distortionScale + offset).toString(),
         );
         ref.current.setAttribute("xChannelSelector", xChannel);
         ref.current.setAttribute("yChannelSelector", yChannel);
@@ -189,8 +189,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
       resizeObserver.disconnect();
     };
   }, [updateDisplacementMap]);
-
-
 
   useEffect(() => {
     setTimeout(updateDisplacementMap, 0);
@@ -243,8 +241,8 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
       return {
         ...baseStyles,
         background: isDarkMode
-          ? `hsl(228 68% 7% / ${backgroundOpacity})`
-          : `hsl(0 0% 100% / ${backgroundOpacity})`,
+          ? `rgba(25, 25, 25, ${backgroundOpacity})`
+          : `rgba(0, 0, 0, ${backgroundOpacity})`,
         backdropFilter: `url(#${filterId}) saturate(${saturation})`,
         // boxShadow: isDarkMode
         //   ? `0 0 2px 1px color-mix(in oklch, white, transparent 65%) inset,

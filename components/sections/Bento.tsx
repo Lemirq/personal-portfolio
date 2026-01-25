@@ -86,7 +86,7 @@ const Bento = () => {
         For <span className="text-violet-500">Clients</span>...
       </h2>
       <div className="w-full grid md:grid-cols-2 md:grid-rows-2 grid-cols-1 gap-4 p-4">
-        <div className="group bg-[#05081B] rounded-2xl overflow-hidden text-center border border-[#070a1f] md:row-span-2 w-full h-full relative">
+        <div className="group bg-[#030712] rounded-2xl overflow-hidden text-center border border-[#0a1420] md:row-span-2 w-full h-full relative">
           <img
             src="/images/Collaboration.jpg"
             alt="Collaboration"
@@ -97,15 +97,15 @@ const Bento = () => {
               I prioritize clear communication and regular check-ins to keep projects aligned with your goals.
             </h3>
           </div>
-          {/* purple radial gradient top right */}
+          {/* blue radial gradient top right */}
           <motion.div
             initial={{
               background:
-                "radial-gradient(circle at 50% 50%, rgba(139,92,246,0.40) 0%,rgba(255,255,255,0.00) 60%",
+                "radial-gradient(circle at 50% 50%, rgba(59,130,246,0.25) 0%,rgba(255,255,255,0.00) 60%",
             }}
             whileInView={{
               background:
-                "radial-gradient(circle at 94% 6%, rgba(139,92,246,0.40) 0%,rgba(255,255,255,0.00) 60%",
+                "radial-gradient(circle at 94% 6%, rgba(59,130,246,0.25) 0%,rgba(255,255,255,0.00) 60%",
             }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
@@ -113,7 +113,7 @@ const Bento = () => {
           />
         </div>
 
-        <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-[200px] sm:min-h-0 h-full relative overflow-hidden">
+        <div className="group bg-[#030712] rounded-2xl p-4 text-center border border-[#0a1420] w-full min-h-[200px] sm:min-h-0 h-full relative overflow-hidden">
           <h3 className="text-lg md:text-2xl font-bold text-left absolute z-10">
             Flexible availability across time zones
           </h3>
@@ -131,7 +131,7 @@ const Bento = () => {
           />
         </div>
 
-        <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full h-full relative overflow-hidden">
+        <div className="group bg-[#030712] rounded-2xl p-4 text-center border border-[#0a1420] w-full h-full relative overflow-hidden">
           <div className="fc items-start md:absolute md:h-full group-hover:translate-y-2 transition-transform z-10">
             <p className="text-sm tracking-wide uppercase">
               I constantly try to improve
@@ -145,7 +145,7 @@ const Bento = () => {
               {tech.map((t) => (
                 <div
                   key={t}
-                  className="text-lg p-5 bg-[#13162b] rounded-xl w-full"
+                  className="text-lg p-5 bg-[#0a1420] rounded-xl w-full"
                 >
                   {t}
                 </div>
@@ -155,7 +155,7 @@ const Bento = () => {
               {tech.map((t) => (
                 <div
                   key={t}
-                  className="text-lg p-5 bg-[#13162b] rounded-xl w-full"
+                  className="text-lg p-5 bg-[#0a1420] rounded-xl w-full"
                 >
                   {t}
                 </div>
@@ -168,7 +168,7 @@ const Bento = () => {
               {tech.map((t) => (
                 <div
                   key={t}
-                  className="text-lg p-5 bg-[#13162b] rounded-xl w-full"
+                  className="text-lg p-5 bg-[#0a1420] rounded-xl w-full"
                 >
                   {t}
                 </div>
@@ -178,7 +178,7 @@ const Bento = () => {
               {tech.map((t) => (
                 <div
                   key={t}
-                  className="text-lg p-5 bg-[#13162b] rounded-xl w-full"
+                  className="text-lg p-5 bg-[#0a1420] rounded-xl w-full"
                 >
                   {t}
                 </div>
@@ -190,7 +190,7 @@ const Bento = () => {
         </div>
       </div>
       <div className="w-full grid md:grid-cols-3 md:grid-rows-2 grid-cols-1 gap-4 p-4">
-        <div className="group bg-[#05081B] bg-grid-white/[0.02] rounded-2xl text-center border border-[#070a1f] w-full h-full relative overflow-hidden fc items-end">
+        <div className="group bg-[#030712] bg-grid-white/[0.02] rounded-2xl text-center border border-[#0a1420] w-full h-full relative overflow-hidden fc items-end">
           <h3 className="text-lg md:text-2xl font-bold text-left mb-16 p-4 group-hover:translate-x-2 transition-transform">
             Building software since 2019, with a focus on delivering reliable, production-ready solutions.
           </h3>
@@ -203,18 +203,18 @@ const Bento = () => {
           <motion.div
             initial={{
               background:
-                "radial-gradient(circle at 50% 50%, rgba(139,92,246,0.40) 0%,rgba(255,255,255,0.00) 60%",
+                "radial-gradient(circle at 50% 50%, rgba(59,130,246,0.25) 0%,rgba(255,255,255,0.00) 60%",
             }}
             whileInView={{
               background:
-                "radial-gradient(circle at 20% 70%, rgba(139,92,246,0.30) 0%,rgba(255,255,255,0.00) 60%",
+                "radial-gradient(circle at 20% 70%, rgba(59,130,246,0.20) 0%,rgba(255,255,255,0.00) 60%",
             }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
             className="absolute inset-0 z-10 pointer-events-none"
           />
         </div>
-        <div className="bg-linear-to-br to-[#0d112a] to-70% from-[#070a1f] rounded-2xl p-4 text-center border border-[#070a1f] w-full min-h-full relative overflow-hidden col-span-2 row-span-2 fc">
+        <div className="bg-linear-to-br to-[#0a1525] to-70% from-[#050e1a] rounded-2xl p-4 text-center border border-[#0a1420] w-full min-h-full relative overflow-hidden col-span-2 row-span-2 fc">
           <h3 className="text-lg md:text-2xl font-bold mb-4">
             My Technologies
           </h3>
@@ -236,7 +236,7 @@ const Bento = () => {
                   key={curr._id}
                   className="iknow-border relative p-px overflow-hidden rounded-2xl"
                 >
-                  <div className="iknow size-16 md:size-24 fc rounded-2xl bg-[#13162b] p-4">
+                  <div className="iknow size-16 md:size-24 fc rounded-2xl bg-[#0a1420] p-4">
                     {/* <img src={curr.img} className="w-24 h-24 rounded-lg mix-blend-exclusion" /> */}
                     <div
                       className={`${curr.className} text-4xl md:text-7xl opacity-40`}
@@ -253,14 +253,14 @@ const Bento = () => {
             </p>
           </div>
         </div>
-        <div className="group bg-[#05081B] rounded-2xl p-4 text-center border border-[#070a1f] w-full h-full relative overflow-hidden fc gap-2">
+        <div className="group bg-[#030712] rounded-2xl p-4 text-center border border-[#0a1420] w-full h-full relative overflow-hidden fc gap-2">
           <h3 className="text-lg md:text-2xl font-bold text-left p-4">
             Have a project in mind? <br /> Let's discuss.
           </h3>
 
           <button
             onClick={handleScrollToContact}
-            className="px-5 py-3 bg-[#12142b] border-[#262b4c] border rounded-2xl text-white"
+            className="px-5 py-3 bg-[#0d1420] border-[#1a2938] border rounded-2xl text-white"
           >
             Contact me
           </button>
@@ -271,7 +271,7 @@ const Bento = () => {
               radial-gradient(at 10% 0%, hsla(189,100%,56%,.4) 0px, transparent 50%),
               radial-gradient(at 30% 0%, hsla(355,100%,93%,.4) 0px, transparent 50%),
               radial-gradient(at 58% 0%, hsla(340,100%,76%,.4) 0px, transparent 50%),
-              radial-gradient(at 60% 0%, rgba(139,92,246,1) 0px, transparent 50%),
+              radial-gradient(at 60% 0%, rgba(59,130,246,0.8) 0px, transparent 50%),
               radial-gradient(at 80% 00%, rgba(47,71,132,1) 0px, transparent 50%),
               radial-gradient(at 100% 0%, hsla(343,100%,76%,.4) 0px, transparent 70%)`,
               // 'radial-gradient(circle at 94% 6%, rgba(139,92,246,0.40) 0%,rgba(255,255,255,0.00)), radial-gradient(circle at 20% 6%, rgba(32,59,121,0.40) 0%,rgba(255,255,255,0.00))',

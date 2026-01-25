@@ -28,6 +28,7 @@ const limit = (ip: string) => {
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { getPostHogClient } from "@/lib/posthog-server";
 export async function POST(request: Request) {
   const headersList = await headers();
   const ip = request.headers.get("X-Forwarded-For") ?? "unknown";
@@ -51,10 +52,29 @@ export async function POST(request: Request) {
     react: <EmailTemplate name={name} email={email} message={message} date={date} />,
   });
 
+  const posthog = getPostHogClient();
+  const distinctId = request.headers.get('x-posthog-distinct-id') || 'anonymous-server';
+
   if (error) {
     console.error(error);
+    posthog.capture({
+      distinctId,
+      event: 'contact_email_failed',
+      properties: {
+        error: error.message,
+        source: 'api',
+      },
+    });
     return NextResponse.json({ error }, { status: 500 });
   }
 
+  posthog.capture({
+    distinctId,
+    event: 'contact_email_sent',
+    properties: {
+      message_length: message.length,
+      source: 'api',
+    },
+  });
   return NextResponse.json({ data });
 }

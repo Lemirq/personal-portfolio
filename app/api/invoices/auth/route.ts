@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 const COOKIE_AUTH = "invo_auth";
 const COOKIE_ATTEMPTS = "invo_attempts";
@@ -10,7 +11,18 @@ export async function POST(req: NextRequest) {
   const maxAttempts = Number(process.env.INVOICE_MAX_ATTEMPTS || 5);
 
   const attempts = Number(req.cookies.get(COOKIE_ATTEMPTS)?.value || 0);
+  const posthog = getPostHogClient();
+  const distinctId = req.headers.get('x-posthog-distinct-id') || 'anonymous-server';
+
   if (attempts >= maxAttempts) {
+    posthog.capture({
+      distinctId,
+      event: 'invoice_login_rate_limited',
+      properties: {
+        attempts,
+        source: 'api',
+      },
+    });
     return NextResponse.json(
       { error: "Too many attempts. Try later." },
       { status: 429 }
@@ -20,6 +32,14 @@ export async function POST(req: NextRequest) {
   if (!expected)
     return NextResponse.json({ error: "Not configured" }, { status: 500 });
   if (!password || password !== expected) {
+    posthog.capture({
+      distinctId,
+      event: 'invoice_login_failed',
+      properties: {
+        attempt_number: attempts + 1,
+        source: 'api',
+      },
+    });
     const res = NextResponse.json(
       { error: "Invalid password" },
       { status: 401 }
@@ -32,6 +52,14 @@ export async function POST(req: NextRequest) {
     });
     return res;
   }
+
+  posthog.capture({
+    distinctId,
+    event: 'invoice_login_succeeded',
+    properties: {
+      source: 'api',
+    },
+  });
 
   const res = NextResponse.json({ ok: true });
   res.cookies.set(COOKIE_AUTH, "1", {
