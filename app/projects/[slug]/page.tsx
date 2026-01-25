@@ -1,22 +1,12 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
-import Link from "next/link";
-import Image from "next/image";
-import { BsArrowLeft, BsArrowUpRight, BsGithub, BsGlobe } from "react-icons/bs";
 import { notFound } from "next/navigation";
-import { Spotlight } from "@/components/Spotlight";
-import GlassSurface from "@/components/GlassSurface";
-import { Button } from "@/components/MovingBorder";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProjectGalleryCarousel } from "@/components/ProjectGalleryCarousel";
 import BackButton from "@/components/BackButton";
 import { TrackedProjectLink } from "@/components/TrackedProjectLink";
+import { ShaderBackground } from "@/components/ShaderMesh";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
 
 // Revalidate project data every hour
 export const revalidate = 3600;
@@ -83,14 +73,11 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-[#050511] text-white selection:bg-indigo-500/30 relative overflow-hidden">
-      <Spotlight
-        className="-top-40 left-0 md:left-60 md:-top-20"
-        fill="white"
-      />
+    <main className="min-h-screen bg-black text-white selection:bg-indigo-500/30 relative overflow-hidden">
+      <ShaderBackground />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-[#050511]/80 backdrop-blur-xs border-b border-white/5">
+      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <BackButton />
         </div>
@@ -196,21 +183,28 @@ export default async function ProjectPage({ params }: Props) {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                   {project.features.map((feature: any, i: number) => (
-                    <Card
-                      key={i}
-                      className="bg-white/5 border-white/10 text-gray-300"
-                    >
-                      <CardHeader>
-                        <CardTitle className="text-indigo-300">
-                          {feature.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="prose prose-invert prose-lg text-gray-300 max-w-none">
-                          <PortableText value={feature.description} />
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <div key={i} className="relative rounded-xl h-full">
+                      <GlowingEffect
+                        spread={40}
+                        glow={true}
+                        disabled={false}
+                        proximity={64}
+                        inactiveZone={0.01}
+                        borderWidth={1}
+                      />
+                      <Card className="relative bg-white/[0.02] border-white/[0.06] text-gray-300 rounded-xl h-full flex flex-col">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-white text-lg font-semibold">
+                            {feature.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex-1 pt-0">
+                          <div className="prose prose-invert prose-sm text-gray-400 max-w-none leading-relaxed">
+                            <PortableText value={feature.description} />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   ))}
                 </div>
               </section>
@@ -224,21 +218,28 @@ export default async function ProjectPage({ params }: Props) {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                   {project.results.map((result: any, i: number) => (
-                    <Card
-                      key={i}
-                      className="bg-white/5 border-white/10 text-gray-300"
-                    >
-                      <CardHeader>
-                        <CardTitle className="text-amber-300">
-                          {result.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="prose prose-invert prose-lg text-gray-300 max-w-none">
-                          <PortableText value={result.description} />
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <div key={i} className="relative rounded-xl h-full">
+                      <GlowingEffect
+                        spread={40}
+                        glow={true}
+                        disabled={false}
+                        proximity={64}
+                        inactiveZone={0.01}
+                        borderWidth={1}
+                      />
+                      <Card className="relative bg-white/[0.02] border-white/[0.06] text-gray-300 rounded-xl h-full flex flex-col">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-white text-lg font-semibold">
+                            {result.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex-1 pt-0">
+                          <div className="prose prose-invert prose-sm text-gray-400 max-w-none leading-relaxed">
+                            <PortableText value={result.description} />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   ))}
                 </div>
               </section>

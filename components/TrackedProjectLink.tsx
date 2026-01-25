@@ -19,11 +19,12 @@ export function TrackedProjectLink({ url, projectTitle }: TrackedProjectLinkProp
 
   return (
     <button
-      className="bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 px-4 py-2 rounded-xl text-lg cursor-pointer"
+      className="group relative px-4 py-2 rounded-xl text-lg cursor-pointer transition-all duration-300 overflow-hidden"
       onClick={handleClick}
     >
-      <Link href={url} target="_blank" rel="noopener noreferrer" className="w-full h-full">
-        Visit Site <BsArrowUpRight className="inline-block ml-2" />
+      <div className="absolute inset-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300" />
+      <Link href={url} target="_blank" rel="noopener noreferrer" className="relative flex items-center gap-2 text-white/90 group-hover:text-white">
+        Visit Site <BsArrowUpRight className="inline-block" />
       </Link>
     </button>
   );

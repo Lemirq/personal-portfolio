@@ -48,7 +48,7 @@
     "next-sanity": "^12.0.8",
     "next-view-transitions": "^0.3.5",
     "npm": "^10.8.2",
-    "posthog-js": "^1.255.1",
+    "posthog-js": "^1.335.2",
     "posthog-node": "^5.1.1",
     "puppeteer-core": "^24.16.0",
     "react": "19.2.3",

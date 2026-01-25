@@ -7,9 +7,8 @@ import * as THREE from "three";
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(SplitText, useGSAP);
+gsap.registerPlugin(useGSAP);
 
 // ===================== SHADER =====================
 const vertexShader = `
@@ -186,9 +185,7 @@ function ShaderPlane() {
   );
 }
 
-function ShaderBackground() {
-  const canvasRef = useRef<HTMLDivElement | null>(null);
-
+export function ShaderBackground() {
   const camera = useMemo(
     () => ({
       position: [0, 0, 1] as [number, number, number],
@@ -199,43 +196,25 @@ function ShaderBackground() {
     [],
   );
 
-  useGSAP(
-    () => {
-      if (!canvasRef.current) return;
-
-      gsap.set(canvasRef.current, {
-        filter: "blur(20px)",
-        scale: 1.1,
-        autoAlpha: 0.7,
-      });
-
-      gsap.to(canvasRef.current, {
-        filter: "blur(0px)",
-        scale: 1,
-        autoAlpha: 1,
-        duration: 1.5,
-        ease: "power3.out",
-        delay: 0.3,
-      });
-    },
-    { scope: canvasRef },
-  );
-
   return (
     <div
-      ref={canvasRef}
-      className="bg-black absolute inset-0 -z-10 w-full h-full"
-      aria-hidden
+      className="bg-black absolute inset-0 z-0 w-full h-full"
+      aria-hidden="true"
     >
       <Canvas
         camera={camera}
-        gl={{ antialias: true, alpha: false }}
-        dpr={[1, 2]}
-        style={{ width: "100%", height: "100%" }}
+        gl={{
+          antialias: false,
+          alpha: false,
+          powerPreference: "high-performance",
+        }}
+        dpr={[1, 1.5]}
+        frameloop="always"
+        style={{ width: "100%", height: "100%", opacity: 0.4 }}
       >
         <ShaderPlane />
       </Canvas>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/40" />
     </div>
   );
 }
