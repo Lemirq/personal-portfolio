@@ -62,7 +62,7 @@ const Container = ({
     <main className="relative w-full overflow-x-clip bg-transparent text-white overscroll-none dark">
         <NoiseBackground />
 
-      <div className="absolute inset-0 bg-white/2 bg-grid pointer-events-none" />
+      <div className="absolute inset-0 bg-columns pointer-events-none" />
       <div className="relative z-10">
         <Navbar />
         <Hero />

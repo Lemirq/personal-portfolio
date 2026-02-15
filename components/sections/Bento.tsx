@@ -193,7 +193,7 @@ const Bento = () => {
       </div>
       <div className="w-full grid md:grid-cols-3 md:grid-rows-2 grid-cols-1 gap-4 p-4">
         <div className="client-border relative p-px rounded-2xl overflow-hidden text-center w-full h-full fc items-end">
-          <div className="group bg-[#101010] bg-grid-white/[0.02] rounded-2xl h-full w-full relative overflow-hidden fc items-end">
+          <div className="group bg-[#101010] rounded-2xl h-full w-full relative overflow-hidden fc items-end">
             <h3 className="text-lg md:text-lg font-bold text-left mb-16 p-4 group-hover:translate-x-2 transition-transform">
               Architecting for Scale. Whether it's an AI-driven platform or a
               robust web application, I build secure, high-traffic solutions
