@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 
@@ -101,16 +101,14 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
-  
 }
 
 @utility fc {
-    @apply flex justify-center items-center flex-col;
-  }
-  @utility fr {
-    @apply flex justify-center items-center flex-row;
-  }
-
+  @apply flex justify-center items-center flex-col;
+}
+@utility fr {
+  @apply flex justify-center items-center flex-row;
+}
 
 @utility bg-grid {
   mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='64' height='64' fill='none' stroke='black'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
@@ -134,15 +132,15 @@
   background-image: repeating-linear-gradient(
     to right,
     transparent 0,
-    transparent calc(100% / 9 - 0.5px),
-    rgba(255, 255, 255, 0.03) calc(100% / 9 - 0.5px),
-    rgba(255, 255, 255, 0.03) calc(100% / 9 + 0.5px),
-    transparent calc(100% / 9 + 0.5px)
+    transparent calc(100% / 9 - 1px),
+    rgba(255, 255, 255, 0.02) calc(100% / 9 - 1px),
+    rgba(255, 255, 255, 0.02) calc(100% / 9 + 1px),
+    transparent calc(100% / 9 + 1px)
   );
 }
 
 /* 3. Variables for Colors */
-/* Tailwind v4 does this natively. You can access any color as a var. 
+/* Tailwind v4 does this natively. You can access any color as a var.
    Example: var(--color-blue-500) is available automatically.
    You do not need the 'addVariablesForColors' plugin anymore. */
 
@@ -202,7 +200,6 @@
   }
 }
 
-
 /* View Transition Styles */
 ::view-transition-group(root) {
   z-index: auto !important;
@@ -225,7 +222,6 @@
 }
 
 @layer utilities {
-
   /* width */
   ::-webkit-scrollbar {
     width: 8px;
@@ -368,7 +364,7 @@
   }
 
   .nav-glass::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
@@ -379,7 +375,7 @@
   }
 
   .nav-glass::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     z-index: -2;
@@ -387,7 +383,7 @@
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     filter: url(#glass-distortion);
-    -webkit-filter: url('#glass-distortion');
+    -webkit-filter: url("#glass-distortion");
   }
 }
 
