@@ -1,13 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Instrument_Serif } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
+import PageWrapper from "@/components/PageWrapper";
 
 const dm_sans = DM_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const instrument_serif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-serif",
 });
 
 export const metadata: Metadata = {
@@ -44,7 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en" className={dm_sans.className}>
+      <html lang="en" className={`${dm_sans.variable} ${instrument_serif.variable} ${dm_sans.className}`}>
         <head>
           <link
             rel="stylesheet"
@@ -53,7 +61,9 @@ export default function RootLayout({
           />
         </head>
         <body className="bg-black h-screen">
-          <Providers>{children}</Providers>
+          <Providers>
+            <PageWrapper>{children}</PageWrapper>
+          </Providers>
           <Toaster />
         </body>
       </html>

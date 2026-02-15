@@ -59,61 +59,76 @@ const Project = ({ project, tech }: { project: project; tech: tech[] }) => {
           },
         }}
         key={project._id}
-        className="w-full h-full group bg-neutral-700/40 rounded-2xl border border-neutral-800 hover:border-neutral-600 transition-colors flex flex-col overflow-hidden"
+        className="client-border relative p-px rounded-2xl overflow-hidden w-full h-full"
       >
-        <div className="w-full aspect-video relative overflow-hidden bg-slate-900 border-b border-neutral-800">
-          {/* Overlay */}
-          <div className="w-full h-full absolute z-10 top-0 left-0 group-hover:opacity-100 opacity-0 bg-indigo-900/40 backdrop-blur-[2px] transition-opacity duration-300 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-              View Case Study <BsArrowRight className="text-xl" />
+        <div className="w-full h-full group bg-[#101010] rounded-2xl transition-colors flex flex-col overflow-hidden relative">
+          <div className="w-full aspect-video relative overflow-hidden bg-neutral-900 border-b border-neutral-800">
+            {/* Overlay */}
+            <div className="w-full h-full absolute z-10 top-0 left-0 group-hover:opacity-100 opacity-0 bg-neutral-900/60 backdrop-blur-[2px] transition-opacity duration-300 flex items-center justify-center">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 text-white">
+                View Case Study <BsArrowRight className="text-xl" />
+              </div>
             </div>
-          </div>
 
-          {isVideo && videoUrl ? (
-            <iframe
-              src={videoUrl}
-              title={project.title!}
-              className="w-full h-full object-cover pointer-events-none transition-transform duration-500 group-hover:scale-105"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            />
-          ) : (
-            <Image
-              src={imageUrl}
-              alt={project.title!}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          )}
-        </div>
-
-        <div className="p-6 flex flex-col gap-4 grow">
-          <div className="flex flex-col gap-2">
-            <h4 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">
-              {project.title}
-            </h4>
-            {project.description && (
-              <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">
-                {project.description}
-              </p>
+            {isVideo && videoUrl ? (
+              <iframe
+                src={videoUrl}
+                title={project.title!}
+                className="w-full h-full object-cover pointer-events-none transition-transform duration-500 group-hover:scale-105"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            ) : (
+              <Image
+                src={imageUrl}
+                alt={project.title!}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
             )}
+            <motion.div
+              initial={{
+                background:
+                  "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%,rgba(255,255,255,0.00) 60%",
+              }}
+              whileInView={{
+                background:
+                  "radial-gradient(circle at 94% 6%, rgba(255,255,255,0.05) 0%,rgba(255,255,255,0.00) 60%",
+              }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="absolute inset-0 z-10 pointer-events-none"
+            />
           </div>
 
-          <div className="mt-auto">
-            <ul className="flex flex-wrap gap-2">
-              {project?.tech?.slice(0, 3).map((tag, i) => (
-                <li
-                  key={i}
-                  className="px-3 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/30 text-[11px] text-indigo-200"
-                >
-                  {tech.find((t) => t._id === tag._ref)?.techName}
-                </li>
-              ))}
-              {project?.tech && project.tech.length > 3 && (
-                <li className="px-3 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/30 text-[11px] text-indigo-200">
-                  +{project.tech.length - 3}
-                </li>
+          <div className="p-6 flex flex-col gap-4 grow">
+            <div className="flex flex-col gap-2">
+              <h4 className="text-2xl font-bold text-white group-hover:text-neutral-200 transition-colors">
+                {project.title}
+              </h4>
+              {project.description && (
+                <p className="text-neutral-400 text-sm leading-relaxed line-clamp-3">
+                  {project.description}
+                </p>
               )}
-            </ul>
+            </div>
+
+            <div className="mt-auto">
+              <ul className="flex flex-wrap gap-2">
+                {project?.tech?.slice(0, 3).map((tag, i) => (
+                  <li
+                    key={i}
+                    className="px-3 py-1 rounded-full bg-[#171717] border border-neutral-800 text-[11px] text-neutral-300"
+                  >
+                    {tech.find((t) => t._id === tag._ref)?.techName}
+                  </li>
+                ))}
+                {project?.tech && project.tech.length > 3 && (
+                  <li className="px-3 py-1 rounded-full bg-[#171717] border border-neutral-800 text-[11px] text-neutral-300">
+                    +{project.tech.length - 3}
+                  </li>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </motion.div>

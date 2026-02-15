@@ -22,7 +22,7 @@ const Projects = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 1.2 }}
-          className="text-5xl font-bold text-center mb-12"
+          className="text-5xl font-bold text-center mb-12 font-serif"
         >
           Projects
         </motion.h2>

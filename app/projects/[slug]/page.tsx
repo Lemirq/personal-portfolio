@@ -88,7 +88,7 @@ export default async function ProjectPage({ params }: Props) {
           {/* Header Section */}
           <header className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
+              <h1 className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-50 font-serif">
                 {project.title}
               </h1>
               {project.headline && (
@@ -142,7 +142,7 @@ export default async function ProjectPage({ params }: Props) {
             {/* Overview */}
             {project.overview && (
               <section className="space-y-4 w-full">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3 font-serif">
                   Overview
                 </h2>
                 <div className="prose prose-invert prose-lg text-gray-300 w-full max-w-none">
@@ -154,7 +154,7 @@ export default async function ProjectPage({ params }: Props) {
             {/* Problem Statement */}
             {project.problemStatement && (
               <section className="space-y-4 w-full">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3 font-serif">
                   The Problem
                 </h2>
                 <div className="prose prose-invert prose-lg text-gray-300 w-full max-w-none">
@@ -166,7 +166,7 @@ export default async function ProjectPage({ params }: Props) {
             {/* Solution */}
             {project.solution && (
               <section className="space-y-4 w-full">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3 font-serif">
                   The Solution
                 </h2>
                 <div className="prose prose-invert prose-lg text-gray-300 w-full max-w-none">
@@ -178,32 +178,31 @@ export default async function ProjectPage({ params }: Props) {
             {/* Features */}
             {project.features && project.features.length > 0 && (
               <section className="space-y-6 w-full">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3 font-serif">
                   Key Features
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                   {project.features.map((feature: any, i: number) => (
-                    <div key={i} className="relative rounded-xl h-full">
-                      <GlowingEffect
-                        spread={40}
-                        glow={true}
-                        disabled={false}
-                        proximity={64}
-                        inactiveZone={0.01}
-                        borderWidth={1}
-                      />
-                      <Card className="relative bg-white/[0.02] border-white/[0.06] text-gray-300 rounded-xl h-full flex flex-col">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-white text-lg font-semibold">
-                            {feature.title}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex-1 pt-0">
-                          <div className="prose prose-invert prose-sm text-gray-400 max-w-none leading-relaxed">
-                            <PortableText value={feature.description} />
-                          </div>
-                        </CardContent>
-                      </Card>
+                    <div
+                      key={i}
+                      className="client-border relative p-px rounded-xl overflow-hidden h-full"
+                    >
+                      <div className="bg-[#101010] rounded-xl h-full p-6 flex flex-col gap-4 relative overflow-hidden group">
+                        {/* Radial gradient overlay */}
+                        <div
+                          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          style={{
+                            background:
+                              "radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%)",
+                          }}
+                        />
+                        <h3 className="text-white text-lg font-bold relative z-10">
+                          {feature.title}
+                        </h3>
+                        <div className="prose prose-invert prose-sm text-neutral-400 max-w-none leading-relaxed relative z-10">
+                          <PortableText value={feature.description} />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -213,32 +212,31 @@ export default async function ProjectPage({ params }: Props) {
             {/* Results */}
             {project.results && project.results.length > 0 && (
               <section className="space-y-6 w-full">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3 font-serif">
                   Results & Impact
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                   {project.results.map((result: any, i: number) => (
-                    <div key={i} className="relative rounded-xl h-full">
-                      <GlowingEffect
-                        spread={40}
-                        glow={true}
-                        disabled={false}
-                        proximity={64}
-                        inactiveZone={0.01}
-                        borderWidth={1}
-                      />
-                      <Card className="relative bg-white/[0.02] border-white/[0.06] text-gray-300 rounded-xl h-full flex flex-col">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-white text-lg font-semibold">
-                            {result.title}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex-1 pt-0">
-                          <div className="prose prose-invert prose-sm text-gray-400 max-w-none leading-relaxed">
-                            <PortableText value={result.description} />
-                          </div>
-                        </CardContent>
-                      </Card>
+                    <div
+                      key={i}
+                      className="client-border relative p-px rounded-xl overflow-hidden h-full"
+                    >
+                      <div className="bg-[#101010] rounded-xl h-full p-6 flex flex-col gap-4 relative overflow-hidden group">
+                        {/* Radial gradient overlay */}
+                        <div
+                          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          style={{
+                            background:
+                              "radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%)",
+                          }}
+                        />
+                        <h3 className="text-white text-lg font-bold relative z-10">
+                          {result.title}
+                        </h3>
+                        <div className="prose prose-invert prose-sm text-neutral-400 max-w-none leading-relaxed relative z-10">
+                          <PortableText value={result.description} />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

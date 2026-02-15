@@ -18,7 +18,7 @@ const Contact = () => {
       className="max-w-6xl mx-auto py-32 pb-16 fc px-5 md:px-10 relative z-10"
       id="contact"
     >
-      <h2 className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-50 tracking-tight">
+      <h2 className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-50 tracking-tight font-serif">
         Ready to take your project <br /> to the next level?
       </h2>
       <div className="max-w-3xl mx-auto mt-10 text-center mb-10">

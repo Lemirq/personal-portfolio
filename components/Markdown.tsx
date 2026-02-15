@@ -19,12 +19,17 @@ const Markdown = ({
           </div>
         ),
         list: ({ children }) => (
-          <ul className="list-disc list-outside pl-5 fc gap-2 items-start text-sm text-neutral-400">
+          <ul
+            className={cn(
+              "list-disc list-outside pl-5 fc gap-2 items-start",
+              block || "text-sm text-neutral-400"
+            )}
+          >
             {children}
           </ul>
         ),
         listItem: ({ children }) => (
-          <li className="text-sm text-neutral-400">{children}</li>
+          <li className={cn(block || "text-sm text-neutral-400")}>{children}</li>
         ),
       }}
       value={markdown}

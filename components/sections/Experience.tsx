@@ -3,6 +3,7 @@
 import { useMainStore } from "@/stores/main-state-provider";
 import { Timeline } from "@/components/ui/timeline";
 import Markdown from "../Markdown";
+import { motion } from "motion/react";
 
 const Experience = () => {
   const { experience } = useMainStore((state) => state);
@@ -34,20 +35,27 @@ const Experience = () => {
           {exp.location && <p className="text-neutral-500">{exp.location}</p>}
         </div>
         {exp.description && (
-          <div className="text-neutral-800">
-            <Markdown markdown={exp.description as any} />
-          </div>
+          <Markdown
+            markdown={exp.description as any}
+            block="text-neutral-300 text-sm md:text-base"
+          />
         )}
       </div>
     ),
   }));
 
   return (
-    <section id="experience" className="w-full">
+    <section id="experience" className="w-full py-20">
       <div className="max-w-7xl mx-auto px-5 md:px-10">
-        <h2 className="text-3xl sm:text-5xl font-bold mb-5">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="text-3xl sm:text-5xl font-bold mb-12 text-center font-serif"
+        >
           Work <span className="text-violet-500">Experience</span>
-        </h2>
+        </motion.h2>
       </div>
       <Timeline data={timelineData} />
     </section>

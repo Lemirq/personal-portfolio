@@ -5,18 +5,14 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
 import { SOCIAL_LINKS } from "@/components/social-links";
+import { Tooltip } from "@/components/ui/tooltip-card";
+import Image from "next/image";
 
 const socialLinks = SOCIAL_LINKS;
 
 const Hero = () => {
   return (
     <section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-32 md:pt-0 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
-      {/* Spline Background */}
-      {/* <div className="z-10 w-screen h-[calc(100vh-100px)]">
-        <div className="w-screen h-screen">
-          <Spline />
-        </div>
-      </div> */}
       <div className="w-full h-full fr justify-between absolute">
         <div className="w-full h-full">
           <Spotlight
@@ -32,7 +28,6 @@ const Hero = () => {
           />
         </div>
         <div
-          // rotate x 180
           style={{ transform: "scale(-1, 1)" }}
           className="w-full h-full absolute"
         >
@@ -49,7 +44,6 @@ const Hero = () => {
           />
         </div>
       </div>
-      {/* two on the top and two on the bottom */}
       <div className="p-4 max-w-7xl mx-auto fc relative z-10 w-full pt-10 sm:pt-20 md:pt-0">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -67,7 +61,13 @@ const Hero = () => {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="mt-4 text-lg text-neutral-300 max-w-3xl font-semibold text-center mx-auto"
         >
-          📍 Toronto, UofT CS
+          📍{" "}
+          <Tooltip
+            containerClassName="text-neutral-300"
+            content={<UofTCard />}
+          >
+            <span className="cursor-pointer hover:text-white transition-colors">Toronto, UofT CS</span>
+          </Tooltip>
         </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -104,8 +104,6 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.7 }}
-            // className="inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-size-[200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-hidden focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 mt-10"
-            // low profile styling
             className=" px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-48 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
           >
             Resume
@@ -113,6 +111,20 @@ const Hero = () => {
         </Link>
       </div>
     </section>
+  );
+};
+
+const UofTCard = () => {
+  return (
+    <div className="-m-2 md:-m-4">
+      <Image
+        src="/cn.jpg"
+        alt="UofT Campus"
+        className="w-80 rounded-sm object-cover"
+        width={320}
+        height={180}
+      />
+    </div>
   );
 };
 
