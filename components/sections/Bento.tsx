@@ -1,5 +1,11 @@
 import { useMainStore } from "@/stores/main-state-provider";
-import { motion, useMotionValue, useSpring, useTransform, Variants } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  Variants,
+} from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
@@ -10,6 +16,7 @@ const tech = [
   "Node.js",
   "Express.js",
   "PostgreSQL",
+  "Framer Motion",
 ];
 
 const TiltCard = ({
@@ -101,7 +108,7 @@ const Bento = () => {
               className="rounded-2xl aspect-4/3 mix-blend-luminosity"
             />
             <div className="w-full inset-0 bg-linear-to-b from-transparent to-black via-transparent from-30% absolute fc justify-end items-start ">
-              <h3 className="text-lg md:text-xl font-bold text-left text-white p-4">
+              <h3 className="text-lg md:text-md font-bold text-left text-white p-4">
                 From Concept to Launch. Building complex, high-performance
                 applications requires more than just code. I provide transparent
                 workflows and regular check-ins so you never have to guess where
@@ -127,10 +134,10 @@ const Bento = () => {
 
         <div className="client-border relative p-px rounded-2xl overflow-hidden w-full min-h-[200px] sm:min-h-0 h-full">
           <div className="group bg-[#101010] rounded-2xl p-4 text-center w-full h-full relative overflow-hidden">
-            <h3 className="text-lg md:text-2xl font-bold text-left absolute z-10">
-              Seamless Global Collaboration. Fast response times and transparent,
-              asynchronous workflows. Your project keeps moving forward, wherever
-              you're based.
+            <h3 className="text-lg md:text-md font-bold text-left absolute z-10">
+              Seamless Global Collaboration. Fast response times and
+              transparent, asynchronous workflows. Your project keeps moving
+              forward, wherever you're based.
             </h3>
             {/* <div className="md:absolute w-full aspect-square md:top-5 z-10">
 						<Cobe />
@@ -148,77 +155,46 @@ const Bento = () => {
         </div>
 
         <div className="client-border relative p-px rounded-2xl overflow-hidden w-full h-full">
-          <div className="group bg-[#101010] rounded-2xl p-4 text-center w-full h-full relative overflow-hidden">
-            <div className="fc items-start md:absolute md:h-full group-hover:translate-y-2 transition-transform z-10">
-              <p className="text-sm tracking-wide uppercase">
+          <div className="absolute inset-0 bg-linear-to-r from-[#101010] from-50% to-transparent z-10"></div>
+          <div className="bg-[#101010] rounded-2xl p-4 text-center w-full h-full relative overflow-hidden">
+            <div className="fc items-start absolute z-20 top-4 left-4">
+              <p className="text-sm tracking-wide uppercase text-neutral-400">
                 Leveraging Next.js, TypeScript & Supabase
               </p>
-              <h3 className="text-lg md:text-2xl font-bold text-left mb-10">
+              <h3 className="text-lg md:text-2xl font-bold text-left">
                 The Modern Web Stack
               </h3>
             </div>
-            <div className="fr absolute right-0 gap-4 group-hover:-translate-y-12 transition-transform hidden lg:flex">
-              <div className="fc gap-4">
-                {tech.map((t) => (
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex overflow-hidden h-[calc(100%-4rem)]">
+              <motion.div
+                animate={{ y: ["0%", "-50%"] }}
+                transition={{
+                  y: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 20,
+                    ease: "linear",
+                  },
+                }}
+                className="fc gap-3"
+              >
+                {[...tech, ...tech].map((t, i) => (
                   <div
-                    key={t}
-                    className="client-border relative p-px rounded-xl w-full"
+                    key={i}
+                    className="text-base px-4 py-2 bg-[#171717] rounded-lg whitespace-nowrap border border-neutral-800"
                   >
-                    <div className="text-lg p-5 bg-[#171717] rounded-xl w-full h-full">
-                      {t}
-                    </div>
+                    {t}
                   </div>
                 ))}
-              </div>
-              <div className="fc -translate-y-[60%] gap-4 group-hover:-translate-y-[35%] transition-transform">
-                {tech.map((t) => (
-                  <div
-                    key={t}
-                    className="client-border relative p-px rounded-xl w-full"
-                  >
-                    <div className="text-lg p-5 bg-[#171717] rounded-xl w-full h-full">
-                      {t}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              </motion.div>
             </div>
-
-            <div className="fc bottom-0 gap-4 group-hover:-translate-x-12 transition-transform flex lg:hidden">
-              <div className="fr gap-4">
-                {tech.map((t) => (
-                  <div
-                    key={t}
-                    className="client-border relative p-px rounded-xl w-full"
-                  >
-                    <div className="text-lg p-5 bg-[#171717] rounded-xl w-full h-full">
-                      {t}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="fr -translate-x-[20%] gap-4 group-hover:-translate-x-[15%] transition-transform">
-                {tech.map((t) => (
-                  <div
-                    key={t}
-                    className="client-border relative p-px rounded-xl w-full"
-                  >
-                    <div className="text-lg p-5 bg-[#171717] rounded-xl w-full h-full">
-                      {t}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* horizontal version for mobile */}
           </div>
         </div>
       </div>
       <div className="w-full grid md:grid-cols-3 md:grid-rows-2 grid-cols-1 gap-4 p-4">
         <div className="client-border relative p-px rounded-2xl overflow-hidden text-center w-full h-full fc items-end">
           <div className="group bg-[#101010] bg-grid-white/[0.02] rounded-2xl h-full w-full relative overflow-hidden fc items-end">
-            <h3 className="text-lg md:text-2xl font-bold text-left mb-16 p-4 group-hover:translate-x-2 transition-transform">
+            <h3 className="text-lg md:text-lg font-bold text-left mb-16 p-4 group-hover:translate-x-2 transition-transform">
               Architecting for Scale. Whether it's an AI-driven platform or a
               robust web application, I build secure, high-traffic solutions
               designed to grow with your user base.
@@ -276,8 +252,8 @@ const Bento = () => {
         <div className="client-border relative p-px rounded-2xl overflow-hidden w-full h-full">
           <div className="group bg-[#101010] rounded-2xl p-4 text-center w-full h-full relative overflow-hidden fc gap-2">
             <h3 className="text-lg md:text-2xl font-bold text-left p-4">
-              Ready to build something exceptional? <br /> Let's turn your vision
-              into reality.
+              Ready to build something exceptional? <br /> Let's turn your
+              vision into reality.
             </h3>
 
             <button

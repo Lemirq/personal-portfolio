@@ -54,7 +54,7 @@ const Experience = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-3xl sm:text-5xl font-bold mb-12 text-center font-serif"
         >
-          Work <span className="text-violet-500">Experience</span>
+          Work <span className="text-neutral-400">Experience</span>
         </motion.h2>
       </div>
       <Timeline data={timelineData} />
