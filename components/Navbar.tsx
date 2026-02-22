@@ -66,6 +66,7 @@ const Navbar = () => {
             return (
               <li
                 key={typeof label === "string" ? label : "home-logo"}
+                data-cursor="snap"
                 className={cn(
                   "sm:px-3 py-2 rounded-full sm:border border-zinc-800 sm:hover:bg-zinc-800 transition-colors bg-transparent cursor-pointer bg-blend-screen",
                   className,

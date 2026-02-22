@@ -62,11 +62,10 @@ const Hero = () => {
           className="mt-4 text-lg text-neutral-300 max-w-3xl font-semibold text-center mx-auto"
         >
           📍{" "}
-          <Tooltip
-            containerClassName="text-neutral-300"
-            content={<UofTCard />}
-          >
-            <span className="cursor-pointer hover:text-white transition-colors">Toronto, UofT CS</span>
+          <Tooltip containerClassName="text-neutral-300" content={<UofTCard />}>
+            <span className="cursor-pointer hover:text-white transition-colors">
+              Toronto, UofT CS
+            </span>
           </Tooltip>
         </motion.div>
         <motion.p
@@ -75,8 +74,8 @@ const Hero = () => {
           transition={{ delay: 0.6, duration: 0.6 }}
           className="mt-4 text-lg text-neutral-300 max-w-3xl font-semibold text-center mx-auto"
         >
-          Full-stack developer in Canada. I turn ideas into <i>smooth</i>,
-          high-performance web experiences that people actually enjoy using.
+          Builder in Canada. I turn ideas into <i>smooth</i>, high-performance
+          web experiences that people actually enjoy using.
         </motion.p>
 
         <motion.div
@@ -99,16 +98,15 @@ const Hero = () => {
           ))}
         </motion.div>
 
-        <Link href="/resume" className="text-center">
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.7 }}
-            className=" px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-48 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
-          >
-            Resume
-          </motion.button>
-        </Link>
+        <motion.a
+          href="/resume"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.7 }}
+          className="text-center fc px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-48 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
+        >
+          Resume
+        </motion.a>
       </div>
     </section>
   );

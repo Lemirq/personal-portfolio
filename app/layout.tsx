@@ -5,6 +5,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
 import PageWrapper from "@/components/PageWrapper";
+import CustomCursor from "@/components/CustomCursor";
 
 const dm_sans = DM_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -65,6 +66,7 @@ export default function RootLayout({
             <PageWrapper>{children}</PageWrapper>
           </Providers>
           <Toaster />
+          <CustomCursor />
         </body>
       </html>
     </ViewTransitions>

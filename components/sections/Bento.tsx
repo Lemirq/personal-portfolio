@@ -12,11 +12,34 @@ import Image from "next/image";
 const tech = [
   "Next.js",
   "React.js",
-  "Typescript",
+  "TypeScript",
   "Node.js",
   "Express.js",
   "PostgreSQL",
   "Framer Motion",
+  "Supabase",
+  "TailwindCSS",
+  "Prisma",
+  "GraphQL",
+  "Redis",
+  "Docker",
+  "Vercel",
+  "REST APIs",
+  "Python",
+  "MongoDB",
+  "Firebase",
+  "AWS",
+  "Git",
+  "Figma",
+  "Sass",
+  "Redux",
+  "Webpack",
+  "Vite",
+  "Jest",
+  "Cypress",
+  "Storybook",
+  "Stripe",
+  "OAuth",
 ];
 
 const TiltCard = ({
@@ -155,38 +178,59 @@ const Bento = () => {
         </div>
 
         <div className="client-border relative p-px rounded-2xl overflow-hidden w-full h-full">
-          <div className="absolute inset-0 bg-linear-to-r from-[#101010] from-50% to-transparent z-10"></div>
-          <div className="bg-[#101010] rounded-2xl p-4 text-center w-full h-full relative overflow-hidden">
-            <div className="fc items-start absolute z-20 top-4 left-4">
+          <div className="bg-[#101010] rounded-2xl text-center w-full h-full relative overflow-hidden">
+            {/* Scrolling columns background */}
+            <div className="absolute inset-0 flex gap-2 px-2 opacity-40">
+              {Array.from({ length: 5 }).map((_, colIndex) => {
+                const offset = colIndex * 6;
+                const columnTech = [
+                  ...tech.slice(offset % tech.length),
+                  ...tech.slice(0, offset % tech.length),
+                ];
+                const direction = colIndex % 2 === 0;
+                return (
+                  <div
+                    key={colIndex}
+                    className="flex-1 overflow-hidden relative"
+                  >
+                    <motion.div
+                      animate={{
+                        y: direction ? ["0%", "-50%"] : ["-50%", "0%"],
+                      }}
+                      transition={{
+                        y: {
+                          repeat: Infinity,
+                          repeatType: "loop",
+                          duration: 10 + colIndex * 0.4,
+                          ease: "linear",
+                        },
+                      }}
+                      className="fc gap-2"
+                    >
+                      {[...columnTech, ...columnTech].map((t, i) => (
+                        <div
+                          key={i}
+                          className="text-sm px-3 py-2 bg-[#171717] rounded-lg whitespace-nowrap border border-neutral-800 text-center w-full"
+                        >
+                          {t}
+                        </div>
+                      ))}
+                    </motion.div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Top and bottom fade gradients */}
+            <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#101010] to-transparent z-10 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#101010] to-transparent z-10 pointer-events-none" />
+            {/* Text overlay */}
+            <div className="absolute inset-0 z-20 fc items-start justify-center p-4">
               <p className="text-sm tracking-wide uppercase text-neutral-400">
-                Leveraging Next.js, TypeScript & Supabase
+                Leveraging velocity
               </p>
               <h3 className="text-lg md:text-2xl font-bold text-left">
                 The Modern Web Stack
               </h3>
-            </div>
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex overflow-hidden h-[calc(100%-4rem)]">
-              <motion.div
-                animate={{ y: ["0%", "-50%"] }}
-                transition={{
-                  y: {
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: 20,
-                    ease: "linear",
-                  },
-                }}
-                className="fc gap-3"
-              >
-                {[...tech, ...tech].map((t, i) => (
-                  <div
-                    key={i}
-                    className="text-base px-4 py-2 bg-[#171717] rounded-lg whitespace-nowrap border border-neutral-800"
-                  >
-                    {t}
-                  </div>
-                ))}
-              </motion.div>
             </div>
           </div>
         </div>
@@ -258,6 +302,7 @@ const Bento = () => {
 
             <button
               onClick={handleScrollToContact}
+              data-cursor="snap"
               className="px-5 py-3 bg-[#171717] border-neutral-700 border rounded-2xl text-white hover:bg-neutral-800 transition-colors"
             >
               Let's Talk

@@ -35,7 +35,7 @@ const About = () => {
           yoyo: true,
           ease: "sine.inOut",
           attr: { baseFrequency: 0.7, seed: 4 },
-        }
+        },
       );
 
       gsap.fromTo(
@@ -47,10 +47,10 @@ const About = () => {
           yoyo: true,
           ease: "sine.inOut",
           attr: { scale: 100 },
-        }
+        },
       );
     },
-    { scope: svgRef }
+    { scope: svgRef },
   );
   return (
     <motion.section
@@ -121,7 +121,7 @@ const About = () => {
             <h2 className="text-5xl font-serif">{about && about.heading}</h2>
             {/* <p className="text-lg text-slate-400">{about && about.body}</p> */}
             {about?.body && (
-              <Markdown block="text-lg text-slate-400" markdown={about.body} />
+              <Markdown block="text-lg text-zinc-400" markdown={about.body} />
             )}
           </div>
         </div>
