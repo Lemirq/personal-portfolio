@@ -1,6 +1,7 @@
 import { cn } from "../utils/cn";
 import Logo from "./Logo";
 import GlassSurface from "./GlassSurface";
+import Magnetic from "./Magnetic";
 import Link from "next/link";
 import { useTransitionRouter } from "next-view-transitions";
 import { pageAnimation } from "@/utils/pageAnimation";
@@ -64,7 +65,7 @@ const Navbar = () => {
         <ul className="rounded-full px-4 py-2 fr text-sm md:text-md gap-4 sm:gap-3 mix-blend-difference">
           {sections.map(({ label, url, className }) => {
             return (
-              <li
+              <Magnetic as="li" strength={4}
                 key={typeof label === "string" ? label : "home-logo"}
                 data-cursor="snap"
                 className={cn(
@@ -91,7 +92,7 @@ const Navbar = () => {
                 >
                   {label}
                 </Link>
-              </li>
+              </Magnetic>
             );
           })}
         </ul>
