@@ -4,6 +4,7 @@ import { Spotlight } from "@/components/Spotlight";
 import { motion } from "motion/react";
 import Link from "next/link";
 import SignatureDraw from "../SignatureDraw";
+import AnimatedName from "../AnimatedName";
 import { SOCIAL_LINKS } from "@/components/social-links";
 import { Tooltip } from "@/components/ui/tooltip-card";
 import Magnetic from "@/components/Magnetic";
@@ -13,7 +14,7 @@ const socialLinks = SOCIAL_LINKS;
 
 const Hero = () => {
   return (
-    <section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-32 md:pt-0 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
+    <section className="w-screen rounded-md flex sm:px-10 px-5 md:items-center md:justify-center antialiased pt-40 md:pt-20 relative overflow-hidden md:min-h-[70vh] pb-10 md:pb-0">
       <div className="w-full h-full fr justify-between absolute">
         <div className="w-full h-full">
           <Spotlight
@@ -46,14 +47,21 @@ const Hero = () => {
         </div>
       </div>
       <div className="p-4 max-w-7xl mx-auto fc relative z-10 w-full pt-10 sm:pt-20 md:pt-0">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.4 }}
+          className="text-lg md:text-xl text-neutral-400 font-medium tracking-wide"
+        >
+          Hi, I'm
+        </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-4xl md:text-7xl max-w-xl font-bold text-center bg-clip-text text-transparent bg-linear-to-b from-neutral-50 to-neutral-400 bg-opacity-50 tracking-tight w-full fr gap-5"
+          className="text-7xl md:text-[10rem] leading-none tracking-tight text-center lowercase -mt-1 md:-mt-3"
         >
-          <span className="whitespace-nowrap">Hi, I&apos;m</span>{" "}
-          <SignatureDraw />
+          <AnimatedName />
         </motion.h1>
 
         <motion.div

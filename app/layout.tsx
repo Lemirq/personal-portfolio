@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Instrument_Serif } from "next/font/google";
+import localFont from "next/font/local";
 import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
@@ -17,6 +18,11 @@ const instrument_serif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-serif",
+});
+
+const cabinet_grotesk = localFont({
+  src: "../public/font/fonts/CabinetGrotesk-Variable.woff2",
+  variable: "--font-cabinet",
 });
 
 export const metadata: Metadata = {
@@ -53,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en" className={`${dm_sans.variable} ${instrument_serif.variable} ${dm_sans.className}`}>
+      <html lang="en" className={`${dm_sans.variable} ${instrument_serif.variable} ${cabinet_grotesk.variable} ${dm_sans.className}`}>
         <head>
           <link
             rel="stylesheet"

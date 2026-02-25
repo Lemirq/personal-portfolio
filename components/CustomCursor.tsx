@@ -14,6 +14,7 @@ export default function CustomCursor() {
   const cachedRect = useRef<DOMRect | null>(null);
   const cachedBR = useRef(0);
   const rafId = useRef(0);
+  const lastMouse = useRef({ x: 0, y: 0 });
   const pathname = usePathname();
 
   const x = useSpring(0, SPRING_CONFIG);
@@ -85,6 +86,7 @@ export default function CustomCursor() {
     if (isTouch) return;
 
     const handleMouseMove = (e: MouseEvent) => {
+      lastMouse.current = { x: e.clientX, y: e.clientY };
       cancelAnimationFrame(rafId.current);
       rafId.current = requestAnimationFrame(() => {
         opacity.set(1);
@@ -126,7 +128,10 @@ export default function CustomCursor() {
     };
 
     const handleScroll = () => {
-      if (targetRef.current) refreshRect();
+      if (targetRef.current) {
+        refreshRect();
+        applySnap(lastMouse.current.x, lastMouse.current.y);
+      }
     };
 
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
