@@ -7,7 +7,6 @@ import SignatureDraw from "../SignatureDraw";
 import AnimatedName from "../AnimatedName";
 import { SOCIAL_LINKS } from "@/components/social-links";
 import { Tooltip } from "@/components/ui/tooltip-card";
-import Magnetic from "@/components/Magnetic";
 import Image from "next/image";
 
 const socialLinks = SOCIAL_LINKS;
@@ -94,31 +93,27 @@ const Hero = () => {
           className="mt-8 flex justify-center gap-6 text-2xl text-neutral-400"
         >
           {socialLinks.map(({ label, icon, url }) => (
-            <Magnetic key={label} strength={8}>
               <a
+                key={label}
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-transform hover:-translate-y-0.5 hover:text-white"
-                data-cursor="fill"
               >
                 {icon}
               </a>
-            </Magnetic>
           ))}
         </motion.div>
 
-        <Magnetic strength={5}>
-          <motion.a
-            href="/resume"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.7 }}
-            className="text-center fc px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-48 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
-          >
-            Resume
-          </motion.a>
-        </Magnetic>
+        <motion.a
+          href="/resume"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.7 }}
+          className="text-center fc px-5 border-neutral-700 bg-neutral-800 border-2 rounded-full text-white w-48 h-10 mt-10 cursor-pointer hover:bg-black hover:text-white transition-colors"
+        >
+          Resume
+        </motion.a>
       </div>
     </section>
   );

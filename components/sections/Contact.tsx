@@ -34,7 +34,6 @@ const Contact = () => {
           {contact.map(({ label, icon, url }) => (
             <li
               key={label}
-              data-cursor="fill"
               className="transition-transform hover:-translate-y-1"
             >
               <a

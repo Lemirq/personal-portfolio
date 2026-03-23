@@ -302,7 +302,6 @@ const Bento = () => {
 
             <button
               onClick={handleScrollToContact}
-              data-cursor="snap"
               className="px-5 py-3 bg-[#171717] border-neutral-700 border rounded-2xl text-white hover:bg-neutral-800 transition-colors"
             >
               Let's Talk

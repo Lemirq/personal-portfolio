@@ -1,23 +1,17 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, useAnimationControls } from "motion/react";
+import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 
 const NAME = "vihaan";
 
 const MIN_WEIGHT = 100;
 const MAX_WEIGHT = 900;
-const FALLOFF_PX = 150; // pixel radius of influence from cursor
 
 const AnimatedName = () => {
-  const containerRef = useRef<HTMLSpanElement>(null);
-  const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [weights, setWeights] = useState<number[]>(
     Array(NAME.length).fill(400),
   );
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const controls = useAnimationControls();
 
   // Ripple on load
   useEffect(() => {
@@ -46,66 +40,22 @@ const AnimatedName = () => {
         await new Promise((r) => setTimeout(r, 80));
       }
 
-      // Ease back to normal weight
-      // setWeights(Array(NAME.length).fill(400));
-      setHasLoaded(true);
+      setWeights(Array(NAME.length).fill(400));
     };
     ripple();
   }, []);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!hasLoaded) return;
-      const mouseX = e.clientX;
-
-      const newWeights = letterRefs.current.map((ref) => {
-        if (!ref) return MIN_WEIGHT;
-        const rect = ref.getBoundingClientRect();
-        const letterCenterX = rect.left + rect.width / 2;
-        const distance = Math.abs(mouseX - letterCenterX);
-
-        if (distance >= FALLOFF_PX) return MIN_WEIGHT;
-        const t = 1 - distance / FALLOFF_PX;
-        // Ease the falloff for a smoother feel
-        const eased = t * t;
-        return Math.round(MIN_WEIGHT + (MAX_WEIGHT - MIN_WEIGHT) * eased);
-      });
-
-      setWeights(newWeights);
-    },
-    [hasLoaded],
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovering(false);
-    if (hasLoaded) {
-      setWeights(Array(NAME.length).fill(MIN_WEIGHT));
-    }
-  }, [hasLoaded]);
-
   return (
     <span
-      ref={containerRef}
       className="inline-flex cursor-default select-none"
       style={{ fontFamily: "var(--font-cabinet), sans-serif" }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={handleMouseLeave}
     >
       {NAME.split("").map((letter, i) => (
         <motion.span
           key={i}
-          ref={(el) => {
-            letterRefs.current[i] = el;
-          }}
           animate={{ fontVariationSettings: `'wght' ${weights[i]}` }}
-          transition={
-            hasLoaded && isHovering
-              ? { type: "spring", stiffness: 600, damping: 35, mass: 0.5 }
-              : { type: "spring", stiffness: 300, damping: 25 }
-          }
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
           className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-neutral-500"
-          data-cursor="fill"
         >
           {letter}
         </motion.span>
