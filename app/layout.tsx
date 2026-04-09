@@ -58,7 +58,10 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en" className={`${dm_sans.variable} ${instrument_serif.variable} ${cabinet_grotesk.variable} ${dm_sans.className}`}>
+      <html
+        lang="en"
+        className={`${dm_sans.variable} ${instrument_serif.variable} ${cabinet_grotesk.variable} ${dm_sans.className}`}
+      >
         <head>
           <link
             rel="stylesheet"
